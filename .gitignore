@@ -1,0 +1,19 @@
+# VS Code
+.vscode
+.history/
+*.code-workspace
+*.coverage
+*.coveragexml
+
+# Composer
+vendor/
+
+# Enviroment
+*.ini
+
+# Product
+cache/
+log/
+
+
+

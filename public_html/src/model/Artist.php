@@ -49,7 +49,7 @@ class Artist extends \App\Model\Template\User
                 UsersDB::NAME => 'name',
                 UsersDB::PHONE => 'phone',
                 UsersDB::CEP => 'CEP',
-                UsersDB::FEDERATION => 'federation',
+                UsersDB::STATE => 'state',
                 UsersDB::CITY => 'city',
                 ArtistDB::CPF => 'CPF',
                 ArtistDB::ART => 'art',

@@ -70,7 +70,7 @@ final class UserController
             $user->setPassword($this->parameterList->getString('password'));
             $user->setPhone($this->parameterList->getString('phone'));
             $user->setCEP($this->parameterList->getString('cep'));
-            $user->setFederation($this->parameterList->getString('federation'));
+            $user->setState($this->parameterList->getString('state'));
             $user->setCity($this->parameterList->getString('city'));
             $user->setImage($this->parameterList->getString('image'));
 
@@ -159,7 +159,7 @@ final class UserController
     private function getRandomUserListByLocation(Artist|Enterprise $user, ArtistDB|EnterpriseDB $db, int $limit): array
     {
         $user->setCity($this->parameterList->getString('city'));
-        $user->setFederation($this->parameterList->getString('federation'));
+        $user->setState($this->parameterList->getString('state'));
         return $db->getRandomListByLocation(0, $limit);
     }
 

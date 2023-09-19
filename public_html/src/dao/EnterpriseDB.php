@@ -84,13 +84,13 @@ class EnterpriseDB extends UsersDB
         $query = $this->getConnection()->prepare(
             "SELECT * FROM enterprise_view
             INNER JOIN users ON users.id = enterprise.id
-            WHERE city = ? AND federation = ?
+            WHERE city = ? AND state = ?
             ORDER BY RAND()
             LIMIT $limit OFFSET $offset"
         );
 
         $query->bindValue(1, $this->enterprise->getCity());
-        $query->bindValue(2, $this->enterprise->getFederation());
+        $query->bindValue(2, $this->enterprise->getState());
 
         if ($query->execute()) { // Executa se consulta não falhar
             return array_map(fn($user) => Enterprise::getInstanceOf($user), $this->fetchRecord($query));

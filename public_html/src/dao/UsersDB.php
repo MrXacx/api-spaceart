@@ -20,7 +20,7 @@ class UsersDB extends DatabaseAcess
     public const NAME = 'name';
     public const PHONE = 'phone';
     public const CEP = 'CEP';
-    public const FEDERATION = 'federation';
+    public const STATE = 'state';
     public const CITY = 'city';
     public const SITE = 'website';
     public const IMAGE_URL = 'image';
@@ -44,7 +44,7 @@ class UsersDB extends DatabaseAcess
     public function create(): bool
     {
         // Passa query SQL de criação
-        $query = $this->getConnection()->prepare('INSERT INTO users (id, name, image, email, password, phone, CEP, federation, city) VALUES (?,?,?,?,?,?,?,?,?)');
+        $query = $this->getConnection()->prepare('INSERT INTO users (id, name, image, email, password, phone, CEP, state, city) VALUES (?,?,?,?,?,?,?,?,?)');
 
         $this->user->setID(parent::getRandomID());
         // Substitui interrogações pelos valores dos atributos
@@ -55,7 +55,7 @@ class UsersDB extends DatabaseAcess
         $query->bindValue(5, $this->user->getPassword());
         $query->bindValue(6, $this->user->getPhone());
         $query->bindValue(7, $this->user->getCEP());
-        $query->bindValue(8, $this->user->getFederation());
+        $query->bindValue(8, $this->user->getState());
         $query->bindValue(9, $this->user->getCity());
 
 
@@ -68,7 +68,7 @@ class UsersDB extends DatabaseAcess
     public function getList(int $offset = 0, int $limit = 10): array
     {
         // Determina query SQL de leitura
-        $query = $this->getConnection()->prepare("SELECT id, name, image, CEP, federation, city, rate, website FROM users LIMIT $limit OFFSET $offset");
+        $query = $this->getConnection()->prepare("SELECT id, name, image, CEP, state, city, rate, website FROM users LIMIT $limit OFFSET $offset");
 
         if ($query->execute()) { // Executa se consulta não falhar
             return $this->fetchRecord($query);
@@ -84,7 +84,7 @@ class UsersDB extends DatabaseAcess
     public function getUnique(): User
     {
         // Define query SQL para obter todas as colunas da linha do usuário
-        $query = $this->getConnection()->prepare('SELECT id, name, image, CEP, federation, city, rate, website FROM users WHERE id = ?');
+        $query = $this->getConnection()->prepare('SELECT id, name, image, CEP, state, city, rate, website FROM users WHERE id = ?');
         $query->bindValue(1, $this->user->getID()); // Substitui interrogação pelo ID
 
         if ($query->execute()) { // Executa se a query for aceita

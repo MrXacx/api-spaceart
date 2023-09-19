@@ -42,7 +42,7 @@ class Enterprise extends \App\Model\Template\User
                 UsersDB::NAME => 'name',
                 EnterpriseDB::CNPJ => 'CNPJ',
                 UsersDB::CEP => 'CEP',
-                UsersDB::FEDERATION => 'federation',
+                UsersDB::STATE => 'state',
                 UsersDB::CITY => 'city',
                 EnterpriseDB::NEIGHBORHOOD => 'neighborhood',
                 EnterpriseDB::ADDRESS => 'address',

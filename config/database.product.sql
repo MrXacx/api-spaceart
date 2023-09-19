@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS users(
   phone varchar(11) NOT NULL,
   password varchar(256) NOT NULL,
   CEP varchar(8) NOT NULL,
-  federation varchar(2) NOT NULL,
+  state varchar(2) NOT NULL,
   city varchar(50) NOT NULL,
   image varchar(256),
   website varchar(256),
@@ -154,12 +154,12 @@ CREATE TABLE IF NOT EXISTS rate(
 
 -- CRIA VIEWS
 CREATE VIEW  artist_view AS
-SELECT usr.id, usr.name, usr.image, usr.CEP, usr.federation, usr.city, artist.art, artist.wage, usr.rate, usr.website
+SELECT usr.id, usr.name, usr.image, usr.CEP, usr.state, usr.city, artist.art, artist.wage, usr.rate, usr.website
 FROM artist, users AS usr
 WHERE usr.id = artist.id;
 
 CREATE VIEW enterprise_view AS
-SELECT usr.id, usr.name, usr.image, usr.CEP, usr.federation, usr.city, ent.neighborhood, ent.address, usr.rate, usr.website
+SELECT usr.id, usr.name, usr.image, usr.CEP, usr.state, usr.city, ent.neighborhood, ent.address, usr.rate, usr.website
 FROM enterprise AS ent, users AS usr
 WHERE usr.id = ent.id;
 

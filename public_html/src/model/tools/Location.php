@@ -8,7 +8,7 @@ trait Location
     protected string $address;
     protected string $neighborhood;
     protected string $city;
-    protected string $federation;
+    protected string $state;
 
     /**
      * @param string $CEP
@@ -75,19 +75,19 @@ trait Location
     }
 
     /**
-     * @param string $federation
+     * @param string $state
      */
-    public function setFederation(string $federation): void
+    public function setState(string $state): void
     {
-        $this->federation = $federation;
+        $this->state = $state;
     }
 
     /** 
-     * @return string federation
+     * @return string state
      */
-    public function getFederation(): string
+    public function getState(): string
     {
-        return $this->federation;
+        return $this->state;
     }
 
     private function toLocationArray(): array
@@ -97,7 +97,7 @@ trait Location
             'address' => $this->address ?? null,
             'neighborhood' => $this->neighborhood ?? null,
             'city' => $this->city,
-            'federation' => $this->federation,
+            'state' => $this->state,
         ], fn($value) => isset($value));
     }
 

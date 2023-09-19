@@ -44,7 +44,7 @@ final class DataValidator
         return $length > 0 && $length <= match ($column) {
             ArtistDB::CPF, UsersDB::PHONE => 11,
             UsersDB::CEP => 8,
-            UsersDB::FEDERATION => 2,
+            UsersDB::STATE => 2,
             UsersDB::CITY, EnterpriseDB::NEIGHBORHOOD => 30,
             EnterpriseDB::CNPJ => 14,
             default => 191

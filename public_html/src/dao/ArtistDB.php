@@ -85,13 +85,13 @@ class ArtistDB extends UsersDB
         // Determina query SQL de leitura
         $query = $this->getConnection()->prepare(
             "SELECT * FROM artist_view
-            WHERE city = ? AND federation = ?
+            WHERE city = ? AND state = ?
             ORDER BY RAND()
             LIMIT $limit OFFSET $offset"
         );
 
-        $query->bindValue(1, $this->artist->getCity()); 
-        $query->bindValue(2, $this->artist->getFederation()); 
+        $query->bindValue(1, $this->artist->getCity());
+        $query->bindValue(2, $this->artist->getState());
 
         if ($query->execute()) { // Executa se consulta não falhar
             return array_map(fn($user) => Artist::getInstanceOf($user), $this->fetchRecord($query));

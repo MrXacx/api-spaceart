@@ -2,7 +2,9 @@
 
 namespace App\Model\Tool;
 
-use App\Util\Exception\InvalidAttributeFormatException;
+use App\DAO\EnterpriseDB;
+use App\Util\Exception\InvalidAttributeLengthException;
+use App\Util\Exception\InvalidAttributeRegexException;
 
 trait Location
 {
@@ -18,7 +20,7 @@ trait Location
      */
     public function setCEP(string $CEP): void
     {
-        $this->CEP = $this->validator->isCEP($CEP) ? $CEP : InvalidAttributeFormatException::throw('CEP');
+        $this->CEP = $this->validator->isCEP($CEP) ? $CEP : InvalidAttributeRegexException::throw('CEP', __FILE__);
     }
 
     /** 
@@ -34,7 +36,7 @@ trait Location
      */
     public function setAddress(string $address): void
     {
-        $this->address = $address;
+        $this->address = $this->validator->isFit($address, EnterpriseDB::ADDRESS) ? $address : InvalidAttributeLengthException::throw('address', __FILE__);
     }
 
     /** 
@@ -50,7 +52,7 @@ trait Location
      */
     public function setNeighborhood(string $neighborhood): void
     {
-        $this->neighborhood = $neighborhood;
+        $this->neighborhood = $this->validator->isFit($neighborhood, EnterpriseDB::NEIGHBORHOOD) ? $neighborhood : InvalidAttributeLengthException::throw('neighborhood', __FILE__);
     }
 
     /** 
@@ -66,7 +68,7 @@ trait Location
      */
     public function setCity(string $city): void
     {
-        $this->city = $city;
+        $this->city = $this->validator->isFit($city, EnterpriseDB::CITY) ? $city : InvalidAttributeLengthException::throw('city', __FILE__);
     }
 
     /** 
@@ -82,7 +84,7 @@ trait Location
      */
     public function setState(string $state): void
     {
-        $this->state = $state;
+        $this->state = $this->validator->isFit($state, EnterpriseDB::STATE) ? $state : InvalidAttributeLengthException::throw('state', __FILE__);
     }
 
     /** 

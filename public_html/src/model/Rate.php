@@ -3,7 +3,8 @@
 namespace App\Model;
 
 use App\DAO\RateDB;
-use App\Util\Exception\DataFormatException;
+use App\Util\Exception\InvalidAttributeLengthException;
+use App\Util\Exception\InvalidAttributeRegexException;
 
 /**
  * Classe modelo de avaliação
@@ -44,7 +45,7 @@ class Rate extends \App\Model\Template\Entity
     function __construct(string $agreement)
     {
         parent::__construct();
-        $this->agreement = $this->validator->isUUID($agreement) ? $agreement : DataFormatException::throw('AGREEMENT ID');
+        $this->agreement = $this->validator->isUUID($agreement) ? $agreement : InvalidAttributeRegexException::throw('agreement', __FILE__);
     }
 
     public static function getInstanceOf(array $attr): self
@@ -84,7 +85,7 @@ class Rate extends \App\Model\Template\Entity
      */
     public function setAuthor(string $author): void
     {
-        $this->author = $this->validator->isUUID($author) ? $author : DataFormatException::throw('AUTHOR ID');
+        $this->author = $this->validator->isUUID($author) ? $author : InvalidAttributeRegexException::throw('author', __FILE__);
     }
 
     /**
@@ -102,7 +103,7 @@ class Rate extends \App\Model\Template\Entity
      */
     public function setDescription(string $description): void
     {
-        $this->description = $this->validator->isFit($description) ? $description : DataFormatException::throw('DESCRIPTION', DataFormatException::LENGTH);
+        $this->description = $this->validator->isFit($description) ? $description : InvalidAttributeLengthException::throw('owner', __FILE__);
     }
 
     /**

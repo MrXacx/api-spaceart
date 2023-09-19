@@ -6,8 +6,7 @@ namespace App\Model;
 
 use App\DAO\SelectionDB;
 use App\Model\Enumerate\ArtType;
-use App\Util\Exception\DataFormatException;
-use DateInterval;
+use App\Util\Exception\InvalidAttributeRegexException;
 use DateTime;
 
 /**
@@ -89,7 +88,7 @@ class Selection extends \App\Model\Template\Entity
      */
     function setOwner(string $owner)
     {
-        $this->owner = $this->validator->isUUID($owner) ? $owner : DataFormatException::throw('ID');
+        $this->owner = $this->validator->isUUID($owner) ? $owner : InvalidAttributeRegexException::throw('owner', __FILE__);
     }
 
     /**

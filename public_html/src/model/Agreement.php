@@ -7,7 +7,7 @@ namespace App\Model;
 use App\DAO\AgreementDB;
 use App\Model\Enumerate\AgreementStatus;
 use App\Model\Enumerate\ArtType;
-use App\Util\Exception\DataFormatException;
+use App\Util\Exception\InvalidAttributeRegexException;
 use DateTime;
 
 /**
@@ -18,8 +18,6 @@ use DateTime;
  */
 class Agreement extends \App\Model\Template\Entity
 {
-
-    use \App\Util\Tool\DateTimeTrait;
 
     /**
      * ID do contratante
@@ -108,7 +106,8 @@ class Agreement extends \App\Model\Template\Entity
      */
     function setHirer(string $hirer)
     {
-        $this->hirer = $this->validator->isUUID($hirer) ? $hirer : DataFormatException::throw('hirer id');
+        $this->hirer = $this->validator->isUUID($hirer) ? $hirer : InvalidAttributeRegexException::throw('hirer', __FILE__);
+        ;
     }
 
     /**
@@ -126,7 +125,7 @@ class Agreement extends \App\Model\Template\Entity
      */
     function setHired(string $hired)
     {
-        $this->hired = $this->validator->isUUID($hired) ? $hired : DataFormatException::throw('hired id');
+        $this->hired = $this->validator->isUUID($hired) ? $hired : InvalidAttributeRegexException::throw('hired', __FILE__);
     }
 
     /**

@@ -2,8 +2,11 @@
 
 namespace App\Model\Tool;
 
+use App\Util\Exception\InvalidAttributeFormatException;
+
 trait Location
 {
+
     protected string $CEP;
     protected string $address;
     protected string $neighborhood;
@@ -15,7 +18,7 @@ trait Location
      */
     public function setCEP(string $CEP): void
     {
-        $this->CEP = $CEP;
+        $this->CEP = $this->validator->isCEP($CEP) ? $CEP : InvalidAttributeFormatException::throw('CEP');
     }
 
     /** 

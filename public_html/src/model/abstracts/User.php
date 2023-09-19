@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace App\Model\Template;
 
 use App\Model\Tool\Location;
-use App\Util\Exception\DataFormatException;
+use App\Util\Exception\InvalidAttributeLengthException;
+use App\Util\Exception\InvalidAttributeRegexException;
 use Exception;
 
 /**
@@ -78,7 +79,7 @@ class User extends Entity
     public function setID(string $id): void
     {
 
-        $this->id = $this->validator->isUUID($id) ? $id : DataFormatException::throw('ID');
+        $this->id = $this->validator->isUUID($id) ? $id : InvalidAttributeRegexException::throw('id', __FILE__);
     }
 
     /**
@@ -95,7 +96,7 @@ class User extends Entity
      */
     public function setEmail(string $email): void
     {
-        $this->email = $this->validator->isEmail($email) ? $email : DataFormatException::throw('EMAIL');
+        $this->email = $this->validator->isEmail($email) ? $email : InvalidAttributeRegexException::throw('email', __FILE__);
     }
 
     /**
@@ -112,7 +113,7 @@ class User extends Entity
      */
     public function setPassword(string $password): void
     {
-        $this->password = $this->validator->isFit($password) ? $password : DataFormatException::throw('PASSWORD', DataFormatException::LENGTH);
+        $this->password = $this->validator->isFit($password) ? $password : InvalidAttributeLengthException::throw('password', __FILE__);
     }
 
     /**
@@ -129,7 +130,7 @@ class User extends Entity
      */
     public function setName(string $name): void
     {
-        $this->name = $this->validator->isFit($name) ? $name : DataFormatException::throw('NAME', DataFormatException::LENGTH);
+        $this->name = $this->validator->isFit($name) ? $name : InvalidAttributeLengthException::throw('name', __FILE__);
     }
 
     /**
@@ -147,7 +148,7 @@ class User extends Entity
      */
     public function setPhone(string $phone): void
     {
-        $this->phone = $this->validator->isPhone($phone) ? $phone : DataFormatException::throw('PHONE');
+        $this->phone = $this->validator->isPhone($phone) ? $phone : InvalidAttributeRegexException::throw('phone', __FILE__);
     }
 
     /**
@@ -164,7 +165,7 @@ class User extends Entity
      */
     public function setWebsite(string $website): void
     {
-        $this->website = $this->validator->isURL($website) ? $website : DataFormatException::throw('website');
+        $this->website = $this->validator->isURL($website) ? $website : InvalidAttributeRegexException::throw('website', __FILE__);
     }
 
     /**

@@ -15,7 +15,7 @@ use App\Model\Enumerate\AccountType;
 use App\Model\Enumerate\ArtType;
 use App\Model\Report;
 use App\Util\Cache;
-use App\Util\Exception\DataFormatException;
+use App\Util\Exception\InvalidAttributeFormatException;
 use App\Util\DataValidator;
 use App\Controller\Tool\Controller;
 
@@ -60,7 +60,7 @@ final class UserController
                 break;
 
             case null:
-                DataFormatException::throw('TYPE ACCOUNT');
+                InvalidAttributeFormatException::throw('TYPE ACCOUNT');
         }
 
         if ($user instanceof User && $db instanceof UsersDB) {
@@ -188,7 +188,7 @@ final class UserController
     {
         $name = $this->parameterList->getString('name');
         if ($name == '%') {
-            DataFormatException::throw('name');
+            InvalidAttributeFormatException::throw('name');
         }
         $user->setName($name);
         $list = $db->getListByName($offset, $limit);
@@ -207,7 +207,7 @@ final class UserController
 
             AccountType::ARTIST => [$artist = new Artist(), new ArtistDB($artist)],
             AccountType::ENTERPRISE => [$enterprise = new Enterprise(), new EnterpriseDB($enterprise)],
-            default => DataFormatException::throw('Account Type')
+            default => InvalidAttributeFormatException::throw('Account Type')
         };
     }
 

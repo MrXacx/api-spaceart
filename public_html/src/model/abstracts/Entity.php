@@ -2,8 +2,8 @@
 
 namespace App\Model\Template;
 
-use App\Util\Exception\DataFormatException;
 use App\Util\DataValidator;
+use App\Util\Exception\InvalidAttributeRegexException;
 
 /**
  * Classe abstrata de uma entidade
@@ -35,7 +35,7 @@ abstract class Entity
      */
     public function setID(string $id): void
     {
-        $this->id = $this->validator->isUUID($id) ? $id : DataFormatException::throw('ID');
+        $this->id = $this->validator->isUUID($id) ? $id : InvalidAttributeRegexException::throw('id', __FILE__);
     }
 
     /**

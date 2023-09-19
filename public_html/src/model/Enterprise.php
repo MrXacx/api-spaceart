@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use App\DAO\UsersDB;
 use App\DAO\EnterpriseDB;
+use App\DAO\UsersDB;
 use App\Model\Enumerate\AccountType;
-use App\Util\Exception\DataFormatException;
+use App\Util\Exception\InvalidAttributeRegexException;
 
 /**
  * Classe modelo de empreendimento
@@ -66,7 +66,7 @@ class Enterprise extends \App\Model\Template\User
      */
     public function setCNPJ(string $CNPJ): void
     {
-        $this->CNPJ = $this->validator->isCNPJ($CNPJ) ? $CNPJ : DataFormatException::throw('CNPJ');
+        $this->CNPJ = $this->validator->isCNPJ($CNPJ) ? $CNPJ : InvalidAttributeRegexException::throw('CNPJ', __FILE__);
     }
 
     /**

@@ -3,7 +3,8 @@
 namespace App\Model;
 
 use App\DAO\MessageDB;
-use App\Util\Exception\DataFormatException;
+use App\Util\Exception\InvalidAttributeLengthException;
+use App\Util\Exception\InvalidAttributeRegexException;
 use DateTime;
 
 /**
@@ -43,7 +44,7 @@ class Message extends \App\Model\Template\Entity
     function __construct(string $chat)
     {
         parent::__construct();
-        $this->chat = $this->validator->isUUID($chat) ? $chat : DataFormatException::throw('chat id');
+        $this->chat = $this->validator->isUUID($chat) ? $chat : InvalidAttributeRegexException::throw('chat', __FILE__);
     }
 
     public static function getInstanceOf(array $attr): self
@@ -72,7 +73,7 @@ class Message extends \App\Model\Template\Entity
      */
     public function setSender(string $sender)
     {
-        $this->sender = $this->validator->isUUID($sender) ? $sender : DataFormatException::throw('SENDER ID');
+        $this->sender = $this->validator->isUUID($sender) ? $sender : InvalidAttributeRegexException::throw('sender', __FILE__);
     }
 
     /**
@@ -99,7 +100,7 @@ class Message extends \App\Model\Template\Entity
      */
     public function setContent(string $content): void
     {
-        $this->content = $this->validator->isFit($content) ? $content : DataFormatException::throw('content', DataFormatException::LENGTH);
+        $this->content = $this->validator->isFit($content) ? $content : InvalidAttributeLengthException::throw('content', __FILE__);
     }
 
     /**

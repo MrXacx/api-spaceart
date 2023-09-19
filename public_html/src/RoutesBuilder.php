@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Controller\AgreementController;
+use App\Controller\ChatController;
+use App\Controller\SelectionController;
+use App\Controller\UserController;
 use App\Server;
 use App\Util\Exception\DatabaseException;
-use App\Util\Exception\DataFormatException;
+use App\Util\Exception\InvalidAttributeFormatException;
 use App\Util\Exception\UnexpectedHttpParameterException;
 use Exception;
 use FastRoute;
-use FastRoute\RouteCollector;
 use FastRoute\Dispatcher;
+use FastRoute\RouteCollector;
 use Monolog\Level;
 use PDOException;
 use Symfony\Component\HttpFoundation\Response;
-use App\Controller\UserController;
-use App\Controller\ChatController;
-use App\Controller\SelectionController;
-use App\Controller\AgreementController;
 
 /**
  * Classe para controlar rotas
@@ -155,10 +155,10 @@ class RoutesBuilder
 
             case Dispatcher::FOUND: // Caso a rota esteja correta
                 Server::$logger->push(
-                    'a rota ' . Server::getStrippedURI() . ' foi acionada',
+                    'a rota ' . Server::getStrippedURI() . ' foi acionada pelo método ' . Server::getHTTPMethod(),
                     Level::Debug
                 );
-                
+
                 list($status, $handler, $vars) = $fetchParams; // Obtém manipulador da rota e parâmetros de manipulação
                 list($class, $method) = explode('@', $handler); // Obtém classe e método a ser executado
 
@@ -172,9 +172,9 @@ class RoutesBuilder
                         DatabaseException::throw($ex->getMessage());
                     }
 
-                } catch (DataFormatException $ex) {
+                } catch (InvalidAttributeFormatException $ex) {
 
-                    Server::$logger->push('formato ou tamanho do atributo ' . $ex->getMessage() . ' não foi aceito na model', Level::Debug);
+                    Server::$logger->push($ex->getMessage(), Level::Debug);
                     $status = Response::HTTP_BAD_REQUEST;
 
                 } catch (DatabaseException $ex) {

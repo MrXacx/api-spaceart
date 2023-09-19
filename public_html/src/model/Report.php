@@ -3,7 +3,8 @@
 namespace App\Model;
 
 use App\DAO\ReportDB;
-use App\Util\Exception\DataFormatException;
+use App\Util\Exception\InvalidAttributeLengthException;
+use App\Util\Exception\InvalidAttributeRegexException;
 
 /**
  * Classe modelo de denúncia
@@ -39,7 +40,7 @@ class Report extends \App\Model\Template\Entity
     function __construct(string $reporter)
     {
         parent::__construct();
-        $this->reporter = $this->validator->isUUID($reporter) ? $reporter : DataFormatException::throw('reporter id');
+        $this->reporter = $this->validator->isUUID($reporter) ? $reporter : InvalidAttributeRegexException::throw('reporter', __FILE__);
     }
 
     public static function getInstanceOf(array $attr): self
@@ -79,7 +80,7 @@ class Report extends \App\Model\Template\Entity
      */
     public function setReported(string $reported): void
     {
-        $this->reported = $this->validator->isUUID($reported) ? $reported : DataFormatException::throw('reported id');
+        $this->reported = $this->validator->isUUID($reported) ? $reported : InvalidAttributeRegexException::throw('reported', __FILE__);
     }
 
     /**
@@ -97,7 +98,7 @@ class Report extends \App\Model\Template\Entity
      */
     public function setReason(string $reason): void
     {
-        $this->reason = $this->validator->isFit($reason) ? $reason : DataFormatException::throw('reason', DataFormatException::LENGTH);
+        $this->reason = $this->validator->isFit($reason) ? $reason : InvalidAttributeLengthException::throw('reason', __FILE__);
     }
 
     /**

@@ -3,7 +3,7 @@
 namespace App\Model;
 
 use App\DAO\ChatDB;
-use App\Util\Exception\DataFormatException;
+use App\Util\Exception\InvalidAttributeRegexException;
 
 /**
  * Classe modelo de chat
@@ -49,7 +49,7 @@ class Chat extends \App\Model\Template\Entity
      */
     public function setArtist(string $artist): void
     {
-        $this->artist = $this->validator->isUUID($artist) ? $artist : DataFormatException::throw('artist id');
+        $this->artist = $this->validator->isUUID($artist) ? $artist : InvalidAttributeRegexException::throw('artist', __FILE__);
     }
 
     /**
@@ -58,7 +58,7 @@ class Chat extends \App\Model\Template\Entity
      */
     public function setEnterprise(string $enterprise): void
     {
-        $this->enterprise = $this->validator->isUUID($enterprise) ? $enterprise : DataFormatException::throw('enterprise id');
+        $this->enterprise = $this->validator->isUUID($enterprise) ? $enterprise : InvalidAttributeRegexException::throw('enterprise', __FILE__);
     }
 
     /**

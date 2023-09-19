@@ -2,9 +2,9 @@
 
 namespace App\Model;
 
-use DateTime;
 use App\DAO\ApplicationDB;
-use App\Util\Exception\DataFormatException;
+use App\Util\Exception\InvalidAttributeRegexException;
+use DateTime;
 
 /**
  * Classe modelo de aplicação a uma seleção
@@ -38,7 +38,7 @@ class Application extends \App\Model\Template\Entity
     function __construct(string $selection)
     {
         parent::__construct();
-        $this->selection = $this->validator->isUUID($selection) ? $selection : DataFormatException::throw('selection id');
+        $this->selection = $this->validator->isUUID($selection) ? $selection : InvalidAttributeRegexException::throw('selection', __FILE__);
     }
 
     /**
@@ -56,7 +56,7 @@ class Application extends \App\Model\Template\Entity
      */
     public function setUser(string $user): void
     {
-        $this->user = $this->validator->isUUID($user) ? $user : DataFormatException::throw('user id');
+        $this->user = $this->validator->isUUID($user) ? $user : InvalidAttributeRegexException::throw('user', __FILE__);
     }
 
     /**

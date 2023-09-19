@@ -8,7 +8,7 @@ use App\DAO\ArtistDB;
 use App\DAO\UsersDB;
 use App\Model\Enumerate\AccountType;
 use App\Model\Enumerate\ArtType;
-use App\Util\Exception\DataFormatException;
+use App\Util\Exception\InvalidAttributeRegexException;
 
 /**
  * Classe modelo de artista
@@ -75,7 +75,7 @@ class Artist extends \App\Model\Template\User
      */
     public function setCPF(string $CPF): void
     {
-        $this->CPF = $this->validator->isCPF($CPF) ? $CPF : DataFormatException::throw('CPF');
+        $this->CPF = $this->validator->isCPF($CPF) ? $CPF : InvalidAttributeRegexException::throw('CPF', __FILE__);
     }
 
     /**

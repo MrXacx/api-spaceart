@@ -6,6 +6,7 @@ use App\DAO\EnterpriseDB;
 use App\Util\Exception\InvalidAttributeLengthException;
 use App\Util\Exception\InvalidAttributeRegexException;
 
+
 trait Location
 {
 

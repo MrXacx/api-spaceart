@@ -16,7 +16,8 @@
       "App\\Model\\Tool\\": "public_html/src/model/tools/",
       "App\\Util\\": "public_html/src/util/",
       "App\\Util\\Tool\\": "public_html/src/util/tools/",
-      "App\\Util\\Exception\\": "public_html/src/util/exceptions/"
+      "App\\Util\\Exception\\": "public_html/src/util/exceptions/",
+      "App\\Util\\Exception\\Template\\": "public_html/src/util/exceptions/abstracts/"
     }
   },
   "require": {
@@ -29,4 +30,3 @@
   "require-dev": {
     "phpunit/phpunit": "^9.6.10"
   }
-}

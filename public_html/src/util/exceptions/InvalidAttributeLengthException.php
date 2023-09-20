@@ -1,11 +1,11 @@
 <?php
 namespace App\Util\Exception;
 
-class InvalidAttributeLengthException extends InvalidAttributeFormatException
+class InvalidAttributeLengthException extends \App\Util\Exception\Template\InvalidAttributeFormatException
 {
     public static function throw (string $attribute, string $file): void
     {
-        parent::throw($attribute, parent::LENGTH, $file);
+        new InvalidAttributeLengthException($attribute, parent::LENGTH, $file);
     }
 }
 

@@ -45,6 +45,6 @@ $response->send(); // Exibe resposta
 $time = microtime(true) - $startTime;
 
 Server::$logger->push('resposta enviada para ' . Server::getClientIP(), Level::Info);
-Server::$logger->push('tempo de resposta: ' . $time . 'ms', Level::Debug);
+Server::$logger->push("tempo de resposta: $time ms", Level::Debug);
 
 ?>

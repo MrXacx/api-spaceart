@@ -12,13 +12,13 @@ use App\Server;
 use App\Util\Exception\DatabaseException;
 use App\Util\Exception\InvalidAttributeFormatException;
 use App\Util\Exception\UnexpectedHttpParameterException;
-use Exception;
 use FastRoute;
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 use Monolog\Level;
 use PDOException;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * Classe para controlar rotas
@@ -208,7 +208,7 @@ class RoutesBuilder
                     Server::$logger->push('parâmetro HTTP ' . $ex->getMessage() . ' não condiz com as opções', Level::Debug);
                     $status = Response::HTTP_BAD_REQUEST;
 
-                } catch (Exception $ex) {
+                } catch (Throwable $ex) {
 
                     Server::$logger->push(
                         'Exceção lançada: ' . $ex->getMessage()

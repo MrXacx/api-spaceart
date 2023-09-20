@@ -2,12 +2,12 @@
 
 $startTime = microtime(true);
 
+require_once __DIR__ . '/../../config/setup.php';
+
 use App\Controller\Tool\Controller;
 use App\Util\Cache;
 use App\Server;
 use Monolog\Level;
-
-require_once __DIR__ . '/../../config/setup.php';
 
 Server::$logger->build(); // Cria log para o dia
 

@@ -13,7 +13,7 @@ use Monolog\Level;
 Locale::setDefault('pt-BR'); // Define charset
 
 $_ENV = array_merge($_ENV, parse_ini_file('setup.ini', true));
-$_ENV = array_merge($_ENV, $_ENV['DATABASE_PROUCTION']) ;
+$_ENV = array_merge($_ENV, $_ENV['DATABASE_PRODUCTION']) ;
 
 Server::$logger = new Log(
     new Logger('SpaceartAPI'),

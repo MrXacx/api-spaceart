@@ -6,7 +6,7 @@
 
 ## Para usar
 
-### Endepoint
+### Endpoint
 
 ```
 

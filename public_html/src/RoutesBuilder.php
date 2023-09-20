@@ -211,7 +211,9 @@ class RoutesBuilder
                 } catch (Throwable $ex) {
 
                     Server::$logger->push(
-                        'Exceção lançada: ' . $ex->getMessage()
+                        'exceção lançada: ' . $ex->getMessage()
+                        . ' em ' . $ex->getFile()
+                        . ' linha ' . $ex->getLine()
                         ,
                         Level::Critical
                     );

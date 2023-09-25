@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS artist(
 
   id varchar(36) PRIMARY KEY,
   CPF varchar(11) UNIQUE KEY NOT NULL,
-  art enum("escultura", "pintura", "dança", "música") NOT NULL,
+  art enum("escultura", "pintura", "dança", "música", "teatro") NOT NULL,
   wage float NOT NULL,
   birthday date NOT NULL,
 

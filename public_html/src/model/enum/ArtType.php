@@ -13,6 +13,7 @@ enum ArtType: string
     case SCULPTURE = 'escultura';
     case PAINTING = 'pintura';
     case DANCE = 'dança';
+    case THEATER = 'teatro';
 
 }
 

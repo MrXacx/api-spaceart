@@ -71,7 +71,6 @@ CREATE TABLE IF NOT EXISTS agreement(
   art varchar(256) NOT NULL,
   status enum("send", "accepted", "recused", "canceled")  DEFAULT "send",
 
-  CONSTRAINT chk_time_is_future CHECK (start_time > CURRENT_TIME AND end_time > start_time),
   CONSTRAINT hirer_user_fk FOREIGN KEY (hirer) REFERENCES enterprise(id) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT hired_user_fk FOREIGN KEY (hired) REFERENCES artist(id) ON UPDATE CASCADE ON DELETE CASCADE
 
@@ -87,9 +86,8 @@ CREATE TABLE IF NOT EXISTS selection(
   art varchar(256) NOT NULL,
   locked boolean DEFAULT 1,
   
-  CONSTRAINT chk_timestamp_is_future CHECK (start_timestamp > CURRENT_TIMESTAMP AND end_timestamp > start_timestamp),
   CONSTRAINT owner_fk FOREIGN KEY (owner) REFERENCES enterprise(id) ON UPDATE CASCADE ON DELETE CASCADE
-  
+
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

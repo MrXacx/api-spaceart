@@ -44,6 +44,7 @@ CREATE TABLE IF NOT EXISTS artist(
   CPF varchar(11) UNIQUE KEY NOT NULL,
   art enum("escultura", "pintura", "dança", "música") NOT NULL,
   wage float NOT NULL,
+  birthday date NOT NULL,
 
   CONSTRAINT artist_user_fk FOREIGN KEY (id) REFERENCES users(id)  ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

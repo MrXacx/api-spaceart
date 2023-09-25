@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\DAO\EnterpriseDB;
-use App\DAO\UsersDB;
 use App\Model\Enumerate\AccountType;
+use App\Util\Exception\InvalidAttributeLengthException;
 use App\Util\Exception\InvalidAttributeRegexException;
 
 /**
@@ -23,6 +23,7 @@ class Enterprise extends \App\Model\Template\User
      */
     private string $CNPJ;
 
+    private string $companyName;
 
     /**
      * Obtém um modelo de usuário inicializado
@@ -37,18 +38,19 @@ class Enterprise extends \App\Model\Template\User
         foreach ($attr as $key => $value) {
             $atributeName = match ($key) {
                 'id' => 'id',
-                UsersDB::EMAIL => 'email',
-                UsersDB::PASSWORD => 'password',
-                UsersDB::NAME => 'name',
+                EnterpriseDB::EMAIL => 'email',
+                EnterpriseDB::PASSWORD => 'password',
+                EnterpriseDB::NAME => 'name',
                 EnterpriseDB::CNPJ => 'CNPJ',
-                UsersDB::CEP => 'CEP',
-                UsersDB::STATE => 'state',
-                UsersDB::CITY => 'city',
+                EnterpriseDB::CEP => 'CEP',
+                EnterpriseDB::STATE => 'state',
+                EnterpriseDB::CITY => 'city',
                 EnterpriseDB::NEIGHBORHOOD => 'neighborhood',
                 EnterpriseDB::ADDRESS => 'address',
-                UsersDB::PHONE => 'phone',
-                UsersDB::SITE => 'website',
-                UsersDB::RATE => 'rate',
+                EnterpriseDB::PHONE => 'phone',
+                EnterpriseDB::SITE => 'website',
+                EnterpriseDB::RATE => 'rate',
+                EnterpriseDB::COMPANY_NAME => 'company_name',
                 default => null
             };
 
@@ -60,26 +62,35 @@ class Enterprise extends \App\Model\Template\User
         return $entity;
     }
 
-    /**
-     * Insere código nacional de pessoa jurídica
-     * @param string $CNPJ código
-     */
     public function setCNPJ(string $CNPJ): void
     {
         $this->CNPJ = $this->validator->isCNPJ($CNPJ) ? $CNPJ : InvalidAttributeRegexException::throw('CNPJ', __FILE__);
     }
 
-    /**
-     * Obtém código nacional de pessoa jurídica
-     * @return string
-     */
     public function getCNPJ(): string
     {
         return $this->CNPJ;
     }
 
+    public function setCompanyName(string $companyName): void
+    {
+        $this->companyName = $this->validator->isFit($companyName) ? $companyName : InvalidAttributeLengthException::throw('company_name', __FILE__);
+    }
+
+    public function getCompanyName(): string
+    {
+        return $this->companyName;
+    }
+
     public function toArray(): array
     {
-        return array_merge(parent::toArray(), ['CNPJ' => $this->CNPJ ?? null, 'type' => AccountType::ENTERPRISE->value]);
+        return array_merge(
+            parent::toArray(),
+            [
+                'CNPJ' => $this->CNPJ ?? null,
+                'companyName' => $this->companyName,
+                'type' => AccountType::ENTERPRISE->value
+            ]
+        );
     }
 }

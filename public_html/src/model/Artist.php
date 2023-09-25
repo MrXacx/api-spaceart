@@ -9,6 +9,7 @@ use App\DAO\UsersDB;
 use App\Model\Enumerate\AccountType;
 use App\Model\Enumerate\ArtType;
 use App\Util\Exception\InvalidAttributeRegexException;
+use DateTime;
 
 /**
  * Classe modelo de artista
@@ -29,6 +30,8 @@ class Artist extends \App\Model\Template\User
      * @var ArtType|string
      */
     private ArtType|string $art;
+
+    private DateTime $birthday;
 
     /**
      * Pretensão salarial por hora
@@ -56,6 +59,7 @@ class Artist extends \App\Model\Template\User
                 ArtistDB::WAGE => 'wage',
                 UsersDB::SITE => 'website',
                 UsersDB::RATE => 'rate',
+                ArtistDB::BIRTHDAY => 'birthday',
 
                 default => null
             };
@@ -121,11 +125,24 @@ class Artist extends \App\Model\Template\User
     {
         return $this->wage;
     }
+    
+    
+    public function setBirthday(DateTime $birthday): void
+    {
+        $this->birthday = $birthday;
+    }
+
+
+    public function getBirthday(): DateTime
+    {
+        return $this->birthday;
+    }
 
     public function toArray(): array
     {
         return array_merge(parent::toArray(), [
             'CPF' => $this->CPF ?? null,
+            'birthday' => $this->birthday->format(UsersDB::USUAL_DATE_FORMAT),
             'art' => $this->art,
             'wage' => $this->wage,
             'type' => AccountType::ARTIST->value

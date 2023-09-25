@@ -48,6 +48,9 @@ final class UserController
                 $user->setCPF($this->parameterList->getString('cpf'));
                 $user->setArt(ArtType::tryFrom($this->parameterList->getString('art')));
                 $user->setWage(floatval($this->parameterList->getString('wage')));
+                $user->setBirthday(
+                    DateTime::createFromFormat(ArtistDB::USUAL_DATE_FORMAT, $this->parameterList->getString('birthday'))
+                );
                 $db = new ArtistDB($user);
                 break;
 

@@ -18,6 +18,7 @@ class ArtistDB extends UsersDB
     public const ART = 'art';
     public const WAGE = 'wage';
     public const CPF = 'cpf';
+    public const BIRTHDAY = 'birthday';
 
     private Artist $artist;
 
@@ -38,13 +39,14 @@ class ArtistDB extends UsersDB
         if (parent::create()) { // Executa se o usuário foi criado
 
             // Passa query SQL de criação
-            $query = $this->getConnection()->prepare('INSERT INTO artist (id, CPF, art, wage) VALUES (?,?,?,?)');
+            $query = $this->getConnection()->prepare('INSERT INTO artist (id, CPF, art, wage, birthday) VALUES (?,?,?,?,?)');
 
             // Substitui interrogações pelos valores dos atributos
             $query->bindValue(1, $this->artist->getID());
             $query->bindValue(2, $this->artist->getCPF());
             $query->bindValue(3, $this->artist->getArt()->value);
             $query->bindValue(4, $this->artist->getWage());
+            $query->bindValue(5, $this->artist->getBirthday()->format(parent::DB_DATE_FORMAT));
 
 
             if ($query->execute()) { // Executa a inserção funcionar

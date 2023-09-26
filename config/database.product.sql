@@ -155,12 +155,12 @@ CREATE TABLE IF NOT EXISTS rate(
 
 -- CRIA VIEWS
 CREATE VIEW  artist_view AS
-SELECT usr.id, usr.name, usr.image, usr.CEP, usr.state, usr.city, artist.art, artist.wage, usr.rate, usr.website
+SELECT usr.id, usr.index, usr.name, usr.image, usr.CEP, usr.state, usr.city, artist.art, artist.wage, usr.rate, usr.website
 FROM artist, users AS usr
 WHERE usr.id = artist.id;
 
 CREATE VIEW enterprise_view AS
-SELECT usr.id, usr.name, ent.company_name, ent.section, usr.image, usr.CEP, usr.state, usr.city, ent.neighborhood, ent.address, usr.rate, usr.website
+SELECT usr.id, usr.index, usr.name, ent.company_name, ent.section, usr.image, usr.CEP, usr.state, usr.city, ent.neighborhood, ent.address, usr.rate, usr.website
 FROM enterprise AS ent, users AS usr
 WHERE usr.id = ent.id;
 

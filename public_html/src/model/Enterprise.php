@@ -39,6 +39,7 @@ class Enterprise extends \App\Model\Template\User
         foreach ($attr as $key => $value) {
             $atributeName = match ($key) {
                 'id' => 'id',
+                'index' => 'index',
                 EnterpriseDB::EMAIL => 'email',
                 EnterpriseDB::PASSWORD => 'password',
                 EnterpriseDB::NAME => 'name',

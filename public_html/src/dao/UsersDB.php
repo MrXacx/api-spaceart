@@ -68,7 +68,7 @@ class UsersDB extends DatabaseAcess
     public function getList(int $offset = 0, int $limit = 10): array
     {
         // Determina query SQL de leitura
-        $query = $this->getConnection()->prepare("SELECT id, name, image, CEP, state, city, rate, website FROM users LIMIT $limit OFFSET $offset");
+        $query = $this->getConnection()->prepare("SELECT id, index, name, image, CEP, state, city, rate, website FROM users LIMIT $limit OFFSET $offset");
 
         if ($query->execute()) { // Executa se consulta não falhar
             return $this->fetchRecord($query);
@@ -84,7 +84,7 @@ class UsersDB extends DatabaseAcess
     public function getUnique(): User
     {
         // Define query SQL para obter todas as colunas da linha do usuário
-        $query = $this->getConnection()->prepare('SELECT id, name, image, CEP, state, city, rate, website FROM users WHERE id = ?');
+        $query = $this->getConnection()->prepare('SELECT id, index, name, image, CEP, state, city, rate, website FROM users WHERE id = ?');
         $query->bindValue(1, $this->user->getID()); // Substitui interrogação pelo ID
 
         if ($query->execute()) { // Executa se a query for aceita
@@ -121,7 +121,7 @@ class UsersDB extends DatabaseAcess
 
         $this->updateTokenAcess();
         // Passa query SQL para leitura da coluna id
-        $query = $this->getConnection()->prepare('SELECT id, token, email FROM users WHERE email = ? AND password = ?');
+        $query = $this->getConnection()->prepare('SELECT id, index, token, email FROM users WHERE email = ? AND password = ?');
 
         // // Substitui os termos pelos valores retornados
         $query->bindValue(1, $this->user->getEmail());

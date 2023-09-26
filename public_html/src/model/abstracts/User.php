@@ -60,6 +60,7 @@ class User extends Entity
      */
     protected float|string $rate;
 
+    protected int|string $index;
 
     /**
      * Obtém um modelo de usuário inicializado
@@ -207,6 +208,7 @@ class User extends Entity
     public function toArray(): array
     {
         return array_merge(parent::toArray(), [
+            'index' => $this->index,
             'name' => $this->name,
             'image' => $this->image,
             'email' => $this->email ?? null,

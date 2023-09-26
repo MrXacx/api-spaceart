@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\DAO\ArtistDB;
-use App\DAO\UsersDB;
 use App\Model\Enumerate\AccountType;
 use App\Model\Enumerate\ArtType;
 use App\Util\Exception\InvalidAttributeRegexException;
@@ -47,18 +46,19 @@ class Artist extends \App\Model\Template\User
 
             $atributeName = match ($key) {
                 'id' => 'id',
-                UsersDB::EMAIL => 'email',
-                UsersDB::PASSWORD => 'password',
-                UsersDB::NAME => 'name',
-                UsersDB::PHONE => 'phone',
-                UsersDB::CEP => 'CEP',
-                UsersDB::STATE => 'state',
-                UsersDB::CITY => 'city',
+                'index' => 'index',
+                ArtistDB::EMAIL => 'email',
+                ArtistDB::PASSWORD => 'password',
+                ArtistDB::NAME => 'name',
+                ArtistDB::PHONE => 'phone',
+                ArtistDB::CEP => 'CEP',
+                ArtistDB::STATE => 'state',
+                ArtistDB::CITY => 'city',
                 ArtistDB::CPF => 'CPF',
                 ArtistDB::ART => 'art',
                 ArtistDB::WAGE => 'wage',
-                UsersDB::SITE => 'website',
-                UsersDB::RATE => 'rate',
+                ArtistDB::SITE => 'website',
+                ArtistDB::RATE => 'rate',
                 ArtistDB::BIRTHDAY => 'birthday',
 
                 default => null
@@ -142,7 +142,7 @@ class Artist extends \App\Model\Template\User
     {
         return array_merge(parent::toArray(), [
             'CPF' => $this->CPF ?? null,
-            'birthday' => $this->birthday->format(UsersDB::USUAL_DATE_FORMAT),
+            'birthday' => $this->birthday->format(ArtistDB::USUAL_DATE_FORMAT),
             'art' => $this->art,
             'wage' => $this->wage,
             'type' => AccountType::ARTIST->value

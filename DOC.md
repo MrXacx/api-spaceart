@@ -47,10 +47,11 @@
 | city         | município                                                  | \w{1,191}            | true        | `default`         |
 | cep          | CEP                                                        | \d{8}                | true        | `default`         |
 | image        | base64 da imagem                                           |                      | true        | `default`         |
-| wage         | pretensão salarial                                         |                      | true        | `type=artist`     |
+| wage         | pretensão salarial                                         | float                    | true        | `type=artist`     |
 | cpf          | CPF                                                        | \d{11}               | true        | `type=artist`     |
 | cnpj         | CNPJ                                                       | \d{11}               | true        | `type=enterprise` |
 | companyName  | Razão social                                               | \w{1, 256}           | true        | `type=enterprise` |
+| section      | Setor                                                      | \w{1, 256}           | true        | `type=enterprise` |
 | art          | tipo de arte                                               |                      | true        | `type=artist`     |
 | neighborhood | bairro                                                     | \w{0,191}            | true        | `type=enterprise` |
 | address      | logradouro, número, complemento, ponto de referência e etc | \w{0,191}            | true        | `type=enterprise` |

@@ -24,6 +24,7 @@ class Enterprise extends \App\Model\Template\User
     private string $CNPJ;
 
     private string $companyName;
+    private string $section;
 
     /**
      * Obtém um modelo de usuário inicializado
@@ -51,6 +52,7 @@ class Enterprise extends \App\Model\Template\User
                 EnterpriseDB::SITE => 'website',
                 EnterpriseDB::RATE => 'rate',
                 EnterpriseDB::COMPANY_NAME => 'company_name',
+                EnterpriseDB::SECTION => 'section',
                 default => null
             };
 
@@ -80,6 +82,15 @@ class Enterprise extends \App\Model\Template\User
     public function getCompanyName(): string
     {
         return $this->companyName;
+    }
+    public function setSection(string $section): void
+    {
+        $this->companyName = $this->validator->isFit($section) ? $section : InvalidAttributeLengthException::throw('section', __FILE__);
+    }
+
+    public function getSection(): string
+    {
+        return $this->section;
     }
 
     public function toArray(): array

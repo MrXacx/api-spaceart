@@ -26,6 +26,7 @@ class UsersDB extends DatabaseAcess
     public const IMAGE_URL = 'image';
     public const RATE = 'rate';
     public const TOKEN = 'token';
+    public const DESCRIPTION = 'description';
 
     private User $user;
 
@@ -84,7 +85,7 @@ class UsersDB extends DatabaseAcess
     public function getUnique(): User
     {
         // Define query SQL para obter todas as colunas da linha do usuário
-        $query = $this->getConnection()->prepare('SELECT id, index, name, image, CEP, state, city, rate, website FROM users WHERE id = ?');
+        $query = $this->getConnection()->prepare('SELECT id, index, name, image, CEP, state, city, rate, website, description FROM users WHERE id = ?');
         $query->bindValue(1, $this->user->getID()); // Substitui interrogação pelo ID
 
         if ($query->execute()) { // Executa se a query for aceita

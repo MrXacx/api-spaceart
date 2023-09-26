@@ -64,6 +64,7 @@ final class UserController
                 $user->setNeighborhood($this->parameterList->getString('neighborhood'));
                 $user->setAddress($this->parameterList->getString('address'));
                 $user->setSection($this->parameterList->getString('section'));
+                $user->setDescription($this->parameterList->getString('description'));
 
                 $db = new EnterpriseDB($user);
                 break;

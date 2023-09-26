@@ -34,7 +34,8 @@ CREATE TABLE IF NOT EXISTS users(
   city varchar(50) NOT NULL,
   image varchar(256),
   website varchar(256),
-  rate float DEFAULT 0
+  rate float DEFAULT 0,
+  description varchar(256) DEFAULT ''
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -155,12 +156,12 @@ CREATE TABLE IF NOT EXISTS rate(
 
 -- CRIA VIEWS
 CREATE VIEW  artist_view AS
-SELECT usr.id, usr.index, usr.name, usr.image, usr.CEP, usr.state, usr.city, artist.art, artist.wage, usr.rate, usr.website
+SELECT usr.id, usr.index, usr.name, usr.image, usr.CEP, usr.state, usr.city, artist.art, artist.wage, usr.rate, usr.website, usr.description
 FROM artist, users AS usr
 WHERE usr.id = artist.id;
 
 CREATE VIEW enterprise_view AS
-SELECT usr.id, usr.index, usr.name, ent.company_name, ent.section, usr.image, usr.CEP, usr.state, usr.city, ent.neighborhood, ent.address, usr.rate, usr.website
+SELECT usr.id, usr.index, usr.name, ent.company_name, ent.section, usr.image, usr.CEP, usr.state, usr.city, ent.neighborhood, ent.address, usr.rate, usr.website, usr.description
 FROM enterprise AS ent, users AS usr
 WHERE usr.id = ent.id;
 

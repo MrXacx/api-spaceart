@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace App\Model\Template;
 
+use App\DAO\UsersDB;
 use App\Model\Tool\Location;
 use App\Util\Exception\InvalidAttributeLengthException;
 use App\Util\Exception\InvalidAttributeRegexException;
@@ -61,6 +62,7 @@ class User extends Entity
     protected float|string $rate;
 
     protected int|string $index;
+    protected string $description;
 
     /**
      * Obtém um modelo de usuário inicializado
@@ -204,6 +206,15 @@ class User extends Entity
     {
         return floatval($this->rate);
     }
+    public function setDescription(string $description): void
+    {
+        $this->description = $this->validator->isFit($description, UsersDB::DESCRIPTION) ? $description : InvalidAttributeLengthException::throw('description', __FILE__);
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
 
     public function toArray(): array
     {
@@ -216,7 +227,8 @@ class User extends Entity
             'phone' => $this->phone ?? null,
             'location' => $this->toLocationArray(),
             'rate' => $this->rate,
-            'website' => $this->website
+            'website' => $this->website,
+            'description' => $this->description
         ]);
     }
 }

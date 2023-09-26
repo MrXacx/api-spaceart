@@ -22,7 +22,6 @@ USE id21258140_dbspaceart;
 -- CRIAÇÃO DAS ENTIDADES
 
 CREATE TABLE IF NOT EXISTS users(
-
   id varchar(36) PRIMARY KEY,
   token VARCHAR(36) UNIQUE KEY,
   name varchar(256) NOT NULL,
@@ -160,7 +159,7 @@ FROM artist, users AS usr
 WHERE usr.id = artist.id;
 
 CREATE VIEW enterprise_view AS
-SELECT usr.id, usr.name, usr.company_name, usr.section, usr.image, usr.CEP, usr.state, usr.city, ent.neighborhood, ent.address, usr.rate, usr.website
+SELECT usr.id, usr.name, ent.company_name, ent.section, usr.image, usr.CEP, usr.state, usr.city, ent.neighborhood, ent.address, usr.rate, usr.website
 FROM enterprise AS ent, users AS usr
 WHERE usr.id = ent.id;
 

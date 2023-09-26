@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS enterprise(
   CNPJ varchar(14) UNIQUE KEY NOT NULL,
   neighborhood varchar(256) NOT NULL,
   address varchar(256) NOT NULL,
+  company_name varchar(256) NOT NULL,
 
   CONSTRAINT enterprise_user_fk FOREIGN KEY (id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
 
@@ -158,7 +159,7 @@ FROM artist, users AS usr
 WHERE usr.id = artist.id;
 
 CREATE VIEW enterprise_view AS
-SELECT usr.id, usr.name, usr.image, usr.CEP, usr.state, usr.city, ent.neighborhood, ent.address, usr.rate, usr.website
+SELECT usr.id, usr.name, usr.company_name, usr.image, usr.CEP, usr.state, usr.city, ent.neighborhood, ent.address, usr.rate, usr.website
 FROM enterprise AS ent, users AS usr
 WHERE usr.id = ent.id;
 

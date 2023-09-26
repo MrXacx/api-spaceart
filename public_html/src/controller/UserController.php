@@ -18,6 +18,8 @@ use App\Util\Cache;
 use App\Util\Exception\InvalidAttributeFormatException;
 use App\Util\DataValidator;
 use App\Controller\Tool\Controller;
+use App\Util\Exception\UnexpectedHttpParameterException;
+use \DateTime;
 
 /**
  * Controlador de usuários e denúncia
@@ -40,7 +42,9 @@ final class UserController
         $user = false;
         $db = false;
 
-        switch ($this->parameterList->getEnum('type', AccountType::class)) {
+        $type = $this->parameterList->getEnum('type', AccountType::class);
+
+        switch ($type) {
             case AccountType::ARTIST:
 
                 $user = new Artist;
@@ -63,7 +67,7 @@ final class UserController
                 break;
 
             case null:
-                InvalidAttributeFormatException::throw('TYPE ACCOUNT');
+                UnexpectedHttpParameterException::throw(strval($type),'TYPE ACCOUNT');
         }
 
         if ($user instanceof User && $db instanceof UsersDB) {
@@ -191,7 +195,7 @@ final class UserController
     {
         $name = $this->parameterList->getString('name');
         if ($name == '%') {
-            InvalidAttributeFormatException::throw('name');
+            UnexpectedHttpParameterException::throw('%', 'name');
         }
         $user->setName($name);
         $list = $db->getListByName($offset, $limit);
@@ -206,11 +210,11 @@ final class UserController
      */
     private function getAccountType(): array
     {
-        return match ($this->parameterList->getEnum('type', AccountType::class)) { // RECEBENDO O TIPO DA CONTA
-
+        $type = $this->parameterList->getEnum('type', AccountType::class);
+        return match ($type) { // RECEBENDO O TIPO DA CONTA
             AccountType::ARTIST => [$artist = new Artist(), new ArtistDB($artist)],
             AccountType::ENTERPRISE => [$enterprise = new Enterprise(), new EnterpriseDB($enterprise)],
-            default => InvalidAttributeFormatException::throw('Account Type')
+            default => UnexpectedHttpParameterException::throw(strval($type),'TYPE ACCOUNT')
         };
     }
 

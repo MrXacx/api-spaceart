@@ -12,13 +12,13 @@
 | /chat/list                  |             `GET`              | Funcionando |
 | /chat/message               |         `GET`, `POST`          | Funcionando |
 | /chat/message/list          |             `GET`              | Funcionando |
-| /user                       | `GET`, `POST`, `PUT`, `DELETE` | Funcionando |
 | /selection                  | `GET`, `POST`, `PUT`, `DELETE` | Funcionando |
 | /selection/list             |             `GET`              | Funcionando |
 | /selection/application      | `GET`, `POST`, `PUT`, `DELETE` | Funcionando |
 | /selection/application/list |             `GET`              | Funcionando |
+| /user                       | `GET`, `POST`, `PUT`, `DELETE` | Necessita de testes |
 | /user/sign-in               |             `GET`              | Funcionando |
-| /user/list                  |             `GET`              | Funcionando |
+| /user/list                  |             `GET`              | Necessita de testes |
 | /user/report                |         `GET`, `POST`          | Funcionando |
 | /user/report/list           |             `GET`              | Funcionando |
 
@@ -30,7 +30,7 @@
 | :-------- | :--------------------------------------------------------------------------------------------------- | :----------------------------- | :---------- |
 | id        | ID do usuário                                                                                        | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | type      | tipo de conta do usuário                                                                             | artist OR enterprise           | true        |
-| token     | se o token informado é o token de acesso;<br>OBS: true para obter dados sensíveis.<br>Default: false | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | false       |
+| token     | se o token informado é o token de acesso;<br>OBS: true para obter dados sensíveis.<br>Default: false | boolean | false       |
 
   <br>
   
@@ -50,6 +50,7 @@
 | wage         | pretensão salarial                                         |                      | true        | `type=artist`     |
 | cpf          | CPF                                                        | \d{11}               | true        | `type=artist`     |
 | cnpj         | CNPJ                                                       | \d{11}               | true        | `type=enterprise` |
+| companyName  | Razão social                                               | \w{1, 256}           | true        | `type=enterprise` |
 | art          | tipo de arte                                               |                      | true        | `type=artist`     |
 | neighborhood | bairro                                                     | \w{0,191}            | true        | `type=enterprise` |
 | address      | logradouro, número, complemento, ponto de referência e etc | \w{0,191}            | true        | `type=enterprise` |

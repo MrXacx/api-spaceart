@@ -18,6 +18,7 @@ class EnterpriseDB extends UsersDB
     public const CNPJ = 'CNPJ';
     public const NEIGHBORHOOD = 'neighborhood';
     public const ADDRESS = 'address';
+    public const COMPANY_NAME = 'company_name';
 
     private Enterprise|null $enterprise;
 
@@ -38,13 +39,14 @@ class EnterpriseDB extends UsersDB
         if (parent::create()) {
 
             // Passa query SQL de criação
-            $query = $this->getConnection()->prepare('INSERT INTO enterprise (id, CNPJ, neighborhood, address) VALUES (?,?,?,?)');
+            $query = $this->getConnection()->prepare('INSERT INTO enterprise (id, CNPJ, neighborhood, address, company_name) VALUES (?,?,?,?,?)');
 
             // Substitui interrogações pelos valores dos atributos
             $query->bindValue(1, $this->enterprise->getID());
             $query->bindValue(2, $this->enterprise->getCNPJ());
             $query->bindValue(3, $this->enterprise->getNeighborhood());
             $query->bindValue(4, $this->enterprise->getAddress());
+            $query->bindValue(5, $this->enterprise->getCompanyName());
 
 
             if ($query->execute()) { // Executa a inserção funcionar
@@ -130,7 +132,7 @@ class EnterpriseDB extends UsersDB
     public function getUnique(): Enterprise
     {
         // Define query SQL para obter todas as colunas da linha do usuário
-        $query = $this->getConnection()->prepare('SELECTSELECT * FROM enterprise_view WHERE id = ?');
+        $query = $this->getConnection()->prepare('SELECT * FROM enterprise_view WHERE id = ?');
         $query->bindValue(1, $this->enterprise->getID()); // Substitui interrogação pelo ID
 
         if ($query->execute()) { // Executa se a query for aceita

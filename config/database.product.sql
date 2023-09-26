@@ -123,7 +123,8 @@ CREATE TABLE IF NOT EXISTS chat(
   id varchar(36) PRIMARY KEY,
   artist varchar(36),
   enterprise varchar(36),
-
+  last_message varchar(256),
+  
   CONSTRAINT artist_member_fk FOREIGN KEY (artist) REFERENCES artist (id) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT enterprise_member_fk FOREIGN KEY (enterprise) REFERENCES enterprise (id) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

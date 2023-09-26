@@ -19,6 +19,7 @@ class EnterpriseDB extends UsersDB
     public const NEIGHBORHOOD = 'neighborhood';
     public const ADDRESS = 'address';
     public const COMPANY_NAME = 'company_name';
+    public const SECTION = 'section';
 
     private Enterprise|null $enterprise;
 
@@ -39,7 +40,7 @@ class EnterpriseDB extends UsersDB
         if (parent::create()) {
 
             // Passa query SQL de criação
-            $query = $this->getConnection()->prepare('INSERT INTO enterprise (id, CNPJ, neighborhood, address, company_name) VALUES (?,?,?,?,?)');
+            $query = $this->getConnection()->prepare('INSERT INTO enterprise (id, CNPJ, neighborhood, address, company_name, section) VALUES (?,?,?,?,?,?)');
 
             // Substitui interrogações pelos valores dos atributos
             $query->bindValue(1, $this->enterprise->getID());
@@ -47,6 +48,7 @@ class EnterpriseDB extends UsersDB
             $query->bindValue(3, $this->enterprise->getNeighborhood());
             $query->bindValue(4, $this->enterprise->getAddress());
             $query->bindValue(5, $this->enterprise->getCompanyName());
+            $query->bindValue(6, $this->enterprise->getSection());
 
 
             if ($query->execute()) { // Executa a inserção funcionar

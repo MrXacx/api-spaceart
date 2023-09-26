@@ -22,6 +22,7 @@ USE id21258140_dbspaceart;
 -- CRIAÇÃO DAS ENTIDADES
 
 CREATE TABLE IF NOT EXISTS users(
+  index int UNIQUE KEY AUTO_INCREMENT,
   id varchar(36) PRIMARY KEY,
   token VARCHAR(36) UNIQUE KEY,
   name varchar(256) NOT NULL,

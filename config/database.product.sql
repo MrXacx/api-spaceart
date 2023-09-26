@@ -124,7 +124,8 @@ CREATE TABLE IF NOT EXISTS chat(
   id varchar(36) PRIMARY KEY,
   artist varchar(36),
   enterprise varchar(36),
-
+  last_message varchar(256),
+  
   CONSTRAINT artist_member_fk FOREIGN KEY (artist) REFERENCES artist (id) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT enterprise_member_fk FOREIGN KEY (enterprise) REFERENCES enterprise (id) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -155,6 +156,7 @@ CREATE TABLE IF NOT EXISTS rate(
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- CRIA VIEWS
+
 CREATE VIEW  artist_view AS
 SELECT usr.id, usr.index, usr.name, usr.image, usr.CEP, usr.state, usr.city, artist.art, artist.wage, usr.rate, usr.website, usr.description
 FROM artist, users AS usr
@@ -170,6 +172,8 @@ WHERE usr.id = ent.id;
 SET GLOBAL event_scheduler = 1;
 SET @@GLOBAL.event_scheduler = 1;
 
+DELIMITER $
+  
 -- LIBERA SELEÇÕES CUJO TIMESTAMP INICAL FOI ALCANÇADO E O END NÃO
 CREATE EVENT IF NOT EXISTS
     start_selection ON SCHEDULE EVERY 5 MINUTE DO
@@ -177,8 +181,25 @@ CREATE EVENT IF NOT EXISTS
     AND start_timestamp <= CURRENT_TIMESTAMP
     AND end_timestamp > CURRENT_TIMESTAMP;
 
+
+
 -- TRANCA SELEÇÕES CUJO TIMESTAMP END FOI ALCANÇADO
 CREATE EVENT IF NOT EXISTS
  finish_selection ON SCHEDULE EVERY 5 MINUTE DO
     UPDATE selection SET locked = 1 WHERE locked = 0
     AND end_timestamp <= CURRENT_TIMESTAMP;
+
+DELIMITER ;
+
+-- CRIA GATILHOS
+
+DELIMITER $
+
+CREATE TRIGGER tgr_update_last_message_in_chat AFTER INSERT
+ON message
+FOR EACH ROW
+BEGIN
+  UPDATE chat SET last_message = NEW.content WHERE id = NEW.chat
+END$
+
+DELIMITER ;

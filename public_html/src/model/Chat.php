@@ -24,6 +24,7 @@ class Chat extends \App\Model\Template\Entity
      */
     private string $enterprise;
 
+    private string $lastMessage;
 
     public static function getInstanceOf(array $attr): self
     {
@@ -31,6 +32,7 @@ class Chat extends \App\Model\Template\Entity
         $entity->id = $attr['id'];
         $entity->artist = $attr[ChatDB::ARTIST];
         $entity->enterprise = $attr[ChatDB::ENTERPRISE];
+        $entity->lastMessage = $attr['last_message'];
 
         return $entity;
     }
@@ -39,7 +41,8 @@ class Chat extends \App\Model\Template\Entity
     {
         return array_merge(parent::toArray(), [
             'artist' => $this->artist,
-            'enterprise' => $this->enterprise
+            'enterprise' => $this->enterprise,
+            'last_message' => $this->lastMessage,
         ]);
     }
 

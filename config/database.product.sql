@@ -155,6 +155,17 @@ CREATE TABLE IF NOT EXISTS rate(
     
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE IF NOT EXISTS post(
+    id varchar(36) PRIMARY KEY,
+    author varchar(36),
+    message varchar(256),
+    media varchar(256),
+    post_time timestamp DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT poster_fk FOREIGN KEY (author) REFERENCES users(id)
+    
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- CRIA VIEWS
 
 CREATE VIEW  artist_view AS

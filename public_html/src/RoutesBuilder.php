@@ -6,11 +6,12 @@ namespace App;
 
 use App\Controller\AgreementController;
 use App\Controller\ChatController;
+use App\Controller\PostController;
 use App\Controller\SelectionController;
 use App\Controller\UserController;
 use App\Server;
 use App\Util\Exception\DatabaseException;
-use App\Util\Exception\InvalidAttributeFormatException;
+use App\Util\Exception\Template\InvalidAttributeFormatException;
 use App\Util\Exception\UnexpectedHttpParameterException;
 use FastRoute;
 use FastRoute\Dispatcher;
@@ -112,6 +113,14 @@ class RoutesBuilder
                     });
                 });
 
+                $collector->addGroup('/post', function (RouteCollector $collector) //rotas com início '/selection/application'
+                {
+                    $collector->get('', PostController::class . '@getPost'); //Abre uma vaga em específico
+                    $collector->post('', PostController::class . '@storePost'); //Cria uma candidatura
+                    $collector->delete('', PostController::class . '@deletePost'); //Cria uma candidatura
+                    $collector->get('/list', PostController::class . '@getPostList'); //Abre o menu de candidatura
+    
+                });
             }
         );
 

@@ -22,9 +22,9 @@ USE id21258140_dbspaceart;
 -- CRIAÇÃO DAS ENTIDADES
 
 CREATE TABLE IF NOT EXISTS users(
-  index int UNIQUE KEY AUTO_INCREMENT,
   id varchar(36) PRIMARY KEY,
   token VARCHAR(36) UNIQUE KEY,
+  placing int UNIQUE KEY AUTO_INCREMENT,
   name varchar(256) NOT NULL,
   email varchar(256) UNIQUE KEY NOT NULL,
   phone varchar(11) NOT NULL,
@@ -169,12 +169,12 @@ CREATE TABLE IF NOT EXISTS post(
 -- CRIA VIEWS
 
 CREATE VIEW  artist_view AS
-SELECT usr.id, usr.index, usr.name, usr.image, usr.CEP, usr.state, usr.city, artist.art, artist.wage, usr.rate, usr.website, usr.description
+SELECT usr.id, usr.placing as 'index', usr.name, usr.image, usr.CEP, usr.state, usr.city, artist.art, artist.wage, usr.rate, usr.website, usr.description
 FROM artist, users AS usr
 WHERE usr.id = artist.id;
 
 CREATE VIEW enterprise_view AS
-SELECT usr.id, usr.index, usr.name, ent.company_name, ent.section, usr.image, usr.CEP, usr.state, usr.city, ent.neighborhood, ent.address, usr.rate, usr.website, usr.description
+SELECT usr.id, usr.placing as 'index', usr.name, ent.company_name, ent.section, usr.image, usr.CEP, usr.state, usr.city, ent.neighborhood, ent.address, usr.rate, usr.website, usr.description
 FROM enterprise AS ent, users AS usr
 WHERE usr.id = ent.id;
 
@@ -202,6 +202,7 @@ CREATE EVENT IF NOT EXISTS
 
 DELIMITER ;
 
+
 -- CRIA GATILHOS
 
 DELIMITER $
@@ -210,7 +211,7 @@ CREATE TRIGGER tgr_update_last_message_in_chat AFTER INSERT
 ON message
 FOR EACH ROW
 BEGIN
-  UPDATE chat SET last_message = NEW.content WHERE id = NEW.chat
-END$
+  UPDATE chat SET last_message = NEW.content WHERE chat.id = NEW.chat
+END $$
 
 DELIMITER ;

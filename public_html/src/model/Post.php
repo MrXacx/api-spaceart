@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\DAO\Template\DatabaseAcess;
 use DateTime;
 
 /**
@@ -12,10 +13,19 @@ use DateTime;
 class Post extends \App\Model\Template\Entity{
     private string $author;
     private string $message;
-    private string $video_url;
-    private string $image;
+    private string $media;
     private DateTime $postTime;
     
+    public static function getInstanceOf(array $attr): self {
+        $model = new Post;
+        $model->id = $attr['id'];
+        $model->message = $attr['message'];
+        $model->media = $attr['media'];
+        $model->postTime = DateTime::createFromFormat(DatabaseAcess::DB_TIMESTAMP_FORMAT, $attr['post_time']);
+
+        return $model;
+    }
+
     public function setAuthor(string $author): void{
         $this->author = $author;
     }
@@ -32,21 +42,14 @@ class Post extends \App\Model\Template\Entity{
         return $this->message;
     }
     
-    public function setImage(string $image): void{
-        $this->image = $image;
+    public function setMedia(string $media): void{
+        $this->media = $media;
     }
     
-    public function getImage(): string{
-        return $this->image;
+    public function getMedia(): string{
+        return $this->media;
     }
     
-    public function setVideoURL(string $videoURL): void{
-       $this->videoURL = $videoURL;
-    }
-    
-    public function getVideoURL(): string{
-        return $this->videoURL;
-    }
     
     public function setPostTime(DateTime $postTime): void{
        $this->postTime = $postTime;
@@ -56,6 +59,13 @@ class Post extends \App\Model\Template\Entity{
         return $this->postTime;
     }
 
+    public function toArray(): array{
+        return array_merge(parent::toArray(), [
+            $this->message,
+            $this->media,
+            $this->postTime->format(DatabaseAcess::USUAL_TIMESTAMP_FORMAT)
+        ]);
+    }
 }
 
 

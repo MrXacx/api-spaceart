@@ -2,25 +2,26 @@
 
 > `http://localhost:<port>/<path>?<parameters>`
 
-| Rota                        |       Métodos suportados       |   Status    |
-| :-------------------------- | :----------------------------: | :---------: |
-| /agreement                  | `GET`, `POST`, `PUT`, `DELETE` | Funcionando |
-| /agreement/list             |             `GET`              | Funcionando |
-| /agreement/rate             | `GET`, `POST`, `PUT`, `DELETE` | Funcionando |
-| /agreement/rate/list        |             `GET`              | Funcionando |
-| /chat                       |         `GET`, `POST`          | Funcionando |
-| /chat/list                  |             `GET`              | Funcionando |
-| /chat/message               |         `GET`, `POST`          | Funcionando |
-| /chat/message/list          |             `GET`              | Funcionando |
-| /selection                  | `GET`, `POST`, `PUT`, `DELETE` | Funcionando |
-| /selection/list             |             `GET`              | Funcionando |
-| /selection/application      | `GET`, `POST`, `PUT`, `DELETE` | Funcionando |
-| /selection/application/list |             `GET`              | Funcionando |
+| Rota                        |       Métodos suportados       |       Status        |
+| :-------------------------- | :----------------------------: | :-----------------: |
+| /agreement                  | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
+| /agreement/list             |             `GET`              |     Funcionando     |
+| /agreement/rate             | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
+| /agreement/rate/list        |             `GET`              |     Funcionando     |
+| /chat                       |         `GET`, `POST`          |     Funcionando     |
+| /chat/list                  |             `GET`              |     Funcionando     |
+| /chat/message               |         `GET`, `POST`          |     Funcionando     |
+| /chat/message/list          |             `GET`              |     Funcionando     |
+| /post                       |    `GET`, `POST`, `DELETE`     | Necessita de testes |
+| /selection                  | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
+| /selection/list             |             `GET`              |     Funcionando     |
+| /selection/application      | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
+| /selection/application/list |             `GET`              |     Funcionando     |
 | /user                       | `GET`, `POST`, `PUT`, `DELETE` | Necessita de testes |
-| /user/sign-in               |             `GET`              | Funcionando |
+| /user/sign-in               |             `GET`              |     Funcionando     |
 | /user/list                  |             `GET`              | Necessita de testes |
-| /user/report                |         `GET`, `POST`          | Funcionando |
-| /user/report/list           |             `GET`              | Funcionando |
+| /user/report                |         `GET`, `POST`          |     Funcionando     |
+| /user/report/list           |             `GET`              |     Funcionando     |
 
 ## /user
 
@@ -30,7 +31,7 @@
 | :-------- | :--------------------------------------------------------------------------------------------------- | :----------------------------- | :---------- |
 | id        | ID do usuário                                                                                        | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | type      | tipo de conta do usuário                                                                             | artist OR enterprise           | true        |
-| token     | se o token informado é o token de acesso;<br>OBS: true para obter dados sensíveis.<br>Default: false | boolean | false       |
+| token     | se o token informado é o token de acesso;<br>OBS: true para obter dados sensíveis.<br>Default: false | boolean                        | false       |
 
   <br>
   
@@ -47,7 +48,7 @@
 | city         | município                                                  | \w{1,191}            | true        | `default`         |
 | cep          | CEP                                                        | \d{8}                | true        | `default`         |
 | image        | base64 da imagem                                           |                      | true        | `default`         |
-| wage         | pretensão salarial                                         | float                    | true        | `type=artist`     |
+| wage         | pretensão salarial                                         | float                | true        | `type=artist`     |
 | cpf          | CPF                                                        | \d{11}               | true        | `type=artist`     |
 | cnpj         | CNPJ                                                       | \d{11}               | true        | `type=enterprise` |
 | companyName  | Razão social                                               | \w{1, 256}           | true        | `type=enterprise` |
@@ -233,12 +234,57 @@
   | limit | máximo de dados retornados.<br>Default: 10. | 0 < limit =< 500  | false |
   <br>
   
-## /selection
+## /post
   > GET
+  
+  | Parâmetro | Descrição  | Formato                        | Obrigatório |
+  | :-------- | :--------- | :----------------------------- | :---------- |
+  | id        | ID do post | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+  <br>
+  
+  > POST
   
   | Parâmetro | Descrição | Formato | Obrigatório |
   | :------- | :-------- | :------ | :---------- |
-  | id | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
+  | author | ID do autor | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
+  | message | texto do post | \w{0,256} | true |
+  | media | mídia da postagem | \w{0,256} | true |
+
+  <br>
+  
+  > DELETE
+  
+  | Parâmetro | Descrição | Formato | Obrigatório |
+  | :------- | :-------- | :------ | :---------- |
+  | id | ID da postagem | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
+
+## /post/list
+
+> GET
+
+| Parâmetro | Descrição                                   | Formato                        | Obrigatório | Caso |
+| :-------- | :------------------------------------------ | :----------------------------- | :---------- | :--- |
+| references | Referência de busca.<br>Default: random    | `author`  e `random`           | false       | `default` |
+| author    | ID do autor                                 |  \d{8}-\d{4}-\d{4}-\d{4}-\d{12}  | true      | `references=author` |
+| offset    | linha de início da consulta.<br>Default: 0. | 0 =< offset                    | false       | `default` |
+| limit     | máximo de dados retornados.<br>Default: 10. | 0 < limit =< 500               | false       | `default` |
+
+  <br>
+
+> > Filters
+> > | Filtro | Descrição | Parâmetros |
+> > | :----- | :-------- | :--------- |
+> > | art | Tipo de arte buscado | art |
+> > | owner | ID do criador da seleção | owner |
+
+## /selection
+
+> GET
+
+| Parâmetro | Descrição     | Formato                        | Obrigatório |
+| :-------- | :------------ | :----------------------------- | :---------- |
+| id        | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+
   <br>
   
   > POST

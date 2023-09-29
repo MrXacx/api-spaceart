@@ -28,6 +28,7 @@ class UsersDB extends DatabaseAcess
     public const TOKEN = 'token';
     public const DESCRIPTION = 'description';
     public const TYPE = 'type';
+    public const VERIFIED = 'verified';
 
     private User $user;
 

@@ -85,6 +85,7 @@ CREATE TABLE IF NOT EXISTS agreement(
 CREATE TABLE IF NOT EXISTS selection(
 
   id varchar(36) PRIMARY KEY,
+  title VARCHAR(256),
   owner varchar(36) NOT NULL,
   price float unsigned NOT NULL,
   start_timestamp timestamp NOT NULL,

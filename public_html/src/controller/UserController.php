@@ -127,10 +127,7 @@ final class UserController
 
         $db = new UsersDB($user);
         $db->updateTokenAcess(); // Gera novo token de acesso
-        $access = $db->getAcess(); // Obtém dados de acesso
-
-        Controller::$cache->create($access, Cache::MEDIUM_INTERVAL_STORAGE); // Armazena em cache
-        return $access;
+        return $db->getAcess(); // Obtém dados de acesso
 
     }
 

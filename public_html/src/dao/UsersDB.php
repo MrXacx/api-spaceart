@@ -125,7 +125,7 @@ class UsersDB extends DatabaseAcess
 
         $this->updateTokenAcess();
         // Passa query SQL para leitura da coluna id
-        $query = $this->getConnection()->prepare('SELECT id, index, token, email, type FROM users WHERE email = ? AND password = ?');
+        $query = $this->getConnection()->prepare("SELECT id, placing AS 'index', token, email, type FROM users WHERE email = ? AND password = ?");
 
         // // Substitui os termos pelos valores retornados
         $query->bindValue(1, $this->user->getEmail());

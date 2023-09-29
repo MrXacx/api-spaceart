@@ -35,7 +35,8 @@ CREATE TABLE IF NOT EXISTS users(
   image varchar(256),
   website varchar(256),
   rate float DEFAULT 0,
-  description varchar(256) DEFAULT ''
+  description varchar(256) DEFAULT '',
+  type enum ("artist", "enterprise"),
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

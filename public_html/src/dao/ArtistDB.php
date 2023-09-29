@@ -2,206 +2,156 @@
 
 declare(strict_types=1);
 
-namespace App\DAO;
+namespace App\Model;
 
-use App\DAO\UsersDB;
-use App\Model\Artist;
-use RuntimeException;
+use App\DAO\ArtistDB;
+use App\Model\Enumerate\AccountType;
+use App\Model\Enumerate\ArtType;
+use App\Util\Exception\InvalidAttributeRegexException;
+use DateTime;
 
 /**
- * Classe de maniupulação da tabela Users
- * @package DAO
+ * Classe modelo de artista
+ * @package Model
+ * @abstract User
  * @author Ariel Santos (MrXacx)
  */
-class ArtistDB extends UsersDB
+class Artist extends \App\Model\Template\User
 {
-    public const ART = 'art';
-    public const WAGE = 'wage';
-    public const CPF = 'cpf';
-    public const BIRTHDAY = 'birthday';
-
-    private Artist $artist;
+    /**
+     * Código de Pessoa Física
+     * @var string
+     */
+    private string $CPF;
 
     /**
-     * @param Artist $artist Modelo de empreendimento a ser manipulado
+     * Tipo de art
+     * @var ArtType|string
      */
-    function __construct(Artist $artist = null)
-    {
-        parent::__construct($artist);
-        $this->artist = $artist;
+    private ArtType|string $art;
+
+    private DateTime $birthday;
+
+    /**
+     * Pretensão salarial por hora
+     * @var string|float
+     */
+    private string|float $wage;
+
+    public function __construct() {
+        parent::__construct();
+        $this->type = AccountType::ARTIST; // Informa à classe mãe o tipo de conta que ela está formando
     }
 
-    /**
-     * @see abstracts/DatabaseAcess.php
-     */
-    public function create(): bool
+    public static function getInstanceOf(array $attr): self
     {
-        if (parent::create()) { // Executa se o usuário foi criado
+        $entity = new Artist;
 
-            // Passa query SQL de criação
-            $query = $this->getConnection()->prepare('INSERT INTO artist (id, CPF, art, wage, birthday) VALUES (?,?,?,?,?)');
+        foreach ($attr as $key => $value) {
 
-            // Substitui interrogações pelos valores dos atributos
-            $query->bindValue(1, $this->artist->getID());
-            $query->bindValue(2, $this->artist->getCPF());
-            $query->bindValue(3, $this->artist->getArt()->value);
-            $query->bindValue(4, $this->artist->getWage());
-            $query->bindValue(5, $this->artist->getBirthday()->format(parent::DB_DATE_FORMAT));
+            $atributeName = match ($key) {
+                'id' => 'id',
+                'index' => 'index',
+                ArtistDB::EMAIL => 'email',
+                ArtistDB::PASSWORD => 'password',
+                ArtistDB::NAME => 'name',
+                ArtistDB::PHONE => 'phone',
+                ArtistDB::CEP => 'CEP',
+                ArtistDB::STATE => 'state',
+                ArtistDB::CITY => 'city',
+                ArtistDB::CPF => 'CPF',
+                ArtistDB::ART => 'art',
+                ArtistDB::WAGE => 'wage',
+                ArtistDB::SITE => 'website',
+                ArtistDB::RATE => 'rate',
+                ArtistDB::DESCRIPTION => 'description',
+                ArtistDB::VERIFIED => 'verified',
 
+                default => null
+            };
 
-            if ($query->execute()) { // Executa a inserção funcionar
-                return true;
+            if (isset($atributeName)) {
+                $entity->$atributeName = $value;
             }
 
-            // Essa linha é essencial para não exista um registro em users que não possa ser encontrado em artist ou enterprise
-            $this->delete();
-
         }
-        return false;
+        
+        $entity->birthday = DateTime::createFromFormat(ArtistDB::DB_DATE_FORMAT, $attr['birthday']);
+        return $entity;
     }
 
     /**
-     * @see abstracts/DatabaseAcess.php
+     * Insere código de pessoa física
+     * @param string $CPF código
      */
-    public function getList(int $offset = 0, int $limit = 10): array
+    public function setCPF(string $CPF): void
     {
-        // Determina query SQL de leitura
-        $query = $this->getConnection()->prepare(
-            "SELECT * FROM artist_view LIMIT $limit OFFSET $offset"
-        );
-
-        if ($query->execute()) { // Executa se consulta não falhar
-            return array_map(fn($user) => Artist::getInstanceOf($user), $this->fetchRecord($query));
-        }
-        throw new RuntimeException('Operação falhou!'); // Executa se alguma falha esperdada ocorrer
+        $this->CPF = $this->validator->isCPF($CPF) ? $CPF : InvalidAttributeRegexException::throw('CPF', __FILE__);
     }
 
     /**
-     * Consulta lista aleatória de artistas na tabela filtrada pela localização
-     * 
-     * @param int $offset Linha inicial da consulta
-     * @param int $limit Número máximo de registros retornados
+     * Obtém código de pessoa física
+     * @return string Número de identificação
      */
-    public function getRandomListByLocation(int $offset = 0, int $limit = 10): array
+    public function getCPF(): string
     {
-        // Determina query SQL de leitura
-        $query = $this->getConnection()->prepare(
-            "SELECT * FROM artist_view
-            WHERE city = ? AND state = ?
-            ORDER BY RAND()
-            LIMIT $limit OFFSET $offset"
-        );
-
-        $query->bindValue(1, $this->artist->getCity());
-        $query->bindValue(2, $this->artist->getState());
-
-        if ($query->execute()) { // Executa se consulta não falhar
-            return array_map(fn($user) => Artist::getInstanceOf($user), $this->fetchRecord($query));
-        }
-        throw new RuntimeException('Operação falhou!'); // Executa se alguma falha esperdada ocorrer
+        return $this->CPF;
     }
 
     /**
-     * Consulta lista aleatória de artistas na tabela filtrada pelo tipo de arte
-     * 
-     * @param int $offset Linha inicial da consulta
-     * @param int $limit Número máximo de registros retornados
+     * Insere tipo de arte
+     * @param ArtType
      */
-    public function getRandomListByArt(int $offset = 0, int $limit = 10): array
+    public function setArt(ArtType $art): void
     {
-        // Determina query SQL de leitura
-        $query = $this->getConnection()->prepare(
-            "SELECT * FROM artist_view
-            WHERE art = ?
-            ORDER BY RAND()
-            LIMIT $limit OFFSET $offset"
-        );
-
-        $query->bindValue(1, $this->artist->getArt()->value);
-
-        if ($query->execute()) { // Executa se consulta não falhar
-            return array_map(fn($user) => Artist::getInstanceOf($user), $this->fetchRecord($query));
-        }
-        throw new RuntimeException('Operação falhou!'); // Executa se alguma falha esperdada ocorrer
+        $this->art = $art;
     }
 
     /**
-     * Consulta lista de artistas na tabela filtrada pelo nome
-     * 
-     * @param int $offset Linha inicial da consulta
-     * @param int $limit Número máximo de registros retornados
+     * Obtém tipo de arte
+     * @return ArtType 
      */
-
-    public function getListByName(int $offset = 0, int $limit = 10): array
+    public function getArt(): ArtType
     {
-        // Determina query SQL de leitura
-        $query = $this->getConnection()->prepare(
-            "SELECT * FROM artist_view
-            WHERE name LIKE ?
-            ORDER BY name
-            LIMIT $limit OFFSET $offset"
-        );
-
-        $query->bindValue(1, $this->artist->getName() . '%');
-
-        if ($query->execute()) { // Executa se consulta não falhar
-            return array_map(fn($user) => Artist::getInstanceOf($user), $this->fetchRecord($query));
-        }
-        throw new RuntimeException('Operação falhou!'); // Executa se alguma falha esperdada ocorrer
+        return $this->art;
+    }
+    /**
+     * Insere pretensão salarial
+     * @param float $wage
+     */
+    public function setWage(float $wage): void
+    {
+        $this->wage = $wage;
     }
 
     /**
-     * Obtém modelo de artista com dados não sensíveis
-     * @return Artist Modelo de artista
+     * Obtém pretensão salarial
+     * @return string Número de identificação
      */
-    public function getUnique(): Artist
+    public function getWage(): float
     {
-        // Define query SQL para obter todas as colunas da linha do usuário
-        $query = $this->getConnection()->prepare('SELECT * FROM artist_view WHERE id = ?');
-        $query->bindValue(1, $this->artist->getID()); // Substitui interrogação pelo ID
-
-        if ($query->execute()) { // Executa se a query for aceita
-            return Artist::getInstanceOf($this->fetchRecord($query, false));
-        }
-        // Executa em caso de falhas esperadas
-        throw new RuntimeException('Operação falhou!');
+        return $this->wage;
+    }
+    
+    
+    public function setBirthday(DateTime $birthday): void
+    {
+        $this->birthday = $birthday;
     }
 
-    /**
-     * Obtém modelo de artista com todos os dados disponíveis
-     * @return Artist Modelo de artista
-     */
-    public function getUser(): Artist
+
+    public function getBirthday(): DateTime
     {
-
-        // Define query SQL para obter todas as colunas da linha do usuário
-        $query = $this->getConnection()->prepare('SELECT * FROM artist INNER JOIN users ON artist.id = users.id WHERE token = ?');
-        $query->bindValue(1, $this->artist->getID()); // Substitui interrogação pelo ID
-
-        if ($query->execute()) { // Executa se a query for aceita
-            return Artist::getInstanceOf($this->fetchRecord($query, false));
-        }
-        // Executa em caso de falhas esperadas
-        throw new RuntimeException('Operação falhou!');
+        return $this->birthday;
     }
 
-    /**
-     * @see abstracts/DatabaseAcess.php
-     */
-    public function update(string $column, string $value): bool
+    public function toArray(): array
     {
-
-        if ($this->isColumn(parent::class, $column)) {
-            return parent::update($column, $value);
-        }
-
-        // Passa query SQL de atualização
-        $query = $this->getConnection()->prepare("UPDATE artist SET $column = ? WHERE token = ?");
-
-        // Substitui interrogações
-        $query->bindValue(1, $value);
-        $query->bindValue(2, $this->artist->getID());
-
-        return $query->execute();
+        return array_merge(parent::toArray(), [
+            'CPF' => $this->CPF ?? null,
+            'birthday' => $this->birthday->format(ArtistDB::USUAL_DATE_FORMAT),
+            'art' => $this->art,
+            'wage' => $this->wage
+        ]);
     }
 }

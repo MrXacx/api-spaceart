@@ -39,13 +39,13 @@
 
 | Parâmetro    | Descrição                                                  | Formato              | Obrigatório | Caso              |
 | :----------- | :--------------------------------------------------------- | :------------------- | :---------- | :---------------- |
-| name         | nome do usuário                                            | \w{1,191}            | true        | `default`         |
+| name         | nome do usuário                                            | \w{1,256}            | true        | `default`         |
 | type         | tipo de conta                                              | artist OR enterprise | true        | `default`         |
 | email        | email                                                      |                      | true        | `default`         |
-| password     | senha                                                      | \w{1,191}            | true        | `default`         |
+| password     | senha                                                      | \w{1,256}            | true        | `default`         |
 | phone        | número de celular                                          | \d{2}9\d{8}          | true        | `default`         |
 | state        | unidade federativa                                         | \w{2}                | true        | `default`         |
-| city         | município                                                  | \w{1,191}            | true        | `default`         |
+| city         | município                                                  | \w{1,256}            | true        | `default`         |
 | cep          | CEP                                                        | \d{8}                | true        | `default`         |
 | image        | base64 da imagem                                           |                      | true        | `default`         |
 | wage         | pretensão salarial                                         | float                | true        | `type=artist`     |
@@ -54,8 +54,8 @@
 | companyName  | Razão social                                               | \w{1, 256}           | true        | `type=enterprise` |
 | section      | Setor                                                      | \w{1, 256}           | true        | `type=enterprise` |
 | art          | tipo de arte                                               |                      | true        | `type=artist`     |
-| neighborhood | bairro                                                     | \w{0,191}            | true        | `type=enterprise` |
-| address      | logradouro, número, complemento, ponto de referência e etc | \w{0,191}            | true        | `type=enterprise` |
+| neighborhood | bairro                                                     | \w{0,256}            | true        | `type=enterprise` |
+| address      | logradouro, número, complemento, ponto de referência e etc | \w{0,256}            | true        | `type=enterprise` |
 
   <br>
   
@@ -83,7 +83,7 @@
 | Parâmetro | Descrição | Formato                        | Obrigatório |
 | :-------- | :-------- | :----------------------------- | :---------- |
 | email     | email     | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-| password  | senha     | \w{0,191}                      | true        |
+| password  | senha     | \w{0,256}                      | true        |
 
 ## /user/list
 
@@ -122,7 +122,7 @@
   | :------- | :-------- | :------ | :---------- |
   | reporter | ID do denunciador | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
   | reported | ID do denunciado | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | reason | motivo da denúncia | \w{0,191} | true |
+  | reason | motivo da denúncia | \w{0,256} | true |
   
 ## /user/report/list
 
@@ -202,7 +202,7 @@
   | agreemnt | ID do contrato | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
   | author | ID de autor | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
   | rate | Nota da avaliação | float | true |
-  | description | ID de autor | \w{0,191} | true |
+  | description | ID de autor | \w{0,256} | true |
   <br>
   
   > PUT

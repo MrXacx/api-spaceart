@@ -6,7 +6,6 @@ namespace App\DAO;
 
 use App\DAO\Template\DatabaseAcess;
 use App\Model\Selection;
-use App\Model\Template\User;
 use RuntimeException;
 
 /**
@@ -24,6 +23,7 @@ class SelectionDB extends DatabaseAcess
     public const END_TIMESTAMP = 'end_timestamp';
     public const PRICE = 'price';
     public const LOCKED = 'locked';
+    public const TITLE = 'title';
 
     /**
      * Modelo de seleção a ser manipulado
@@ -48,7 +48,7 @@ class SelectionDB extends DatabaseAcess
         $datetime = $this->selection->getDatetime(); // Obtém datas e horários de início e fim
 
         // Passa query SQL de criação
-        $query = $this->getConnection()->prepare('INSERT INTO selection (id, owner, price, start_timestamp, end_timestamp, art) VALUES (UUID(),?,?,?,?,?)');
+        $query = $this->getConnection()->prepare('INSERT INTO selection (id, owner, price, start_timestamp, end_timestamp, art, title) VALUES (UUID(),?,?,?,?,?,?)');
 
         // Substitui interrogações pelos valores dos atributos
         $query->bindValue(1, $this->selection->getOwner());
@@ -56,6 +56,7 @@ class SelectionDB extends DatabaseAcess
         $query->bindValue(3, $datetime['start']->format(parent::DB_TIMESTAMP_FORMAT));
         $query->bindValue(4, $datetime['end']->format(parent::DB_TIMESTAMP_FORMAT));
         $query->bindValue(5, $this->selection->getArt()->value);
+        $query->bindValue(6, $this->selection->getTitle());
 
         return $query->execute();
     }

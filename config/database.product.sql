@@ -15,8 +15,7 @@ SET time_zone = "+00:00";
 -- Banco de dados: id21258140_dbspaceart
 --
 -- --------------------------------------------------------
-DROP DATABASE IF EXISTS id21258140_dbspaceart;
-CREATE DATABASE id21258140_dbspaceart;
+CREATE DATABASE IF NOT EXISTS id21258140_dbspaceart;
 USE id21258140_dbspaceart;
 
 -- CRIAÇÃO DAS ENTIDADES
@@ -37,7 +36,7 @@ CREATE TABLE IF NOT EXISTS users(
   rate float DEFAULT 0,
   description varchar(256) DEFAULT '',
   type enum ("artist", "enterprise"),
-  verified boolean DEFAULT 0,
+  verified boolean DEFAULT 0
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -215,7 +214,7 @@ CREATE TRIGGER tgr_update_last_message_in_chat AFTER INSERT
 ON message
 FOR EACH ROW
 BEGIN
-  UPDATE chat SET last_message = NEW.content WHERE chat.id = NEW.chat
+  UPDATE chat SET last_message = NEW.content WHERE chat.id = NEW.chat;
 END $$
 
 DELIMITER ;

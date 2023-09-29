@@ -24,6 +24,7 @@ class AgreementDB extends DatabaseAcess
     public const START_TIME = 'start_time';
     public const END_TIME = 'end_time';
     public const STATUS = 'status';
+    public const DESCRIPTION = 'description';
 
     /**
      * Modelo de contrato a ser utilizado na manipulação
@@ -47,19 +48,20 @@ class AgreementDB extends DatabaseAcess
     {
 
         // Passa query SQL de criação
-        $query = $this->getConnection()->prepare('INSERT INTO agreement (id, hirer, hired, price, date, start_time, end_time, art) VALUES (UUID(),?,?,?,?,?,?,?)');
+        $query = $this->getConnection()->prepare('INSERT INTO agreement (id, hirer, hired, price, date, start_time, end_time, art, description) VALUES (UUID(),?,?,?,?,?,?,?,?)');
 
         // Substitui interrogações pelos valores dos atributos
         $query->bindValue(1, $this->agreement->getHirer());
         $query->bindValue(2, $this->agreement->getHired());
         $query->bindValue(3, $this->agreement->getPrice());
         $query->bindValue(4, $this->agreement->getDate()->format(parent::DB_DATE_FORMAT));
-
+        
         $time = $this->agreement->getTime();
         $query->bindValue(5, $time['start']->format(parent::DB_TIME_FORMAT));
         $query->bindValue(6, $time['end']->format(parent::DB_TIME_FORMAT));
         $query->bindValue(7, $this->agreement->getArt()->value);
-
+        $query->bindValue(8, $this->agreement->getDescription());
+        
         return $query->execute();
     }
 
@@ -69,7 +71,7 @@ class AgreementDB extends DatabaseAcess
     public function getList(int $offset = 0, int $limit = 10): array
     {
         // Determina query SQL de leitura
-        $query = $this->getConnection()->prepare("SELECT id, hirer, hired, price, date FROM agreement WHERE hirer = ? OR hired = ? ORDER BY ABS(DATEDIFF(date, CURDATE())) LIMIT $limit OFFSET $offset");
+        $query = $this->getConnection()->prepare("SELECT id, hirer, hired, price, description, date FROM agreement WHERE hirer = ? OR hired = ? ORDER BY ABS(DATEDIFF(date, CURDATE())) LIMIT $limit OFFSET $offset");
 
 
         $query->bindValue(1, $this->agreement->gethirer());

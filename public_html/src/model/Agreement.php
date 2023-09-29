@@ -7,6 +7,7 @@ namespace App\Model;
 use App\DAO\AgreementDB;
 use App\Model\Enumerate\AgreementStatus;
 use App\Model\Enumerate\ArtType;
+use App\Util\Exception\InvalidAttributeLengthException;
 use App\Util\Exception\InvalidAttributeRegexException;
 use DateTime;
 
@@ -60,7 +61,8 @@ class Agreement extends \App\Model\Template\Entity
      * @var AgreementStatus
      */
     private AgreementStatus $status;
-
+    
+    private string $description;
 
     public static function getInstanceOf(array $attr): self
     {
@@ -75,6 +77,9 @@ class Agreement extends \App\Model\Template\Entity
                     break;
                 case AgreementDB::HIRER:
                     $entity->hirer = $value;
+                    break;
+                case AgreementDB::DESCRIPTION:
+                    $entity->description = $value;
                     break;
                 case AgreementDB::PRICE:
                     $entity->price = $value;
@@ -228,13 +233,22 @@ class Agreement extends \App\Model\Template\Entity
         return $this->status;
     }
 
+    public function setDescription(string $description): void
+    {
+        $this->description = $this->validator->isFit($description, UsersDB::DESCRIPTION) ? $description : InvalidAttributeLengthException::throw('description', __FILE__);
+    }
 
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
 
     public function toArray(): array
     {
         return array_filter(array_merge(parent::toArray(), [
             'hirer' => $this->hirer,
             'hired' => $this->hired,
+            'description' => $this->description,
             'price' => $this->price,
             'date' => $this->date->format(AgreementDB::USUAL_DATE_FORMAT),
             'art' => $this->art ?? null,

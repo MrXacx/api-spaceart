@@ -172,12 +172,12 @@ CREATE TABLE IF NOT EXISTS post(
 -- CRIA VIEWS
 
 CREATE VIEW  artist_view AS
-SELECT usr.id, usr.placing as 'index', usr.name, usr.image, usr.CEP, usr.state, usr.city, artist.art, artist.wage, usr.rate, usr.website, usr.description
+SELECT usr.id, usr.placing as 'index', usr.verified, usr.name, artist.birthday,usr.image, usr.CEP, usr.state, usr.city, artist.art, artist.wage, usr.rate, usr.website, usr.description
 FROM artist, users AS usr
 WHERE usr.id = artist.id;
 
 CREATE VIEW enterprise_view AS
-SELECT usr.id, usr.placing as 'index', usr.name, ent.company_name, ent.section, usr.image, usr.CEP, usr.state, usr.city, ent.neighborhood, ent.address, usr.rate, usr.website, usr.description
+SELECT usr.id, usr.placing as 'index', usr.verified, usr.name, ent.company_name, ent.section, usr.image, usr.CEP, usr.state, usr.city, ent.neighborhood, ent.address, usr.rate, usr.website, usr.description
 FROM enterprise AS ent, users AS usr
 WHERE usr.id = ent.id;
 
@@ -194,8 +194,6 @@ CREATE EVENT IF NOT EXISTS
     UPDATE selection SET locked = 0 WHERE locked = 1
     AND start_timestamp <= CURRENT_TIMESTAMP
     AND end_timestamp > CURRENT_TIMESTAMP;
-
-
 
 -- TRANCA SELEÇÕES CUJO TIMESTAMP END FOI ALCANÇADO
 CREATE EVENT IF NOT EXISTS

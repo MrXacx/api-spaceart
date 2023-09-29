@@ -28,6 +28,7 @@ class Enterprise extends \App\Model\Template\User
 
     public function __construct()
     {
+        parent::__construct();
         $this->type = AccountType::ENTERPRISE; // Informa à classe mãe o tipo de conta que ela está formando
     }
 

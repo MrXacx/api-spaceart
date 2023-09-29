@@ -51,11 +51,12 @@
 | wage         | pretensão salarial                                         | float                | true        | `type=artist`     |
 | cpf          | CPF                                                        | \d{11}               | true        | `type=artist`     |
 | cnpj         | CNPJ                                                       | \d{11}               | true        | `type=enterprise` |
-| companyName  | Razão social                                               | \w{1,256}           | true        | `type=enterprise` |
-| section      | Setor                                                      | \w{1,256}           | true        | `type=enterprise` |
+| companyName  | Razão social                                               | \w{1,256}            | true        | `type=enterprise` |
+| section      | Setor                                                      | \w{1,256}            | true        | `type=enterprise` |
 | art          | tipo de arte                                               |                      | true        | `type=artist`     |
 | neighborhood | bairro                                                     | \w{1,256}            | true        | `type=enterprise` |
 | address      | logradouro, número, complemento, ponto de referência e etc | \w{1,256}            | true        | `type=enterprise` |
+| birthday     | data de nascimento do artista                              | dd/mm/yyyy           | true        | `type=artist` |
 
   <br>
   

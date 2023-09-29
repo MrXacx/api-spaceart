@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Model\Template;
 
 use App\DAO\UsersDB;
+use App\Model\Enumerate\AccountType;
 use App\Model\Tool\Location;
 use App\Util\Exception\InvalidAttributeLengthException;
 use App\Util\Exception\InvalidAttributeRegexException;
@@ -63,6 +64,8 @@ class User extends Entity
 
     protected int|string $index;
     protected string $description;
+
+    protected AccountType $type;
 
     /**
      * Obtém um modelo de usuário inicializado
@@ -216,6 +219,16 @@ class User extends Entity
         return $this->description;
     }
 
+    public function setType(AccountType $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function getType(): AccountType
+    {
+        return $this->type;
+    }
+
     public function toArray(): array
     {
         return array_merge(parent::toArray(), [
@@ -228,7 +241,8 @@ class User extends Entity
             'location' => $this->toLocationArray(),
             'rate' => $this->rate,
             'website' => $this->website,
-            'description' => $this->description
+            'description' => $this->description,
+            'type' => $this->type->value,
         ]);
     }
 }

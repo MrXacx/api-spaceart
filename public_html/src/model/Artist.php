@@ -38,6 +38,10 @@ class Artist extends \App\Model\Template\User
      */
     private string|float $wage;
 
+    public function __construct() {
+        $this->type = AccountType::ARTIST; // Informa à classe mãe o tipo de conta que ela está formando
+    }
+
     public static function getInstanceOf(array $attr): self
     {
         $entity = new Artist;
@@ -145,8 +149,7 @@ class Artist extends \App\Model\Template\User
             'CPF' => $this->CPF ?? null,
             'birthday' => $this->birthday->format(ArtistDB::USUAL_DATE_FORMAT),
             'art' => $this->art,
-            'wage' => $this->wage,
-            'type' => AccountType::ARTIST->value
+            'wage' => $this->wage
         ]);
     }
 }

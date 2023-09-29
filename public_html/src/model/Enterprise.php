@@ -26,6 +26,11 @@ class Enterprise extends \App\Model\Template\User
     private string $companyName;
     private string $section;
 
+    public function __construct()
+    {
+        $this->type = AccountType::ENTERPRISE; // Informa à classe mãe o tipo de conta que ela está formando
+    }
+
     /**
      * Obtém um modelo de usuário inicializado
      * 
@@ -101,8 +106,7 @@ class Enterprise extends \App\Model\Template\User
             parent::toArray(),
             [
                 'CNPJ' => $this->CNPJ ?? null,
-                'companyName' => $this->companyName,
-                'type' => AccountType::ENTERPRISE->value
+                'companyName' => $this->companyName
             ]
         );
     }

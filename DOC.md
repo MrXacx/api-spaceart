@@ -51,11 +51,11 @@
 | wage         | pretensão salarial                                         | float                | true        | `type=artist`     |
 | cpf          | CPF                                                        | \d{11}               | true        | `type=artist`     |
 | cnpj         | CNPJ                                                       | \d{11}               | true        | `type=enterprise` |
-| companyName  | Razão social                                               | \w{1, 256}           | true        | `type=enterprise` |
-| section      | Setor                                                      | \w{1, 256}           | true        | `type=enterprise` |
+| companyName  | Razão social                                               | \w{1,256}           | true        | `type=enterprise` |
+| section      | Setor                                                      | \w{1,256}           | true        | `type=enterprise` |
 | art          | tipo de arte                                               |                      | true        | `type=artist`     |
-| neighborhood | bairro                                                     | \w{0,256}            | true        | `type=enterprise` |
-| address      | logradouro, número, complemento, ponto de referência e etc | \w{0,256}            | true        | `type=enterprise` |
+| neighborhood | bairro                                                     | \w{1,256}            | true        | `type=enterprise` |
+| address      | logradouro, número, complemento, ponto de referência e etc | \w{1,256}            | true        | `type=enterprise` |
 
   <br>
   
@@ -83,7 +83,7 @@
 | Parâmetro | Descrição | Formato                        | Obrigatório |
 | :-------- | :-------- | :----------------------------- | :---------- |
 | email     | email     | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-| password  | senha     | \w{0,256}                      | true        |
+| password  | senha     | \w{1,256}                      | true        |
 
 ## /user/list
 
@@ -122,7 +122,7 @@
   | :------- | :-------- | :------ | :---------- |
   | reporter | ID do denunciador | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
   | reported | ID do denunciado | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | reason | motivo da denúncia | \w{0,256} | true |
+  | reason | motivo da denúncia | \w{1,256} | true |
   
 ## /user/report/list
 
@@ -202,7 +202,7 @@
   | agreemnt | ID do contrato | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
   | author | ID de autor | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
   | rate | Nota da avaliação | float | true |
-  | description | ID de autor | \w{0,256} | true |
+  | description | ID de autor | \w{1,256} | true |
   <br>
   
   > PUT
@@ -247,8 +247,8 @@
   | Parâmetro | Descrição | Formato | Obrigatório |
   | :------- | :-------- | :------ | :---------- |
   | author | ID do autor | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | message | texto do post | \w{0,256} | true |
-  | media | mídia da postagem | \w{0,256} | true |
+  | message | texto do post | \w{1,256} | true |
+  | media | mídia da postagem | \w{1,256} | true |
 
   <br>
   

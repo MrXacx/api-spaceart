@@ -183,8 +183,9 @@ class RoutesBuilder
 
                 } catch (InvalidAttributeFormatException $ex) {
 
-                    Server::$logger->push($ex->getMessage(), Level::Debug);
+                    Server::$logger->push($ex->getMessage(), Level::Info);
                     $status = Response::HTTP_BAD_REQUEST;
+                    $responseHandler->setContent(json_encode($ex->getMessage()));
 
                 } catch (DatabaseException $ex) {
                     $message = $ex->getMessage(); // Obtém mensagem da exceção
@@ -242,7 +243,9 @@ class RoutesBuilder
                     $status = Response::HTTP_INTERNAL_SERVER_ERROR;
 
                 } finally {
+
                     $responseHandler->setStatusCode($status);
+
                 }
         }
     }

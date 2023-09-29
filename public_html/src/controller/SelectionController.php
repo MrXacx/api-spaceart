@@ -36,6 +36,7 @@ final class SelectionController
 
         $selection = new Selection;
         $selection->setOwner($this->parameterList->getString('owner'));
+        $selection->setTitle($this->parameterList->getString('title'));
         $selection->setPrice(floatval($this->parameterList->getString('owner')));
 
         $date = explode(';', $this->parameterList->getString('date'));

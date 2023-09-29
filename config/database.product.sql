@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS users(
   rate float DEFAULT 0,
   description varchar(256) DEFAULT '',
   type enum ("artist", "enterprise"),
+  verified boolean DEFAULT 0,
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

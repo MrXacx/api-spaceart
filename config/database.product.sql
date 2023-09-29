@@ -70,6 +70,7 @@ CREATE TABLE IF NOT EXISTS agreement(
   id varchar(36) PRIMARY KEY,
   hirer varchar(36) NOT NULL,
   hired varchar(36) NOT NULL,
+  description varchar(256),
   price float unsigned NOT NULL,
   date date NOT NULL,
   start_time time NOT NULL,

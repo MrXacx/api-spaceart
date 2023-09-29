@@ -60,6 +60,7 @@ class Enterprise extends \App\Model\Template\User
                 EnterpriseDB::COMPANY_NAME => 'company_name',
                 EnterpriseDB::SECTION => 'section',
                 EnterpriseDB::DESCRIPTION => 'description',
+                EnterpriseDB::VERIFIED => 'verified',
                 default => null
             };
 

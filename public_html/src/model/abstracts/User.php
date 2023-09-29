@@ -64,8 +64,8 @@ class User extends Entity
 
     protected int|string $index;
     protected string $description;
-
     protected AccountType $type;
+    protected bool|int|string $verified; // Variável para controlar se o usuário já foi verificado na aplicação servida
 
     /**
      * Obtém um modelo de usuário inicializado
@@ -229,6 +229,15 @@ class User extends Entity
         return $this->type;
     }
 
+    public function setVerified(bool $verified): void
+    {
+        $this->verified = $verified;
+    }
+    public function isVerified(): bool
+    {
+        return boolval($this->verified);
+    }
+
     public function toArray(): array
     {
         return array_merge(parent::toArray(), [
@@ -243,6 +252,7 @@ class User extends Entity
             'website' => $this->website,
             'description' => $this->description,
             'type' => $this->type->value,
+            'verified' => $this->isVerified(),
         ]);
     }
 }

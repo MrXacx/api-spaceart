@@ -65,6 +65,7 @@ class Artist extends \App\Model\Template\User
                 ArtistDB::RATE => 'rate',
                 ArtistDB::BIRTHDAY => 'birthday',
                 ArtistDB::DESCRIPTION => 'description',
+                ArtistDB::VERIFIED => 'verified',
 
                 default => null
             };

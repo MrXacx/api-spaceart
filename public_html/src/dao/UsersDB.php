@@ -27,6 +27,7 @@ class UsersDB extends DatabaseAcess
     public const RATE = 'rate';
     public const TOKEN = 'token';
     public const DESCRIPTION = 'description';
+    public const TYPE = 'type';
 
     private User $user;
 
@@ -45,7 +46,7 @@ class UsersDB extends DatabaseAcess
     public function create(): bool
     {
         // Passa query SQL de criação
-        $query = $this->getConnection()->prepare('INSERT INTO users (id, name, image, email, password, phone, CEP, state, city) VALUES (?,?,?,?,?,?,?,?,?)');
+        $query = $this->getConnection()->prepare('INSERT INTO users (id, name, image, email, password, phone, CEP, state, city, type) VALUES (?,?,?,?,?,?,?,?,?,?)');
 
         $this->user->setID(parent::getRandomID());
         // Substitui interrogações pelos valores dos atributos
@@ -58,6 +59,7 @@ class UsersDB extends DatabaseAcess
         $query->bindValue(7, $this->user->getCEP());
         $query->bindValue(8, $this->user->getState());
         $query->bindValue(9, $this->user->getCity());
+        $query->bindValue(10, $this->user->getType()->value);
 
 
         return $query->execute();

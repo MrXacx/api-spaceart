@@ -4,7 +4,7 @@
 
 | Rota                        |       Métodos suportados       |       Status        |
 | :-------------------------- | :----------------------------: | :-----------------: |
-| /agreement                  | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
+| /agreement                  | `GET`, `POST`, `PUT`, `DELETE` | Necessita de testes |
 | /agreement/list             |             `GET`              |     Funcionando     |
 | /agreement/rate             | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
 | /agreement/rate/list        |             `GET`              |     Funcionando     |
@@ -13,7 +13,7 @@
 | /chat/message               |         `GET`, `POST`          |     Funcionando     |
 | /chat/message/list          |             `GET`              |     Funcionando     |
 | /post                       |    `GET`, `POST`, `DELETE`     | Necessita de testes |
-| /selection                  | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
+| /selection                  | `GET`, `POST`, `PUT`, `DELETE` | Necessita de testes |
 | /selection/list             |             `GET`              |     Funcionando     |
 | /selection/application      | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
 | /selection/application/list |             `GET`              |     Funcionando     |
@@ -150,6 +150,7 @@
   | :------- | :-------- | :------ | :---------- |
   | hirer | ID do contrante | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
   | hired | ID do contratado | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
+  | description | descrição | \w{1,256} | true |
   | art | tipo de arte | | true |
   | price | preço | float | true |
   | date | data do evento | dd/mm/yyyy | true |
@@ -269,14 +270,6 @@
 | offset    | linha de início da consulta.<br>Default: 0. | 0 =< offset                    | false       | `default` |
 | limit     | máximo de dados retornados.<br>Default: 10. | 0 < limit =< 500               | false       | `default` |
 
-  <br>
-
-> > Filters
-> > | Filtro | Descrição | Parâmetros |
-> > | :----- | :-------- | :--------- |
-> > | art | Tipo de arte buscado | art |
-> > | owner | ID do criador da seleção | owner |
-
 ## /selection
 
 > GET
@@ -291,6 +284,7 @@
   
   | Parâmetro | Descrição | Formato | Obrigatório |
   | :------- | :-------- | :------ | :---------- |
+  | title | Título da seleção | \w{1,256} | true |
   | owner | ID do criador | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
   | date | datas de início e fim da seleção repectivamente | dd/mm/yyyy;dd/mm/yyyy | true |
   | time | horários de início e fim da seleção repectivamente | hh:mm;hh:mm | true |

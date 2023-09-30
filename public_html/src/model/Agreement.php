@@ -235,7 +235,7 @@ class Agreement extends \App\Model\Template\Entity
 
     public function setDescription(string $description): void
     {
-        $this->description = $this->validator->isFit($description, UsersDB::DESCRIPTION) ? $description : InvalidAttributeLengthException::throw('description', __FILE__);
+        $this->description = $this->validator->isFit($description, AgreementDB::DESCRIPTION) ? $description : InvalidAttributeLengthException::throw('description', __FILE__);
     }
 
     public function getDescription(): string

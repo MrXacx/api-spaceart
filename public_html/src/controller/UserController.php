@@ -63,6 +63,7 @@ final class UserController
                 $user->setCNPJ($this->parameterList->getString('cnpj'));
                 $user->setNeighborhood($this->parameterList->getString('neighborhood'));
                 $user->setAddress($this->parameterList->getString('address'));
+                $user->setCompanyName($this->parameterList->getString('companyName'));
                 $user->setSection($this->parameterList->getString('section'));
 
                 $db = new EnterpriseDB($user);

@@ -39,18 +39,22 @@ final class SelectionController
         $selection->setTitle($this->parameterList->getString('title'));
         $selection->setPrice(floatval($this->parameterList->getString('owner')));
 
-        $date = explode(';', $this->parameterList->getString('date'));
-        $selection->setDate(
-            DateTime::createFromFormat(SelectionDB::USUAL_DATE_FORMAT, $date[0]),
-            DateTime::createFromFormat(SelectionDB::USUAL_DATE_FORMAT, $date[1])
-        );
+        $date = explode(';', $this->parameterList->getString('date')); // separa datas nos ';'
+        if(sizeof($date) == 2 ){ // Executa apenas se o comprimento do vetor for 2
 
-        $time = explode(';', $this->parameterList->getString('time'));
-        $selection->setTime(
-            DateTime::createFromFormat(SelectionDB::USUAL_TIME_FORMAT, $time[0]),
-            DateTime::createFromFormat(SelectionDB::USUAL_TIME_FORMAT, $time[1])
-        );
+            $selection->setDate(
+                DateTime::createFromFormat(SelectionDB::USUAL_DATE_FORMAT, $date[0]),
+                DateTime::createFromFormat(SelectionDB::USUAL_DATE_FORMAT, $date[1])
+            );
+        }
 
+        $time = explode(';', $this->parameterList->getString('time')); // separa horários nos ';'
+        if(sizeof($time) == 2){ // Executa apenas se o comprimento do vetor for 2
+            $selection->setTime(
+                DateTime::createFromFormat(SelectionDB::USUAL_TIME_FORMAT, $time[0]),
+                DateTime::createFromFormat(SelectionDB::USUAL_TIME_FORMAT, $time[1])
+            );
+        }
         $selection->setArt($this->parameterList->getEnum('art', ArtType::class));
 
         $db = new SelectionDB($selection);

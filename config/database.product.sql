@@ -208,7 +208,8 @@ DELIMITER ;
 
 DELIMITER $
 
-CREATE TRIGGER tgr_update_last_message_in_chat AFTER INSERT
+CREATE TRIGGER IF NOT EXISTS
+tgr_update_last_message_in_chat AFTER INSERT
 ON message
 FOR EACH ROW
 BEGIN

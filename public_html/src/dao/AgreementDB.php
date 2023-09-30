@@ -71,7 +71,7 @@ class AgreementDB extends DatabaseAcess
     public function getList(int $offset = 0, int $limit = 10): array
     {
         // Determina query SQL de leitura
-        $query = $this->getConnection()->prepare("SELECT id, hirer, hired, price, description, date FROM agreement WHERE hirer = ? OR hired = ? ORDER BY ABS(DATEDIFF(date, CURDATE())) LIMIT $limit OFFSET $offset");
+        $query = $this->getConnection()->prepare("SELECT * FROM agreement WHERE hirer = ? OR hired = ? ORDER BY ABS(DATEDIFF(date, CURDATE())) LIMIT $limit OFFSET $offset");
 
 
         $query->bindValue(1, $this->agreement->gethirer());

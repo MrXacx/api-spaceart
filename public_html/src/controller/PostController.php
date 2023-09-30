@@ -6,18 +6,20 @@ namespace App\Controller;
 
 use App\DAO\PostDB;
 use App\Model\Post;
+use App\Util\Cache;
+use App\Controller\Tool\Controller;
 
 /**
  * Controlador de Post e mensagens
  * 
  * @package Controller
- * @author Ariel Santos <MrXacx>
+ * @author Ariel Santos <MrXacx>m   
  * @author Marcos Vinícius <>
  * @author Matheus Silva <>
  */
 final class PostController
 {
-    use \App\Controller\Tool\Controller;
+    use Controller;
 
     /**
      * Armazena um Post
@@ -46,7 +48,9 @@ final class PostController
         $post->setID($this->parameterList->getString('id'));
 
         $db = new PostDB($post); // Inicia objeto para manipular o Post
-        return $this->filterNulls($db->getPost()->toArray());
+        $post = $this->filterNulls($db->getPost()->toArray()); // Obtém dados do post
+        Controller::$cache->create($post, Cache::LARGE_INTERVAL_STORAGE); 
+        return $post;
 
     }
 
@@ -61,9 +65,12 @@ final class PostController
         $limit = $this->fetchListLimit(); // Obtém máximo de elementos da leitura
 
 
-        return ($this->parameterList->getString('references') == 'author') ?
+        $list = ($this->parameterList->getString('references') == 'author') ?
             $this->getUserPostList($offset, $limit) :
             $this->getRandomPostList($limit);
+            
+         Controller::$cache->create($list, Cache::LARGE_INTERVAL_STORAGE);
+         return $list;
     }
 
     /**

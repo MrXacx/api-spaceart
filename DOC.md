@@ -28,11 +28,11 @@
 
 > GET
 
-| Parâmetro | Descrição                                                                                            | Formato                        | Obrigatório |
-| :-------- | :--------------------------------------------------------------------------------------------------- | :----------------------------- | :---------- |
-| id        | ID do usuário                                                                                        | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-| type      | tipo de conta do usuário                                                                             | artist OR enterprise           | true        |
-| token     | se o token informado é o token de acesso;<br>OBS: true para obter dados sensíveis.<br>Default: false | boolean                        | false       |
+| Parâmetro | Descrição                                | Formato                        | Obrigatório |
+| :-------- | :--------------------------------------- | :----------------------------- | :---------- |
+| id        | ID do usuário                            | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| type      | tipo de conta do usuário                 | artist OR enterprise           | true        |
+| token     | se o token informado é o token de acesso | boolean                        | false       |
 
   <br>
   

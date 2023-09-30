@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-use App\DAO\Template\DatabaseAcess;
+use App\DAO\PostDB;
 use DateTime;
 
 /**
@@ -19,9 +19,11 @@ class Post extends \App\Model\Template\Entity{
     public static function getInstanceOf(array $attr): self {
         $model = new Post;
         $model->id = $attr['id'];
-        $model->message = $attr['message'];
-        $model->media = $attr['media'];
-        $model->postTime = DateTime::createFromFormat(DatabaseAcess::DB_TIMESTAMP_FORMAT, $attr['post_time']);
+        
+        $model->author = $attr[PostDB::AUTHOR];
+        $model->message = $attr[PostDB::POST_TIME];
+        $model->media = $attr[PostDB::POST_TIME];
+        $model->postTime = DateTime::createFromFormat(PostDB::DB_TIMESTAMP_FORMAT, $attr[PostDB::POST_TIME]);
 
         return $model;
     }
@@ -61,13 +63,13 @@ class Post extends \App\Model\Template\Entity{
 
     public function toArray(): array{
         return array_merge(parent::toArray(), [
-            $this->message,
-            $this->media,
-            $this->postTime->format(DatabaseAcess::USUAL_TIMESTAMP_FORMAT)
+            PostDB::AUTHOR => $this->author,
+            PostDB::MESSAGE => $this->message,
+            PostDB::MEDIA => $this->media,
+            PostDB::POST_TIME => $this->postTime->format(PostDB::USUAL_TIMESTAMP_FORMAT)
         ]);
     }
 }
 
 
 ?>
-

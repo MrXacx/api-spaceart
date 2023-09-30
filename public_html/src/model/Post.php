@@ -35,7 +35,7 @@ class Post extends \App\Model\Template\Entity{
     }
     
     public function setMessage(string $message): void{
-        $this->$message = $message;
+        $this->message = $message;
     }
     
     public function getMessage(): string{
@@ -70,3 +70,4 @@ class Post extends \App\Model\Template\Entity{
 
 
 ?>
+

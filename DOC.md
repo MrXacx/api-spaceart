@@ -13,13 +13,13 @@
 | /chat/message               |         `GET`, `POST`          |     Funcionando     |
 | /chat/message/list          |             `GET`              |     Funcionando     |
 | /post                       |    `GET`, `POST`, `DELETE`     | Necessita de testes |
-| /selection                  | `GET`, `POST`, `PUT`, `DELETE` | Necessita de testes |
+| //20                  | `GET`, `POST`, `PUT`, `DELETE` | Necessita de testes |
 | /selection/list             |             `GET`              |     Funcionando     |
 | /selection/application      | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
 | /selection/application/list |             `GET`              |     Funcionando     |
-| /user                       | `GET`, `POST`, `PUT`, `DELETE` | Necessita de testes |
+| /user                       | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
 | /user/sign-in               |             `GET`              |     Funcionando     |
-| /user/list                  |             `GET`              | Necessita de testes |
+| /user/list                  |             `GET`              |     Funcionando     |
 | /user/report                |         `GET`, `POST`          |     Funcionando     |
 | /user/report/list           |             `GET`              |     Funcionando     |
 

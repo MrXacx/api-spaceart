@@ -14,7 +14,7 @@
 | /chat/message/list          |             `GET`              |     Funcionando     |
 | /post                       |    `GET`, `POST`, `DELETE`     | Necessita de testes |
 | /post/list                  |    `GET`                       | Necessita de testes |
-| /selection                  | `GET`, `POST`, `PUT`, `DELETE` | Necessita de testes |
+| /selection                  | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
 | /selection/list             |             `GET`              |     Funcionando     |
 | /selection/application      | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
 | /selection/application/list |             `GET`              |     Funcionando     |

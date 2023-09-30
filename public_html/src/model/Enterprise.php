@@ -58,7 +58,7 @@ class Enterprise extends \App\Model\Template\User
                 EnterpriseDB::PHONE => 'phone',
                 EnterpriseDB::SITE => 'website',
                 EnterpriseDB::RATE => 'rate',
-                EnterpriseDB::COMPANY_NAME => 'company_name',
+                EnterpriseDB::COMPANY_NAME => 'companyName',
                 EnterpriseDB::SECTION => 'section',
                 EnterpriseDB::DESCRIPTION => 'description',
                 EnterpriseDB::VERIFIED => 'verified',

@@ -2,183 +2,115 @@
 
 declare(strict_types=1);
 
-namespace App\DAO;
+namespace App\Model;
 
-use App\DAO\UsersDB;
-use App\Model\Enterprise;
-use RuntimeException;
+use App\DAO\EnterpriseDB;
+use App\Model\Enumerate\AccountType;
+use App\Util\Exception\InvalidAttributeLengthException;
+use App\Util\Exception\InvalidAttributeRegexException;
 
 /**
- * Classe de maniupulação da tabela Users
- * @package DAO
+ * Classe modelo de empreendimento
+ * @package Model
+ * @abstract User
  * @author Ariel Santos (MrXacx)
  */
-class EnterpriseDB extends UsersDB
+class Enterprise extends \App\Model\Template\User
 {
-    public const CNPJ = 'CNPJ';
-    public const NEIGHBORHOOD = 'neighborhood';
-    public const ADDRESS = 'address';
-    public const COMPANY_NAME = 'company_name';
-    public const SECTION = 'section';
-
-    private Enterprise|null $enterprise;
-
     /**
-     * @param Enterprise $enterprise Modelo de empreendimento a ser manipulado
+     * Código nacional de pessoa jurídica
+     * @var string
      */
-    function __construct(Enterprise $enterprise = null)
+    private string $CNPJ;
+
+    private string $companyName;
+    private string $section;
+
+    public function __construct()
     {
-        parent::__construct($enterprise);
-        $this->enterprise = $enterprise;
+        parent::__construct();
+        $this->type = AccountType::ENTERPRISE; // Informa à classe mãe o tipo de conta que ela está formando
     }
 
     /**
-     * @see abstracts/DatabaseAcess.php
+     * Obtém um modelo de usuário inicializado
+     * 
+     * @param array $attr Array associativo contento todas as informações do modelo
+     * @return self Instância da classe
      */
-    public function create(): bool
+    public static function getInstanceOf(array $attr): self
     {
-        if (parent::create()) {
+        $entity = new Enterprise;
 
-            // Passa query SQL de criação
-            $query = $this->getConnection()->prepare('INSERT INTO enterprise (id, CNPJ, neighborhood, address, company_name, section) VALUES (?,?,?,?,?,?)');
+        foreach ($attr as $key => $value) { // Itera array informado em busca de atributos úteis à classe
+            $atributeName = match ($key) { // Retorna o nome do atributo correspondente na classe
+                'id' => 'id',
+                'index', 'placing' => 'index',
+                EnterpriseDB::EMAIL => 'email',
+                EnterpriseDB::PASSWORD => 'password',
+                EnterpriseDB::NAME => 'name',
+                EnterpriseDB::CNPJ => 'CNPJ',
+                EnterpriseDB::CEP => 'CEP',
+                EnterpriseDB::STATE => 'state',
+                EnterpriseDB::CITY => 'city',
+                EnterpriseDB::NEIGHBORHOOD => 'neighborhood',
+                EnterpriseDB::ADDRESS => 'address',
+                EnterpriseDB::PHONE => 'phone',
+                EnterpriseDB::SITE => 'website',
+                EnterpriseDB::RATE => 'rate',
+                EnterpriseDB::COMPANY_NAME => 'companyName',
+                EnterpriseDB::SECTION => 'section',
+                EnterpriseDB::DESCRIPTION => 'description',
+                EnterpriseDB::VERIFIED => 'verified',
+                default => null
+            };
 
-            // Substitui interrogações pelos valores dos atributos
-            $query->bindValue(1, $this->enterprise->getID());
-            $query->bindValue(2, $this->enterprise->getCNPJ());
-            $query->bindValue(3, $this->enterprise->getNeighborhood());
-            $query->bindValue(4, $this->enterprise->getAddress());
-            $query->bindValue(5, $this->enterprise->getCompanyName());
-            $query->bindValue(6, $this->enterprise->getSection());
-
-
-            if ($query->execute()) { // Executa a inserção funcionar
-                return true;
+            if (isset($atributeName)) { // executa apenas caso um correspondente tenha sido encontrado
+                $entity->$atributeName = $value;
             }
-
-            // Essa linha é essencial para não exista um registro em users que não possa ser encontrado em artist ou enterprise
-            $this->delete();
         }
 
-        return false;
+        return $entity;
     }
 
-    /**
-     * @see abstracts/DatabaseAcess.php
-     */
-    public function getList(int $offset = 0, int $limit = 10): array
+    public function setCNPJ(string $CNPJ): void
     {
-        // Determina query SQL de leitura
-        $query = $this->getConnection()->prepare("SELECT * FROM enterprise_view LIMIT $limit OFFSET $offset");
-
-        if ($query->execute()) { // Executa se consulta não falhar
-            return array_map(fn($user) => Enterprise::getInstanceOf($user), $this->fetchRecord($query));
-        }
-        throw new RuntimeException('Operação falhou!'); // Executa se alguma falha esperdada ocorrer
+        $this->CNPJ = $this->validator->isCNPJ($CNPJ) ? $CNPJ : InvalidAttributeRegexException::throw('CNPJ', __FILE__);
     }
 
-    /**
-     * Consulta lista aleatória de artistas na tabela filtrada pela localização
-     * 
-     * @param int $offset Linha inicial da consulta
-     * @param int $limit Número máximo de registros retornados
-     */
-    public function getRandomListByLocation(int $offset = 0, int $limit = 10): array
+    public function getCNPJ(): string
     {
-        // Determina query SQL de leitura
-        $query = $this->getConnection()->prepare(
-            "SELECT * FROM enterprise_view
-            INNER JOIN users ON users.id = enterprise.id
-            WHERE city = ? AND state = ?
-            ORDER BY RAND()
-            LIMIT $limit OFFSET $offset"
+        return $this->CNPJ;
+    }
+
+    public function setCompanyName(string $companyName): void
+    {
+        $this->companyName = $this->validator->isFit($companyName, EnterpriseDB::COMPANY_NAME) ? $companyName : InvalidAttributeLengthException::throw('company_name', __FILE__);
+    }
+
+    public function getCompanyName(): string
+    {
+        return $this->companyName;
+    }
+    public function setSection(string $section): void
+    {
+        $this->section = $this->validator->isFit($section, EnterpriseDB::SECTION) ? $section : InvalidAttributeLengthException::throw('section', __FILE__);
+    }
+
+    public function getSection(): string
+    {
+        return $this->section;
+    }
+
+    public function toArray(): array
+    {
+        return array_merge(
+            parent::toArray(),
+            [
+                'CNPJ' => $this->CNPJ ?? null,
+                'companyName' => $this->companyName,
+                'section' => $this->section,
+            ]
         );
-
-        $query->bindValue(1, $this->enterprise->getCity());
-        $query->bindValue(2, $this->enterprise->getState());
-
-        if ($query->execute()) { // Executa se consulta não falhar
-            return array_map(fn($user) => Enterprise::getInstanceOf($user), $this->fetchRecord($query));
-        }
-        throw new RuntimeException('Operação falhou!'); // Executa se alguma falha esperdada ocorrer
-    }
-
-    /**
-     * Consulta lista de artistas na tabela filtrada pelo nome
-     * 
-     * @param int $offset Linha inicial da consulta
-     * @param int $limit Número máximo de registros retornados
-     */
-
-    public function getListByName(int $offset = 0, int $limit = 10): array
-    {
-        // Determina query SQL de leitura
-        $query = $this->getConnection()->prepare(
-            "SELECT * FROM enterprise_view
-            WHERE name LIKE ?
-            ORDER BY name
-            LIMIT $limit OFFSET $offset"
-        );
-
-        $query->bindValue(1, $this->enterprise->getName() . '%');
-
-        if ($query->execute()) { // Executa se consulta não falhar
-            return array_map(fn($user) => Enterprise::getInstanceOf($user), $this->fetchRecord($query));
-        }
-        throw new RuntimeException('Operação falhou!'); // Executa se alguma falha esperdada ocorrer
-    }
-
-    /**
-     * Obtém modelo de empreendimento com dados não sensíveis
-     * @return Enterprise Modelo de empreendimento
-     */
-    public function getUnique(): Enterprise
-    {
-        // Define query SQL para obter todas as colunas da linha do usuário
-        $query = $this->getConnection()->prepare('SELECT * FROM enterprise_view WHERE id = ?');
-        $query->bindValue(1, $this->enterprise->getID()); // Substitui interrogação pelo ID
-
-        if ($query->execute()) { // Executa se a query for aceita
-            return Enterprise::getInstanceOf($this->fetchRecord($query, false));
-        }
-        // Executa em caso de falhas esperadas
-        throw new RuntimeException('Operação falhou!');
-    }
-
-    /**
-     * Obtém modelo de empreendimento com todos os dados disponíveis
-     * @return Enterprise Modelo de empreendimento
-     */
-    public function getUser(): Enterprise
-    {
-
-        // Define query SQL para obter todas as colunas da linha do usuário
-        $query = $this->getConnection()->prepare('SELECT * FROM enterprise INNER JOIN users ON enterprise.id = users.id WHERE token = ?');
-        $query->bindValue(1, $this->enterprise->getID()); // Substitui interrogação pelo ID
-
-        if ($query->execute()) { // Executa se a query for aceita
-            return Enterprise::getInstanceOf($this->fetchRecord($query, false));
-        }
-        // Executa em caso de falhas esperadas
-        throw new RuntimeException('Operação falhou!');
-    }
-
-    /**
-     * @see abstracts/DatabaseAcess.php
-     */
-    public function update(string $column, string $value): bool
-    {
-
-        if (UsersDB::isColumn(parent::class, $column)) {
-            return parent::update($column, $value);
-        }
-
-        // Passa query SQL de atualização
-        $query = $this->getConnection()->prepare("UPDATE enterprise SET $column = ? WHERE token = ?");
-
-        // Substitui interrogações
-        $query->bindValue(1, $value);
-        $query->bindValue(2, $this->enterprise->getID());
-
-        return $query->execute();
     }
 }

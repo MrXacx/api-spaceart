@@ -54,7 +54,7 @@ class Agreement extends \App\Model\Template\Entity
      * Horários de início e fim do evento
      * @var array<DateTime>
      */
-    private array $time;
+    private array $time = [];
 
     /**
      * Status do contrato
@@ -252,7 +252,7 @@ class Agreement extends \App\Model\Template\Entity
             'price' => $this->price,
             'date' => $this->date->format(AgreementDB::USUAL_DATE_FORMAT),
             'art' => $this->art ?? null,
-            'time' => array_map(fn($time) => $time->format(AgreementDB::USUAL_TIME_FORMAT), $this->time ?? []),
+            'time' => array_map(fn($time) => $time->format(AgreementDB::USUAL_TIME_FORMAT), $this->time),
             'status' => $this->status->value ?? null
         ]), fn($value) => isset($value));
     }

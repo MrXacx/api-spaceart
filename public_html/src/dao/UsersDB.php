@@ -104,7 +104,6 @@ class UsersDB extends DatabaseAcess
     public function updateTokenAcess(): bool
     {
 
-
         // atualiza coluna token do registro cujo id foi encontrado com base em email e senha
         $query = $this->getConnection()->prepare('UPDATE users SET token = UUID() WHERE id = ALL (SELECT id FROM users WHERE email = ? AND password = ?)');
 
@@ -123,7 +122,6 @@ class UsersDB extends DatabaseAcess
     public function getAcess(): array
     {
 
-        $this->updateTokenAcess();
         // Passa query SQL para leitura da coluna id
         $query = $this->getConnection()->prepare("SELECT id, placing AS 'index', token, email, type FROM users WHERE email = ? AND password = ?");
 

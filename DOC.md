@@ -13,7 +13,8 @@
 | /chat/message               |         `GET`, `POST`          |     Funcionando     |
 | /chat/message/list          |             `GET`              |     Funcionando     |
 | /post                       |    `GET`, `POST`, `DELETE`     | Necessita de testes |
-| //20                  | `GET`, `POST`, `PUT`, `DELETE` | Necessita de testes |
+| /post/list                  |    `GET`                       | Necessita de testes |
+| /selection                  | `GET`, `POST`, `PUT`, `DELETE` | Necessita de testes |
 | /selection/list             |             `GET`              |     Funcionando     |
 | /selection/application      | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
 | /selection/application/list |             `GET`              |     Funcionando     |
@@ -71,11 +72,11 @@
 
   <br>
   
-  > DELETE
+> DELETE
   
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | id | ID do usuário | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
+| Parâmetro | Descrição     | Formato                        | Obrigatório |
+| :-------- | :------------ | :----------------------------- | :---------- |
+| id        | ID do usuário | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 
 ## /user/sign-in
 
@@ -99,12 +100,12 @@
 
   <br>
 
-> > Filters
-> > | Filtro | Descrição | Parâmetros |
-> > | :----- | :-------- | :--------- |
-> > | art | Tipo de arte buscado.<br>OBS: `type=artist` é obrigatório. | art |
-> > | location | Cidade e Estado do usuário | city e state |
-> > | name | Nome parcial, como "mu" em "munik" e "murilo" | name |
+> Filters
+> | Filtro   | Descrição                                                  | Parâmetros   |
+> | :------- | :--------------------------------------------------------- | :----------- |
+> | art      | Tipo de arte buscado.<br>OBS: `type=artist` é obrigatório. | art          |
+> | location | Cidade e Estado do usuário                                 | city e state |
+> | name     | Nome parcial, como "mu" em "munik" e "murilo"              | name         |
 
 ## /user/report
 
@@ -115,15 +116,15 @@
 | id        | ID da denúncia    | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | reporter  | ID do denunciador | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 
-  <br>
-  
-  > POST
-  
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | reporter | ID do denunciador | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | reported | ID do denunciado | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | reason | motivo da denúncia | \w{1,256} | true |
+<br>
+
+> POST
+
+| Parâmetro | Descrição          | Formato                        | Obrigatório |
+| :-------- | :----------------- | :----------------------------- | :---------- |
+| reporter  | ID do denunciador  | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| reported  | ID do denunciado   | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| reason    | motivo da denúncia | \w{1,256}                      | true        |
   
 ## /user/report/list
 
@@ -142,134 +143,131 @@
 | Parâmetro | Descrição      | Formato                        | Obrigatório |
 | :-------- | :------------- | :----------------------------- | :---------- |
 | id        | ID do contrato | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-
-  <br>
+ <br>
   
   > POST  
   
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | hirer | ID do contrante | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | hired | ID do contratado | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | description | descrição | \w{1,256} | true |
-  | art | tipo de arte | | true |
-  | price | preço | float | true |
-  | date | data do evento | dd/mm/yyyy | true |
-  | time | horários de início e fim do evento respectivamente | hh:mm;hh:mm | true |
+| Parâmetro   | Descrição                                          | Formato                        | Obrigatório |
+| :---------- | :------------------------------------------------- | :----------------------------- | :---------- |
+| hirer       | ID do contrante                                    | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| hired       | ID do contratado                                   | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| description | descrição                                          | \w{1,256}                      | true        |
+| art         | tipo de arte                                       |                                | true        |
+| price       | preço                                              | float                          | true        |
+| date        | data do evento                                     | dd/mm/yyyy                     | true        |
+| time        | horários de início e fim do evento respectivamente | hh:mm;hh:mm                    | true        |
   <br>
   
   > PUT  
   
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | id | ID do contrato | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | column | parâmetro a ser alterado | | true |
-  | info | novo valor do parâmetro | | true |
-  <br>
+| Parâmetro | Descrição                | Formato                        | Obrigatório |
+| :-------- | :----------------------- | :----------------------------- | :---------- |
+| id        | ID do contrato           | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| column    | parâmetro a ser alterado |                                | true        |
+| info      | novo valor do parâmetro  |                                | true        |
+<br>
   
-  > DELETE
+> DELETE
  
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | id | ID do contrato | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  <br>
+| Parâmetro | Descrição      | Formato                        | Obrigatório |
+| :-------- | :------------- | :----------------------------- | :---------- |
+| id        | ID do contrato | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+<br>
   
 ## /agreement/list
-  <br>
   
-  > GET
+> GET
   
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | user | ID do contratante ou do contratado | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | offset | linha de início da consulta.<br>Default: 0. | 0 =< offset | false |
-  | limit | máximo de dados retornados.<br>Default: 10. | 0 < limit =< 500  | false |
-  <br>
+| Parâmetro | Descrição                                   | Formato                        | Obrigatório |
+| :-------- | :------------------------------------------ | :----------------------------- | :---------- |
+| user      | ID do contratante ou do contratado          | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| offset    | linha de início da consulta.<br>Default: 0. | 0 =< offset                    | false       |
+| limit     | máximo de dados retornados.<br>Default: 10. | 0 < limit =< 500               | false       |
+<br>
   
 ## /agreement/rate
-  <br>
   
-  > GET
-  
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | agreemnt | ID do contrato | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | author | ID de autor | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  <br>
+> GET
+
+| Parâmetro | Descrição      | Formato                        | Obrigatório |
+| :-------- | :------------- | :----------------------------- | :---------- |
+| agreemnt  | ID do contrato | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| author    | ID de autor    | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+<br>
    
-  > POST
+> POST
+
+| Parâmetro   | Descrição         | Formato                        | Obrigatório |
+| :---------- | :---------------- | :----------------------------- | :---------- |
+| agreemnt    | ID do contrato    | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| author      | ID de autor       | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| rate        | Nota da avaliação | float                          | true        |
+| description | ID de autor       | \w{1,256}                      | true        |
+<br>
   
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | agreemnt | ID do contrato | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | author | ID de autor | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | rate | Nota da avaliação | float | true |
-  | description | ID de autor | \w{1,256} | true |
-  <br>
+> PUT
+
+| Parâmetro | Descrição                | Formato                        | Obrigatório |
+| :-------- | :----------------------- | :----------------------------- | :---------- |
+| agreemnt  | ID do contrato           | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| author    | ID de autor              | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| column    | parâmetro a ser alterado |                                | true        |
+| info      | novo valor do parâmetro  |                                | true        |
+<br>
   
-  > PUT
-  
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | agreemnt | ID do contrato | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | author | ID de autor | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | column | parâmetro a ser alterado | | true |
-  | info | novo valor do parâmetro | | true |
-  <br>
-  
-  > DELETE
-  
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | agreemnt | ID do contrato | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | author | ID de autor | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  <br>
+> DELETE
+
+| Parâmetro | Descrição      | Formato                        | Obrigatório |
+| :-------- | :------------- | :----------------------------- | :---------- |
+| agreemnt  | ID do contrato | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| author    | ID de autor    | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+<br>
   
 ## /agreement/rate/list
   
   > GET
   
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | agreemnt | ID do contrato | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | offset | linha de início da consulta.<br>Default: 0. | 0 =< offset | false |
-  | limit | máximo de dados retornados.<br>Default: 10. | 0 < limit =< 500  | false |
-  <br>
+| Parâmetro | Descrição                                   | Formato                        | Obrigatório |
+| :-------- | :------------------------------------------ |:------------------------------ | :---------- |
+| agreemnt  | ID do contrato                              | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| offset    | linha de início da consulta.<br>Default: 0. | 0 =< offset                    | false       |
+| limit     | máximo de dados retornados.<br>Default: 10. | 0 < limit =< 500               | false       |
+<br>
   
 ## /post
-  > GET
-  
-  | Parâmetro | Descrição  | Formato                        | Obrigatório |
-  | :-------- | :--------- | :----------------------------- | :---------- |
-  | id        | ID do post | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-  <br>
-  
-  > POST
-  
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | author | ID do autor | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | message | texto do post | \w{1,256} | true |
-  | media | mídia da postagem | \w{1,256} | true |
+> GET
 
-  <br>
+| Parâmetro | Descrição  | Formato                        | Obrigatório |
+| :-------- | :--------- | :----------------------------- | :---------- |
+| id        | ID do post | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+<br>
+
+> POST
+
+| Parâmetro | Descrição         | Formato                        | Obrigatório |
+| :-------- | :---------------- | :----------------------------- | :---------- |
+| author    | ID do autor       | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| message   | texto do post     | \w{1,256}                      | true        |
+| media     | mídia da postagem | \w{1,256}                      | true        |
+
+<br>
   
-  > DELETE
-  
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | id | ID da postagem | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
+> DELETE
+
+| Parâmetro | Descrição      | Formato                        | Obrigatório |
+| :-------- | :------------- | :----------------------------- | :---------- |
+| id        | ID da postagem | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 
 ## /post/list
 
 > GET
 
-| Parâmetro | Descrição                                   | Formato                        | Obrigatório | Caso |
-| :-------- | :------------------------------------------ | :----------------------------- | :---------- | :--- |
-| references | Referência de busca.<br>Default: random    | `author`  e `random`           | false       | `default` |
-| author    | ID do autor                                 |  \d{8}-\d{4}-\d{4}-\d{4}-\d{12}  | true      | `references=author` |
-| offset    | linha de início da consulta.<br>Default: 0. | 0 =< offset                    | false       | `default` |
-| limit     | máximo de dados retornados.<br>Default: 10. | 0 < limit =< 500               | false       | `default` |
+| Parâmetro  | Descrição                                   | Formato                        | Obrigatório | Caso                |
+| :--------- | :------------------------------------------ | :----------------------------- | :---------- | :------------------ |
+| references | Referência de busca.<br>Default: random     | `author`  e `random`           | false       | `default`           |
+| author     | ID do autor                                 | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        | `references=author` |
+| offset     | linha de início da consulta.<br>Default: 0. | 0 =< offset                    | false       | `default`           |
+| limit      | máximo de dados retornados.<br>Default: 10. | 0 < limit =< 500               | false       | `default`           |
 
 ## /selection
 
@@ -278,35 +276,34 @@
 | Parâmetro | Descrição     | Formato                        | Obrigatório |
 | :-------- | :------------ | :----------------------------- | :---------- |
 | id        | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+<br>
 
-  <br>
+> POST
+
+| Parâmetro | Descrição                                          | Formato                        | Obrigatório |
+| :-------- | :------------------------------------------------- | :----------------------------- | :---------- |
+| title     | Título da seleção                                  | \w{1,256}                      | true        |
+| owner     | ID do criador                                      | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| date      | datas de início e fim da seleção repectivamente    | dd/mm/yyyy;dd/mm/yyyy          | true        |
+| time      | horários de início e fim da seleção repectivamente | hh:mm;hh:mm                    | true        |
+| price     | preço                                              | float                          | true        |
+| art       | tipo de arte buscado                               |                                | true        |
+<br>
   
-  > POST
-  
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | title | Título da seleção | \w{1,256} | true |
-  | owner | ID do criador | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | date | datas de início e fim da seleção repectivamente | dd/mm/yyyy;dd/mm/yyyy | true |
-  | time | horários de início e fim da seleção repectivamente | hh:mm;hh:mm | true |
-  | price | preço | float | true |
-  | art | tipo de arte buscado |  | true |
-  <br>
-  
-  > PUT
-  
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | id | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | column | parâmetro a ser alterado | | true |
-  | info | novo valor do parâmetro | | true |
-  <br>
-  
-  > DELETE
-  
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | id | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
+> PUT
+
+| Parâmetro | Descrição                | Formato                        | Obrigatório |
+| :-------- | :----------------------- | :----------------------------- | :---------- |
+| id        | ID da seleção            | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| column    | parâmetro a ser alterado |                                | true        |
+| info      | novo valor do parâmetro  |                                | true        |
+<br>
+
+> DELETE
+
+| Parâmetro | Descrição     | Formato                        | Obrigatório |
+| :-------- | :------------ | :----------------------------- | :---------- |
+| id        | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 
 ## /selection/list
 
@@ -317,15 +314,14 @@
 | owner     | ID do criador                               | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | false       |
 | offset    | linha de início da consulta.<br>Default: 0. | 0 =< offset                    | false       |
 | limit     | máximo de dados retornados.<br>Default: 10. | 0 < limit =< 500               | false       |
-| filter    | Tipo de filtro da busca                     | `name`, `location` ou `art`    | true        |
+| filter    | Tipo de filtro da busca                     |  `owner` ou `art`              | true        |
+<br>
 
-  <br>
-
-> > Filters
-> > | Filtro | Descrição | Parâmetros |
-> > | :----- | :-------- | :--------- |
-> > | art | Tipo de arte buscado | art |
-> > | owner | ID do criador da seleção | owner |
+> Filters
+> | Filtro | Descrição                | Parâmetros |
+> | :----- | :----------------------- | :--------- |
+> | art    | Tipo de arte buscado     | art        |
+> | owner  | ID do criador da seleção | owner      |
 
 ## /selection/application
 
@@ -335,33 +331,32 @@
 | :-------- | :------------ | :----------------------------- | :---------- |
 | selection | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | artist    | ID do artista | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+<br>
+  
+> POST
 
-  <br>
-  
-  > POST
-  
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | selection | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | artist | ID do artista | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  <br>
-  
-  > PUT
-  
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | selection | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | artist | ID do artista | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | column | parâmetro a ser alterado | | true |
-  | info | novo valor do parâmetro | | true |
-  <br>
-  
-  > DELETE
-  
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | selection | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | artist | ID do artista | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
+| Parâmetro | Descrição     | Formato                        | Obrigatório |
+| :-------- | :------------ | :----------------------------- | :---------- |
+| selection | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| artist    | ID do artista | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+<br>
+
+> PUT
+
+| Parâmetro | Descrição                | Formato                        | Obrigatório |
+| :-------- | :----------------------- | :----------------------------- | :---------- |
+| selection | ID da seleção            | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| artist    | ID do artista            | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| column    | parâmetro a ser alterado |                                | true        |
+| info      | novo valor do parâmetro  |                                | true        |
+<br>
+
+> DELETE
+
+| Parâmetro | Descrição     | Formato                        | Obrigatório |
+| :-------- | :------------ | :----------------------------- | :---------- |
+| selection | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| artist    | ID do artista | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 
 ## /selection/application/list
 
@@ -378,15 +373,14 @@
 | Parâmetro | Descrição  | Formato                        | Obrigatório |
 | :-------- | :--------- | :----------------------------- | :---------- |
 | id        | ID do chat | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+<br>
+  
+> POST
 
-  <br>
-  
-  > POST
-  
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | artist | ID da artista | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | enterprise | ID do empreedimento | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
+| Parâmetro  | Descrição           | Formato                        | Obrigatório |
+| :--------- | :------------------ | :----------------------------- | :---------- |
+| artist     | ID da artista       | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| enterprise | ID do empreedimento | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 
 ## /chat/list
 
@@ -407,16 +401,15 @@
 | chat      | ID do chat                          | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | sender    | ID do emissor                       | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | timestamp | Marco temporal do envio da mensagem | dd/mm/yyyy hh:mm:ss            | true        |
+ <br>
+  
+> POST
 
-  <br>
-  
-  > POST
-  
-  | Parâmetro | Descrição | Formato | Obrigatório |
-  | :------- | :-------- | :------ | :---------- |
-  | chat | ID do chat | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  | sender | ID do emissor | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true |
-  <br>
+| Parâmetro | Descrição     | Formato                        | Obrigatório |
+| :-------- | :------------ | :----------------------------- | :---------- |
+| chat      | ID do chat    | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| sender    | ID do emissor | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+<br>
 
 ## /chat/list
 

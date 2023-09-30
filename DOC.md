@@ -4,7 +4,7 @@
 
 | Rota                        |       Métodos suportados       |       Status        |
 | :-------------------------- | :----------------------------: | :-----------------: |
-| /agreement                  | `GET`, `POST`, `PUT`, `DELETE` | Necessita de testes |
+| /agreement                  | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
 | /agreement/list             |             `GET`              |     Funcionando     |
 | /agreement/rate             | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
 | /agreement/rate/list        |             `GET`              |     Funcionando     |

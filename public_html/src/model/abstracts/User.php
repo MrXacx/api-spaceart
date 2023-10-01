@@ -19,7 +19,7 @@ class User extends Entity
 {
 
     use Location;
-    
+
     /**
      * Nome completo do usuário
      * @var string
@@ -78,10 +78,10 @@ class User extends Entity
     {
         throw new Exception('Este método não está disponível nesta classe');
     }
-    
+
     public function setIndex(int|string $index): void
     {
-        $this->id = is_int($index) ? $index : InvalidAttributeRegexException::throw('index', __FILE__);
+        $this->index = is_int($index) && $index >= 0 ? $index : InvalidAttributeRegexException::throw('index', __FILE__);
     }
 
 

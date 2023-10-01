@@ -42,8 +42,8 @@ class Enterprise extends \App\Model\Template\User
     {
         $entity = new Enterprise;
 
-        foreach ($attr as $key => $value) {
-            $atributeName = match ($key) {
+        foreach ($attr as $key => $value) { // Itera array informado em busca de atributos úteis à classe
+            $atributeName = match ($key) { // Retorna o nome do atributo correspondente na classe
                 'id' => 'id',
                 'index', 'placing' => 'index',
                 EnterpriseDB::EMAIL => 'email',
@@ -65,7 +65,7 @@ class Enterprise extends \App\Model\Template\User
                 default => null
             };
 
-            if (isset($atributeName)) {
+            if (isset($atributeName)) { // executa apenas caso um correspondente tenha sido encontrado
                 $entity->$atributeName = $value;
             }
         }
@@ -85,7 +85,7 @@ class Enterprise extends \App\Model\Template\User
 
     public function setCompanyName(string $companyName): void
     {
-        $this->companyName = $this->validator->isFit($companyName) ? $companyName : InvalidAttributeLengthException::throw('company_name', __FILE__);
+        $this->companyName = $this->validator->isFit($companyName, EnterpriseDB::COMPANY_NAME) ? $companyName : InvalidAttributeLengthException::throw('company_name', __FILE__);
     }
 
     public function getCompanyName(): string
@@ -94,7 +94,7 @@ class Enterprise extends \App\Model\Template\User
     }
     public function setSection(string $section): void
     {
-        $this->companyName = $this->validator->isFit($section) ? $section : InvalidAttributeLengthException::throw('section', __FILE__);
+        $this->section = $this->validator->isFit($section, EnterpriseDB::SECTION) ? $section : InvalidAttributeLengthException::throw('section', __FILE__);
     }
 
     public function getSection(): string
@@ -108,7 +108,8 @@ class Enterprise extends \App\Model\Template\User
             parent::toArray(),
             [
                 'CNPJ' => $this->CNPJ ?? null,
-                'companyName' => $this->companyName
+                'companyName' => $this->companyName,
+                'section' => $this->section,
             ]
         );
     }

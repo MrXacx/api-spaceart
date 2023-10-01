@@ -28,15 +28,15 @@
 
 > GET
 
-| Parâmetro | Descrição                                | Formato                        | Obrigatório |
-| :-------- | :--------------------------------------- | :----------------------------- | :---------- |
-| id        | ID do usuário                            | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-| type      | tipo de conta do usuário                 | artist OR enterprise           | true        |
-| token     | se o token informado é o token de acesso | boolean                        | false       |
-
-  <br>
+| Parâmetro | Descrição                                                  | Formato                        | Obrigatório |
+| :-------- | :--------------------------------------------------------- | :----------------------------- | :---------- |
+| id        | ID do usuário                                              | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | false       |
+| index     | Index do usuário. Obtém o mesmo resultado que o id público | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | false       |
+| token     | se o token informado é o token de acesso                   | boolean                        | false       |
+| type      | tipo de conta do usuário                                   | artist OR enterprise           | true        |
+<br>
   
-  > POST
+> POST
 
 | Parâmetro    | Descrição                                                  | Formato              | Obrigatório | Caso              |
 | :----------- | :--------------------------------------------------------- | :------------------- | :---------- | :---------------- |

@@ -147,22 +147,18 @@ final class SelectionController
      */
     public function updateSelection(): bool
     {
-
         $column = $this->parameterList->getString('column'); // RECEBE A COLUNA QUE SERÁ ALTERADA
         $info = $this->parameterList->getString('info'); // RECEBE A INFORMAÇÃO QUE ELE DESEJA ALTERAR DE ACORDO COM A CONTA EM QUE ESTÁ CADASTRADO O ID
-
-        $selection = new Selection; // INICIANDO MODELO DO USUÁRIO 
-
-        //REALIZA A INICIALIZAÇÃO DO BANCO A PARTIR DA VERIFICAÇÃO DO TIPO DE CONTA
-        $selection->setID($this->parameterList->getString('id')); // PASSA O ID DO SELEÇÃO PARA O MODELO
-
+        
         $validator = new DataValidator;
-
-        if (SelectionDB::isColumn(SelectionDB::class, $column) && $validator->isValidToFlag($info, $column)) {
-            $db = new SelectionDB($selection);
-            return $db->update($column, $info); //RETORNA SE ALTEROU OU NÃO, DE ACORDO COM A VERIFICAÇÃO DO IF
+        if ($validator->isValidToFlag($info, $column) && SelectionDB::isEditalbeColumn($column)){
+            
+            $selection = new Selection; // INICIANDO MODELO DO USUÁRIO 
+            // Define ID do usuário
+            $selection->setID($this->parameterList->getString('id')); // PASSA O ID DO USUARIO PARA O MODELO
+            
+            return (new SelectionDB($selection))->update($column, $info); //RETORNA SE ALTEROU OU NÃO, DE ACORDO COM A VERIFICAÇÃO DO IF
         }
-
         return false; // RETORNA FALSO CASO NÃO TENHA PASSADO DA VERIFICAÇÃO
     }
 

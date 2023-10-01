@@ -19,6 +19,7 @@ use App\Util\Cache;
 use App\Util\DataValidator;
 use App\Util\Exception\UnexpectedHttpParameterException;
 use \DateTime;
+use Exception;
 
 /**
  * Controlador de usuários e denúncia
@@ -242,15 +243,27 @@ final class UserController
         $column = ($this->parameterList->getString('column')); // RECEBE A COLUNA QUE SERÁ ALTERADA
         $info = ($this->parameterList->getString('info')); // RECEBE A INFORMAÇÃO QUE ELE DESEJA ALTERAR DE ACORDO COM A CONTA EM QUE ESTÁ CADASTRADO O ID
 
-        list($user, $db) = $this->getAccountType();
-
-        //REALIZA A INICIALIZAÇÃO DO BANCO A PARTIR DA VERIFICAÇÃO DO TIPO DE CONTA
-        $user->setID($this->parameterList->getString('id')); // PASSA O ID DO USUARIO PARA O MODELO
-
+        if ($column == 'companyName') { // Executa caso o camel case tenha sido uitilzada para razão social
+            $column = EnterpriseDB::COMPANY_NAME;
+        }
+        
         $validator = new DataValidator;
+        if ($validator->isValidToFlag($info, $column)) {
+            if(UsersDB::isEditalbeColumn($column)){
+                $user = new User;
+                $db = new UsersDB($user);
+            } else if(ArtistDB::isEditalbeColumn($column)){
+                $user = new Artist;
+                $db = new ArtistDB($user);
+            } else if(EnterpriseDB::isEditalbeColumn($column)){
+                $user = new Enterprise;
+                $db = new EnterpriseDB($user);
+            } else {
+                return false;
+            }
 
-
-        if ($db::isColumn($db::class, $column) && $validator->isValidToFlag($info, $column)) {
+            // Define ID do usuário
+            $user->setID($this->parameterList->getString('id')); // PASSA O ID DO USUARIO PARA O MODELO
             return $db->update($column, $info); //RETORNA SE ALTEROU OU NÃO, DE ACORDO COM A VERIFICAÇÃO DO IF
         }
         return false; // RETORNA FALSO CASO NÃO TENHA PASSADO DA VERIFICAÇÃO

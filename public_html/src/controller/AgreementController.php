@@ -101,15 +101,14 @@ final class AgreementController
         $column = ($this->parameterList->getString('column')); // RECEBE A COLUNA QUE SERÁ ALTERADA
         $info = ($this->parameterList->getString('info')); // RECEBE A INFORMAÇÃO QUE ELE DESEJA ALTERAR DE ACORDO COM A CONTA EM QUE ESTÁ CADASTRADO O ID
 
-        $agreement = new Agreement; // INICIANDO MODELO DO CONTRATO 
-
-        $agreement->setID($this->parameterList->getString('id')); // PASSA O ID DO CONTRATO PARA O MODELO
-
         $validator = new DataValidator;
+        if ($validator->isValidToFlag($info, $column) && AgreementDB::isEditalbeColumn($column)) {
 
-        if (AgreementDB::isColumn(AgreementDB::class, $column) && $validator->isValidToFlag($info, $column)) {
-            $db = new AgreementDB($agreement);
-            return $db->update($column, $info); //RETORNA SE ALTEROU OU NÃO, DE ACORDO COM A VERIFICAÇÃO DO IF
+            $agreement = new Agreement; // INICIANDO MODELO DO CONTRATO 
+            // Define ID do usuário
+            $agreement->setID($this->parameterList->getString('id')); // PASSA O ID DO USUARIO PARA O MODELO
+
+            return (new AgreementDB($agreement))->update($column, $info); //RETORNA SE ALTEROU OU NÃO, DE ACORDO COM A VERIFICAÇÃO DO IF
         }
         return false; // RETORNA FALSO CASO NÃO TENHA PASSADO DA VERIFICAÇÃO
     }
@@ -182,16 +181,14 @@ final class AgreementController
 
         $column = ($this->parameterList->getString('column')); // RECEBE A COLUNA QUE SERÁ ALTERADA
         $info = $this->parameterList->getString('info'); // RECEBE A INFORMAÇÃO QUE ELE DESEJA ALTERAR DE ACORDO COM A CONTA EM QUE ESTÁ CADASTRADO O ID
-
-        $rate = new Rate($this->parameterList->getString('agreement')); // INICIANDO MODELO DO USUÁRIO 
-        $rate->setAuthor($this->parameterList->getString('author')); // PASSA O ID DO AUTOR
-
+        
         $validator = new DataValidator;
+        if ($validator->isValidToFlag($info, $column) && RateDB::isEditalbeColumn($column)) {
+            
+            $rate = new Rate($this->parameterList->getString('agreement')); // INICIANDO MODELO DO USUÁRIO 
+            $rate->setAuthor($this->parameterList->getString('author')); // PASSA O ID DO AUTOR
 
-
-        if (AgreementDB::isColumn(AgreementDB::class, $column) && $validator->isValidToFlag($info, $column)) {
-            $db = new RateDB($rate);
-            return $db->update($column, $info); //RETORNA SE ALTEROU OU NÃO, DE ACORDO COM A VERIFICAÇÃO DO IF
+            return (new RateDB($rate))->update($column, $info); //RETORNA SE ALTEROU OU NÃO, DE ACORDO COM A VERIFICAÇÃO DO IF
         }
         return false; // RETORNA FALSO CASO NÃO TENHA PASSADO DA VERIFICAÇÃO
     }

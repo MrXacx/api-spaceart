@@ -4,20 +4,19 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DAO\UsersDB;
+use App\Controller\Tool\Controller;
 use App\DAO\ArtistDB;
 use App\DAO\EnterpriseDB;
 use App\DAO\ReportDB;
-use App\Model\Template\User;
+use App\DAO\UsersDB;
 use App\Model\Artist;
 use App\Model\Enterprise;
 use App\Model\Enumerate\AccountType;
 use App\Model\Enumerate\ArtType;
 use App\Model\Report;
+use App\Model\Template\User;
 use App\Util\Cache;
-use App\Util\Exception\InvalidAttributeFormatException;
 use App\Util\DataValidator;
-use App\Controller\Tool\Controller;
 use App\Util\Exception\UnexpectedHttpParameterException;
 use \DateTime;
 
@@ -27,7 +26,7 @@ use \DateTime;
  * @package Controller
  * @author Ariel Santos <MrXacx>
  * @author Marcos Vinícius <>
- * @author Matheus Silva <>
+ * @author Matheus Silva <theubr78>
  */
 final class UserController
 {
@@ -70,7 +69,7 @@ final class UserController
                 break;
 
             case null:
-                UnexpectedHttpParameterException::throw(strval($type),'TYPE ACCOUNT');
+                UnexpectedHttpParameterException::throw(strval($type), 'TYPE ACCOUNT');
         }
 
         if ($user instanceof User && $db instanceof UsersDB) {
@@ -100,11 +99,26 @@ final class UserController
     {
 
         list($user, $db) = $this->getAccountType();
-        $user->setID($this->parameterList->getString('id')); // Inicia usuário com o id informado
+        $id = $this->parameterList->getString('id');
+
 
         // Caso o id seja o token de acesso, dados sigilosos serão consultados
-        $user = $this->filterNulls($this->parameterList->getBoolean('token') ? $db->getUser()->toArray() : $db->getUnique()->toArray());
-        Controller::$cache->create($user, Cache::MEDIUM_INTERVAL_STORAGE);
+        if ($this->parameterList->getBoolean('token')) { // Executa caso o usuário tenha passado um token pessoal no lugar do id
+            $user->setID($id); // Inicia usuário com o id informado
+            $user = $db->getUser();
+        } else if (strlen($id) > 0) { // Executa caso o id público tenha sido informado
+            // Note que o id tem preferência em comparação com o index
+
+            $user->setID($id); // Inicia usuário com o id informado
+            $user = $db->getPublicDataFromUserForID(); // Sobrescreve modelo user com modelo baseado no registro
+
+        } else { // Executa caso o ide não tenha sido informado
+            $user->setIndex($this->parameterList->getInt('index', -1)); // Inicia usuário com o index informado
+            $user = $db->getPublicDataFromUserForIndex(); // Sobrescreve modelo user com modelo baseado no registro
+        }
+
+        $user = $this->filterNulls($user->toArray()); // Sobrescreve modelo com array sem elementos nulos
+        Controller::$cache->create($user, Cache::MEDIUM_INTERVAL_STORAGE); // Guarda o cache
         return $user;
 
     }
@@ -214,7 +228,7 @@ final class UserController
         return match ($type) { // RECEBENDO O TIPO DA CONTA
             AccountType::ARTIST => [$artist = new Artist(), new ArtistDB($artist)],
             AccountType::ENTERPRISE => [$enterprise = new Enterprise(), new EnterpriseDB($enterprise)],
-            default => UnexpectedHttpParameterException::throw(strval($type),'TYPE ACCOUNT')
+            default => UnexpectedHttpParameterException::throw(strval($type), 'TYPE ACCOUNT')
         };
     }
 

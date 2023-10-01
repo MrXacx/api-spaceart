@@ -151,14 +151,30 @@ class ArtistDB extends UsersDB
     }
 
     /**
-     * Obtém modelo de artista com dados não sensíveis
+     * Obtém modelo de artista com dados não sensíveis com base no id
      * @return Artist Modelo de artista
      */
-    public function getUnique(): Artist
+    public function getPublicDataFromUserForID(): Artist
     {
         // Define query SQL para obter todas as colunas da linha do usuário
-        $query = $this->getConnection()->prepare("SELECT * FROM artist_view WHERE id = ?");
+        $query = $this->getConnection()->prepare('SELECT * FROM artist_view WHERE id = ?');
         $query->bindValue(1, $this->artist->getID()); // Substitui interrogação pelo ID
+
+        if ($query->execute()) { // Executa se a query for aceita
+            return Artist::getInstanceOf($this->fetchRecord($query, false));
+        }
+        // Executa em caso de falhas esperadas
+        throw new RuntimeException('Operação falhou!');
+    }
+    /**
+     * Obtém modelo de artista com dados não sensíveis com base no Index
+     * @return Artist Modelo de artista
+     */
+    public function getPublicDataFromUserForIndex(): Artist
+    {
+        // Define query SQL para obter todas as colunas da linha do usuário
+        $query = $this->getConnection()->prepare('SELECT * FROM artist_view WHERE artist_view.index = ?');
+        $query->bindValue(1, $this->artist->getIndex()); // Substitui interrogação pelo Index
 
         if ($query->execute()) { // Executa se a query for aceita
             return Artist::getInstanceOf($this->fetchRecord($query, false));

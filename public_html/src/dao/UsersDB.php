@@ -85,11 +85,28 @@ class UsersDB extends DatabaseAcess
      * Obtém modelo de Usuário com dados não sensíveis
      * @return User Modelo de usuário
      */
-    public function getUnique(): User
+    public function getPublicDataFromUserForID(): User
     {
         // Define query SQL para obter todas as colunas da linha do usuário
         $query = $this->getConnection()->prepare('SELECT id, index, name, image, CEP, state, city, rate, website, description FROM users WHERE id = ?');
         $query->bindValue(1, $this->user->getID()); // Substitui interrogação pelo ID
+
+        if ($query->execute()) { // Executa se a query for aceita
+            return User::getInstanceOf($this->fetchRecord($query, false));
+        }
+        // Executa em caso de falhas esperadas
+        throw new RuntimeException('Operação falhou!');
+    }
+
+    /**
+     * Obtém modelo de Usuário com dados não sensíveis
+     * @return User Modelo de usuário
+     */
+    public function getPublicDataFromUserForIndex(): User
+    {
+        // Define query SQL para obter todas as colunas da linha do usuário
+        $query = $this->getConnection()->prepare('SELECT id, index, name, image, CEP, state, city, rate, website, description FROM users WHERE placing = ?');
+        $query->bindValue(1, $this->user->getIndex()); // Substitui interrogação pelo index
 
         if ($query->execute()) { // Executa se a query for aceita
             return User::getInstanceOf($this->fetchRecord($query, false));

@@ -19,7 +19,7 @@ class User extends Entity
 {
 
     use Location;
-
+    
     /**
      * Nome completo do usuário
      * @var string
@@ -78,23 +78,16 @@ class User extends Entity
     {
         throw new Exception('Este método não está disponível nesta classe');
     }
-
-    /**
-     * @param string $id ID do usuário
-     */
-    public function setID(string $id): void
+    
+    public function setIndex(int|string $index): void
     {
-
-        $this->id = $this->validator->isUUID($id) ? $id : InvalidAttributeRegexException::throw('id', __FILE__);
+        $this->id = is_int($index) ? $index : InvalidAttributeRegexException::throw('index', __FILE__);
     }
 
-    /**
-     * Obtém ID do usuário
-     * @return string ID 
-     */
-    public function getID(): string
+
+    public function getIndex(): string|int
     {
-        return $this->id;
+        return $this->index;
     }
 
     /**

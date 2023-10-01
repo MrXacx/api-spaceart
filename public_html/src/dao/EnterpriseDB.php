@@ -32,7 +32,7 @@ class EnterpriseDB extends UsersDB
         $this->enterprise = $enterprise;
     }
 
-    public static function isEditalbeColumn(string $column)
+    public static function isEditalbeColumn(string $column): bool
     {
         return is_int(
             array_search($column, [

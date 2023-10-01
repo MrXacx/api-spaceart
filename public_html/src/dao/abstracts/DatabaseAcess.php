@@ -81,11 +81,7 @@ abstract class DatabaseAcess
         NoReturnRetrieveException::throw();
     }
 
-    final public static function isColumn(string $class, string $column): bool
-    {
-        $cases = (new \ReflectionClass($class))->getConstants(ReflectionClassConstant::IS_PUBLIC);
-        return false !== array_search($column, $cases, true);
-    }
+    abstract public static function isEditalbeColumn(string $column): bool;
 
     function __destruct()
     {

@@ -41,7 +41,7 @@ class AgreementDB extends DatabaseAcess
         parent::__construct();
     }
 
-    public static function isEditalbeColumn(string $column)
+    public static function isEditalbeColumn(string $column): bool
     {
         return is_int(
             array_search($column, [
@@ -68,13 +68,13 @@ class AgreementDB extends DatabaseAcess
         $query->bindValue(2, $this->agreement->getHired());
         $query->bindValue(3, $this->agreement->getPrice());
         $query->bindValue(4, $this->agreement->getDate()->format(parent::DB_DATE_FORMAT));
-        
+
         $time = $this->agreement->getTime();
         $query->bindValue(5, $time['start']->format(parent::DB_TIME_FORMAT));
         $query->bindValue(6, $time['end']->format(parent::DB_TIME_FORMAT));
         $query->bindValue(7, $this->agreement->getArt()->value);
         $query->bindValue(8, $this->agreement->getDescription());
-        
+
         return $query->execute();
     }
 

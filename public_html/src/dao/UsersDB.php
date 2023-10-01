@@ -23,7 +23,7 @@ class UsersDB extends DatabaseAcess
     public const STATE = 'state';
     public const CITY = 'city';
     public const SITE = 'website';
-    public const IMAGE_URL = 'image';
+    public const IMAGE = 'image';
     public const RATE = 'rate';
     public const TOKEN = 'token';
     public const DESCRIPTION = 'description';
@@ -39,6 +39,24 @@ class UsersDB extends DatabaseAcess
     {
         $this->user = $user;
         parent::__construct();
+    }
+
+    public static function isEditalbeColumn(string $column)
+    {
+        return is_int(
+            array_search($column, [
+                self::PASSWORD,
+                self::NAME,
+                self::PHONE,
+                self::CEP,
+                self::STATE,
+                self::CITY,
+                self::SITE,
+                self::IMAGE,
+                self::DESCRIPTION,
+                self::VERIFIED,
+            ])
+        );
     }
 
     /**

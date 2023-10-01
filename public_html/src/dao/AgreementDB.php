@@ -41,6 +41,19 @@ class AgreementDB extends DatabaseAcess
         parent::__construct();
     }
 
+    public static function isEditalbeColumn(string $column)
+    {
+        return is_int(
+            array_search($column, [
+                self::STATUS,
+                self::PRICE,
+                self::DATE,
+                self::START_TIME,
+                self::END_TIME,
+            ])
+        );
+    }
+
     /**
      * @see abstracts/DatabaseAcess.php
      */

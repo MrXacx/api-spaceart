@@ -32,6 +32,19 @@ class EnterpriseDB extends UsersDB
         $this->enterprise = $enterprise;
     }
 
+    public static function isEditalbeColumn(string $column)
+    {
+        return is_int(
+            array_search($column, [
+                self::NEIGHBORHOOD,
+                self::ADDRESS,
+                self::SECTION,
+                self::COMPANY_NAME,
+            ])
+        );
+    }
+
+
     /**
      * @see abstracts/DatabaseAcess.php
      */

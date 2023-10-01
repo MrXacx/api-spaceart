@@ -40,6 +40,19 @@ class SelectionDB extends DatabaseAcess
         parent::__construct();
     }
 
+    public static function isEditalbeColumn(string $column)
+    {
+        return is_int(
+            array_search($column, [
+                self::TITLE,
+                self::START_TIMESTAMP,
+                self::END_TIMESTAMP,
+                self::PRICE,
+                self::LOCKED,
+            ])
+        );
+    }
+
     /**
      * @see abstracts/DatabaseAcess.php
      */

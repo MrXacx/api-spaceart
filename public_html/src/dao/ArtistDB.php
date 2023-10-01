@@ -31,6 +31,16 @@ class ArtistDB extends UsersDB
         $this->artist = $artist;
     }
 
+    public static function isEditalbeColumn(string $column)
+    {
+        return is_int(
+            array_search($column, [
+                self::ART,
+                self::WAGE,
+            ])
+        );
+    }
+
     /**
      * @see abstracts/DatabaseAcess.php
      */

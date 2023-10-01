@@ -11,6 +11,7 @@ use App\Controller\SelectionController;
 use App\Controller\UserController;
 use App\Server;
 use App\Util\Exception\DatabaseException;
+use App\Util\Exception\NoReturnRetrieveException;
 use App\Util\Exception\Template\InvalidAttributeFormatException;
 use App\Util\Exception\UnexpectedHttpParameterException;
 use FastRoute;
@@ -187,6 +188,8 @@ class RoutesBuilder
                     $status = Response::HTTP_BAD_REQUEST;
                     $responseHandler->setContent(json_encode($ex->getMessage()));
 
+                } catch (NoReturnRetrieveException $ex) {
+                    $responseHandler->setContent(json_encode([]));
                 } catch (DatabaseException $ex) {
                     $message = $ex->getMessage(); // Obtém mensagem da exceção
                     $startpoint = strpos($message, '[') + 1; // Posição inicial do código sqlstate
@@ -212,7 +215,7 @@ class RoutesBuilder
 
                         case '08001': // The connection was unable to be established to the application server or other server.
                         case '08003': // The connection does not exist.
-                        //case '08004': // The application server rejected establishment of the connection.
+                        case '08004': // The application server rejected establishment of the connection.
                         case '42505': // Connection authorization failure occurred.
                         case '26501': // The statement identified does not exist.
                             $level = Level::Emergency;

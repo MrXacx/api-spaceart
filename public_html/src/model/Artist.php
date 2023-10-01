@@ -38,7 +38,8 @@ class Artist extends \App\Model\Template\User
      */
     private string|float $wage;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->type = AccountType::ARTIST; // Informa à classe mãe o tipo de conta que ela está formando
     }
@@ -51,8 +52,9 @@ class Artist extends \App\Model\Template\User
 
             $atributeName = match ($key) {
                 'id' => 'id',
-                'index','placing' => 'index',
+                'index', 'placing' => 'index',
                 ArtistDB::EMAIL => 'email',
+                ArtistDB::IMAGE => 'image',
                 ArtistDB::PASSWORD => 'password',
                 ArtistDB::NAME => 'name',
                 ArtistDB::PHONE => 'phone',
@@ -75,7 +77,7 @@ class Artist extends \App\Model\Template\User
             }
 
         }
-        
+
         $entity->birthday = DateTime::createFromFormat(ArtistDB::DB_DATE_FORMAT, $attr['birthday']);
         return $entity;
     }
@@ -132,8 +134,8 @@ class Artist extends \App\Model\Template\User
     {
         return $this->wage;
     }
-    
-    
+
+
     public function setBirthday(DateTime $birthday): void
     {
         $this->birthday = $birthday;

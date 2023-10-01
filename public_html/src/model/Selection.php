@@ -6,6 +6,7 @@ namespace App\Model;
 
 use App\DAO\SelectionDB;
 use App\Model\Enumerate\ArtType;
+use App\Util\Exception\InvalidAttributeLengthException;
 use App\Util\Exception\InvalidAttributeRegexException;
 use DateTime;
 
@@ -51,6 +52,7 @@ class Selection extends \App\Model\Template\Entity
      * @var bool
      */
     private bool $locked = false;
+    private string $title;
 
 
     /**
@@ -64,6 +66,7 @@ class Selection extends \App\Model\Template\Entity
 
         $entity = new Selection;
         $entity->id = $attr['id'];
+        $entity->title = $attr['title'];
         $entity->owner = $attr[SelectionDB::OWNER];
         $entity->price = $attr[SelectionDB::PRICE];
         $entity->art = ArtType::tryFrom($attr[SelectionDB::ART]);
@@ -199,9 +202,18 @@ class Selection extends \App\Model\Template\Entity
         return $this->locked;
     }
 
+    public function setTitle(string $title): void{
+        $this->title = $this->validator->isFit($title, SelectionDB::TITLE) ? $title : InvalidAttributeLengthException::throw('title', __FILE__);
+    }
+
+    public function getTitle(): string{
+        return $this->title;
+    }
+
     public function toArray(): array
     {
         return array_filter(array_merge(parent::toArray(), [
+            'title' => $this->title,
             'owner' => $this->owner,
             'price' => $this->price ?? null,
             'art' => $this->art ?? null,

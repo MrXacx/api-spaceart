@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use DateTime;
-use App\Model\Agreement;
-use App\DAO\AgreementDB;
-use App\Model\Rate;
-use App\DAO\RateDB;
-use App\Model\Enumerate\ArtType;
-use App\Util\DataValidator;
-use App\Util\Cache;
 use App\Controller\Tool\Controller;
+use App\DAO\AgreementDB;
+use App\DAO\RateDB;
+use App\Model\Agreement;
+use App\Model\Enumerate\ArtType;
+use App\Model\Rate;
+use App\Util\Cache;
+use App\Util\DataValidator;
+use DateTime;
 
 /**
  * Controlador de contrato e avaliações
@@ -37,6 +37,7 @@ final class AgreementController
 
         $agreement->setHirer($this->parameterList->getString('hirer')); // obtém id do contratante
         $agreement->setHired($this->parameterList->getString('hired')); // obtém id do contratado
+        $agreement->setDescription($this->parameterList->getString('description')); // obtém id do contratado
         $agreement->setArt($this->parameterList->getEnum('art', ArtType::class)); // obtém tipo de arte
         $agreement->setPrice(floatval($this->parameterList->getString('price')));
 

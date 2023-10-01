@@ -3,6 +3,8 @@
 declare(strict_types=1);
 namespace App\Model\Template;
 
+use App\DAO\UsersDB;
+use App\Model\Enumerate\AccountType;
 use App\Model\Tool\Location;
 use App\Util\Exception\InvalidAttributeLengthException;
 use App\Util\Exception\InvalidAttributeRegexException;
@@ -60,6 +62,10 @@ class User extends Entity
      */
     protected float|string $rate;
 
+    protected int|string $index;
+    protected string $description;
+    protected AccountType $type;
+    protected bool|int|string $verified; // Variável para controlar se o usuário já foi verificado na aplicação servida
 
     /**
      * Obtém um modelo de usuário inicializado
@@ -73,22 +79,15 @@ class User extends Entity
         throw new Exception('Este método não está disponível nesta classe');
     }
 
-    /**
-     * @param string $id ID do usuário
-     */
-    public function setID(string $id): void
+    public function setIndex(int|string $index): void
     {
-
-        $this->id = $this->validator->isUUID($id) ? $id : InvalidAttributeRegexException::throw('id', __FILE__);
+        $this->index = is_int($index) && $index >= 0 ? $index : InvalidAttributeRegexException::throw('index', __FILE__);
     }
 
-    /**
-     * Obtém ID do usuário
-     * @return string ID 
-     */
-    public function getID(): string
+
+    public function getIndex(): string|int
     {
-        return $this->id;
+        return $this->index;
     }
 
     /**
@@ -203,10 +202,39 @@ class User extends Entity
     {
         return floatval($this->rate);
     }
+    public function setDescription(string $description): void
+    {
+        $this->description = $this->validator->isFit($description, UsersDB::DESCRIPTION) ? $description : InvalidAttributeLengthException::throw('description', __FILE__);
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function setType(AccountType $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function getType(): AccountType
+    {
+        return $this->type;
+    }
+
+    public function setVerified(bool $verified): void
+    {
+        $this->verified = $verified;
+    }
+    public function isVerified(): bool
+    {
+        return boolval($this->verified);
+    }
 
     public function toArray(): array
     {
         return array_merge(parent::toArray(), [
+            'index' => $this->index,
             'name' => $this->name,
             'image' => $this->image,
             'email' => $this->email ?? null,
@@ -214,7 +242,10 @@ class User extends Entity
             'phone' => $this->phone ?? null,
             'location' => $this->toLocationArray(),
             'rate' => $this->rate,
-            'website' => $this->website
+            'website' => $this->website,
+            'description' => $this->description,
+            'type' => $this->type->value,
+            'verified' => $this->isVerified(),
         ]);
     }
 }

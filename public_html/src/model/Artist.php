@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\DAO\ArtistDB;
-use App\DAO\UsersDB;
 use App\Model\Enumerate\AccountType;
 use App\Model\Enumerate\ArtType;
 use App\Util\Exception\InvalidAttributeRegexException;
+use DateTime;
 
 /**
  * Classe modelo de artista
@@ -30,11 +30,18 @@ class Artist extends \App\Model\Template\User
      */
     private ArtType|string $art;
 
+    private DateTime $birthday;
+
     /**
      * Pretensão salarial por hora
      * @var string|float
      */
     private string|float $wage;
+
+    public function __construct() {
+        parent::__construct();
+        $this->type = AccountType::ARTIST; // Informa à classe mãe o tipo de conta que ela está formando
+    }
 
     public static function getInstanceOf(array $attr): self
     {
@@ -44,18 +51,21 @@ class Artist extends \App\Model\Template\User
 
             $atributeName = match ($key) {
                 'id' => 'id',
-                UsersDB::EMAIL => 'email',
-                UsersDB::PASSWORD => 'password',
-                UsersDB::NAME => 'name',
-                UsersDB::PHONE => 'phone',
-                UsersDB::CEP => 'CEP',
-                UsersDB::STATE => 'state',
-                UsersDB::CITY => 'city',
+                'index','placing' => 'index',
+                ArtistDB::EMAIL => 'email',
+                ArtistDB::PASSWORD => 'password',
+                ArtistDB::NAME => 'name',
+                ArtistDB::PHONE => 'phone',
+                ArtistDB::CEP => 'CEP',
+                ArtistDB::STATE => 'state',
+                ArtistDB::CITY => 'city',
                 ArtistDB::CPF => 'CPF',
                 ArtistDB::ART => 'art',
                 ArtistDB::WAGE => 'wage',
-                UsersDB::SITE => 'website',
-                UsersDB::RATE => 'rate',
+                ArtistDB::SITE => 'website',
+                ArtistDB::RATE => 'rate',
+                ArtistDB::DESCRIPTION => 'description',
+                ArtistDB::VERIFIED => 'verified',
 
                 default => null
             };
@@ -65,7 +75,8 @@ class Artist extends \App\Model\Template\User
             }
 
         }
-
+        
+        $entity->birthday = DateTime::createFromFormat(ArtistDB::DB_DATE_FORMAT, $attr['birthday']);
         return $entity;
     }
 
@@ -121,14 +132,26 @@ class Artist extends \App\Model\Template\User
     {
         return $this->wage;
     }
+    
+    
+    public function setBirthday(DateTime $birthday): void
+    {
+        $this->birthday = $birthday;
+    }
+
+
+    public function getBirthday(): DateTime
+    {
+        return $this->birthday;
+    }
 
     public function toArray(): array
     {
         return array_merge(parent::toArray(), [
             'CPF' => $this->CPF ?? null,
+            'birthday' => $this->birthday->format(ArtistDB::USUAL_DATE_FORMAT),
             'art' => $this->art,
-            'wage' => $this->wage,
-            'type' => AccountType::ARTIST->value
+            'wage' => $this->wage
         ]);
     }
 }

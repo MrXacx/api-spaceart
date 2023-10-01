@@ -18,6 +18,7 @@ class ArtistDB extends UsersDB
     public const ART = 'art';
     public const WAGE = 'wage';
     public const CPF = 'cpf';
+    public const BIRTHDAY = 'birthday';
 
     private Artist $artist;
 
@@ -38,13 +39,14 @@ class ArtistDB extends UsersDB
         if (parent::create()) { // Executa se o usuário foi criado
 
             // Passa query SQL de criação
-            $query = $this->getConnection()->prepare('INSERT INTO artist (id, CPF, art, wage) VALUES (?,?,?,?)');
+            $query = $this->getConnection()->prepare('INSERT INTO artist (id, CPF, art, wage, birthday) VALUES (?,?,?,?,?)');
 
             // Substitui interrogações pelos valores dos atributos
             $query->bindValue(1, $this->artist->getID());
             $query->bindValue(2, $this->artist->getCPF());
             $query->bindValue(3, $this->artist->getArt()->value);
             $query->bindValue(4, $this->artist->getWage());
+            $query->bindValue(5, $this->artist->getBirthday()->format(parent::DB_DATE_FORMAT));
 
 
             if ($query->execute()) { // Executa a inserção funcionar
@@ -149,14 +151,30 @@ class ArtistDB extends UsersDB
     }
 
     /**
-     * Obtém modelo de artista com dados não sensíveis
+     * Obtém modelo de artista com dados não sensíveis com base no id
      * @return Artist Modelo de artista
      */
-    public function getUnique(): Artist
+    public function getPublicDataFromUserForID(): Artist
     {
         // Define query SQL para obter todas as colunas da linha do usuário
         $query = $this->getConnection()->prepare('SELECT * FROM artist_view WHERE id = ?');
         $query->bindValue(1, $this->artist->getID()); // Substitui interrogação pelo ID
+
+        if ($query->execute()) { // Executa se a query for aceita
+            return Artist::getInstanceOf($this->fetchRecord($query, false));
+        }
+        // Executa em caso de falhas esperadas
+        throw new RuntimeException('Operação falhou!');
+    }
+    /**
+     * Obtém modelo de artista com dados não sensíveis com base no Index
+     * @return Artist Modelo de artista
+     */
+    public function getPublicDataFromUserForIndex(): Artist
+    {
+        // Define query SQL para obter todas as colunas da linha do usuário
+        $query = $this->getConnection()->prepare('SELECT * FROM artist_view WHERE artist_view.index = ?');
+        $query->bindValue(1, $this->artist->getIndex()); // Substitui interrogação pelo Index
 
         if ($query->execute()) { // Executa se a query for aceita
             return Artist::getInstanceOf($this->fetchRecord($query, false));

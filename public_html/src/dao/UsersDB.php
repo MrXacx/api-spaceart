@@ -26,6 +26,9 @@ class UsersDB extends DatabaseAcess
     public const IMAGE_URL = 'image';
     public const RATE = 'rate';
     public const TOKEN = 'token';
+    public const DESCRIPTION = 'description';
+    public const TYPE = 'type';
+    public const VERIFIED = 'verified';
 
     private User $user;
 
@@ -44,7 +47,7 @@ class UsersDB extends DatabaseAcess
     public function create(): bool
     {
         // Passa query SQL de criação
-        $query = $this->getConnection()->prepare('INSERT INTO users (id, name, image, email, password, phone, CEP, state, city) VALUES (?,?,?,?,?,?,?,?,?)');
+        $query = $this->getConnection()->prepare('INSERT INTO users (id, name, image, email, password, phone, CEP, state, city, type) VALUES (?,?,?,?,?,?,?,?,?,?)');
 
         $this->user->setID(parent::getRandomID());
         // Substitui interrogações pelos valores dos atributos
@@ -57,6 +60,7 @@ class UsersDB extends DatabaseAcess
         $query->bindValue(7, $this->user->getCEP());
         $query->bindValue(8, $this->user->getState());
         $query->bindValue(9, $this->user->getCity());
+        $query->bindValue(10, $this->user->getType()->value);
 
 
         return $query->execute();
@@ -68,7 +72,7 @@ class UsersDB extends DatabaseAcess
     public function getList(int $offset = 0, int $limit = 10): array
     {
         // Determina query SQL de leitura
-        $query = $this->getConnection()->prepare("SELECT id, name, image, CEP, state, city, rate, website FROM users LIMIT $limit OFFSET $offset");
+        $query = $this->getConnection()->prepare("SELECT id, index, name, image, CEP, state, city, rate, website, type, description FROM users LIMIT $limit OFFSET $offset");
 
         if ($query->execute()) { // Executa se consulta não falhar
             return $this->fetchRecord($query);
@@ -81,11 +85,28 @@ class UsersDB extends DatabaseAcess
      * Obtém modelo de Usuário com dados não sensíveis
      * @return User Modelo de usuário
      */
-    public function getUnique(): User
+    public function getPublicDataFromUserForID(): User
     {
         // Define query SQL para obter todas as colunas da linha do usuário
-        $query = $this->getConnection()->prepare('SELECT id, name, image, CEP, state, city, rate, website FROM users WHERE id = ?');
+        $query = $this->getConnection()->prepare('SELECT id, index, name, image, CEP, state, city, rate, website, description FROM users WHERE id = ?');
         $query->bindValue(1, $this->user->getID()); // Substitui interrogação pelo ID
+
+        if ($query->execute()) { // Executa se a query for aceita
+            return User::getInstanceOf($this->fetchRecord($query, false));
+        }
+        // Executa em caso de falhas esperadas
+        throw new RuntimeException('Operação falhou!');
+    }
+
+    /**
+     * Obtém modelo de Usuário com dados não sensíveis
+     * @return User Modelo de usuário
+     */
+    public function getPublicDataFromUserForIndex(): User
+    {
+        // Define query SQL para obter todas as colunas da linha do usuário
+        $query = $this->getConnection()->prepare('SELECT id, index, name, image, CEP, state, city, rate, website, description FROM users WHERE placing = ?');
+        $query->bindValue(1, $this->user->getIndex()); // Substitui interrogação pelo index
 
         if ($query->execute()) { // Executa se a query for aceita
             return User::getInstanceOf($this->fetchRecord($query, false));
@@ -99,7 +120,6 @@ class UsersDB extends DatabaseAcess
      */
     public function updateTokenAcess(): bool
     {
-
 
         // atualiza coluna token do registro cujo id foi encontrado com base em email e senha
         $query = $this->getConnection()->prepare('UPDATE users SET token = UUID() WHERE id = ALL (SELECT id FROM users WHERE email = ? AND password = ?)');
@@ -119,9 +139,8 @@ class UsersDB extends DatabaseAcess
     public function getAcess(): array
     {
 
-        $this->updateTokenAcess();
         // Passa query SQL para leitura da coluna id
-        $query = $this->getConnection()->prepare('SELECT id, token, email FROM users WHERE email = ? AND password = ?');
+        $query = $this->getConnection()->prepare("SELECT id, placing AS 'index', token, email, type FROM users WHERE email = ? AND password = ?");
 
         // // Substitui os termos pelos valores retornados
         $query->bindValue(1, $this->user->getEmail());

@@ -6,11 +6,13 @@ namespace App;
 
 use App\Controller\AgreementController;
 use App\Controller\ChatController;
+use App\Controller\PostController;
 use App\Controller\SelectionController;
 use App\Controller\UserController;
 use App\Server;
 use App\Util\Exception\DatabaseException;
-use App\Util\Exception\InvalidAttributeFormatException;
+use App\Util\Exception\NoReturnRetrieveException;
+use App\Util\Exception\Template\InvalidAttributeFormatException;
 use App\Util\Exception\UnexpectedHttpParameterException;
 use FastRoute;
 use FastRoute\Dispatcher;
@@ -112,6 +114,14 @@ class RoutesBuilder
                     });
                 });
 
+                $collector->addGroup('/post', function (RouteCollector $collector) //rotas com início '/selection/application'
+                {
+                    $collector->get('', PostController::class . '@getPost'); //Abre uma vaga em específico
+                    $collector->post('', PostController::class . '@storePost'); //Cria uma candidatura
+                    $collector->delete('', PostController::class . '@deletePost'); //Cria uma candidatura
+                    $collector->get('/list', PostController::class . '@getPostList'); //Abre o menu de candidatura
+    
+                });
             }
         );
 
@@ -174,30 +184,46 @@ class RoutesBuilder
 
                 } catch (InvalidAttributeFormatException $ex) {
 
-                    Server::$logger->push($ex->getMessage(), Level::Debug);
+                    Server::$logger->push($ex->getMessage(), Level::Info);
                     $status = Response::HTTP_BAD_REQUEST;
+                    $responseHandler->setContent(json_encode($ex->getMessage()));
 
+                } catch (NoReturnRetrieveException $ex) {
+                    $responseHandler->setContent(json_encode([]));
                 } catch (DatabaseException $ex) {
-                    switch ($ex->getCode()) {
-                        case 1062:
-                            $responseHandler->setContent(json_encode($ex->getMessage()));
-                        case 2013:
-                        case 2008:
-                            $level = Level::Warning;
-                            break;
+                    $message = $ex->getMessage(); // Obtém mensagem da exceção
+                    $startpoint = strpos($message, '[') + 1; // Posição inicial do código sqlstate
+                    $code = substr(
+                        $message,
+                        $startpoint,
+                        strpos($message, ']') - $startpoint
+                    ); //  Extrai SQLSTATE da mensagem de exceção
 
-                        case 2002:
+                    switch ($code) {
+                        case 23000:
+                        case 22001: // Character data, right truncation occurred
+                        case 22002: // A null value, or the absence of an indicator parameter was detected
+                        case 22004: // A null value is not allowed.
+                        case 22007: // An invalid datetime format was detected
+                        case 23502: // An insert or update value is null, but the column cannot contain null values.
+                        case 23503: // The insert or update value of a foreign key is invalid.
+                            $responseHandler->setContent(json_encode($message));
+
+                        case 54001: // The statement is too long or too complex.
                             $level = Level::Alert;
                             break;
 
-                        case 1045:
-                        case 1114:
+                        case '08001': // The connection was unable to be established to the application server or other server.
+                        case '08003': // The connection does not exist.
+                        case '08004': // The application server rejected establishment of the connection.
+                        case '42505': // Connection authorization failure occurred.
+                        case '26501': // The statement identified does not exist.
                             $level = Level::Emergency;
                             break;
 
-                        case 2006:
                         default:
                             $level = Level::Critical;
+                            $responseHandler->setContent(json_encode($message));
                     }
 
                     Server::$logger->push($ex->getMessage(), $level);

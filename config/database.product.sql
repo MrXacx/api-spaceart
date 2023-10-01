@@ -15,16 +15,15 @@ SET time_zone = "+00:00";
 -- Banco de dados: id21258140_dbspaceart
 --
 -- --------------------------------------------------------
-DROP DATABASE IF EXISTS id21258140_dbspaceart;
-CREATE DATABASE id21258140_dbspaceart;
+CREATE DATABASE IF NOT EXISTS id21258140_dbspaceart;
 USE id21258140_dbspaceart;
 
 -- CRIAÇÃO DAS ENTIDADES
 
 CREATE TABLE IF NOT EXISTS users(
-
   id varchar(36) PRIMARY KEY,
   token VARCHAR(36) UNIQUE KEY,
+  placing int UNIQUE KEY AUTO_INCREMENT,
   name varchar(256) NOT NULL,
   email varchar(256) UNIQUE KEY NOT NULL,
   phone varchar(11) NOT NULL,
@@ -34,7 +33,10 @@ CREATE TABLE IF NOT EXISTS users(
   city varchar(50) NOT NULL,
   image varchar(256),
   website varchar(256),
-  rate float DEFAULT 0
+  rate float DEFAULT 0,
+  description varchar(256) DEFAULT '',
+  type enum ("artist", "enterprise"),
+  verified boolean DEFAULT 0
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -42,8 +44,9 @@ CREATE TABLE IF NOT EXISTS artist(
 
   id varchar(36) PRIMARY KEY,
   CPF varchar(11) UNIQUE KEY NOT NULL,
-  art enum("escultura", "pintura", "dança", "música") NOT NULL,
+  art enum("escultura", "pintura", "dança", "música", "teatro") NOT NULL,
   wage float NOT NULL,
+  birthday date NOT NULL,
 
   CONSTRAINT artist_user_fk FOREIGN KEY (id) REFERENCES users(id)  ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -54,6 +57,8 @@ CREATE TABLE IF NOT EXISTS enterprise(
   CNPJ varchar(14) UNIQUE KEY NOT NULL,
   neighborhood varchar(256) NOT NULL,
   address varchar(256) NOT NULL,
+  company_name varchar(256) NOT NULL,
+  section varchar(256) NOT NULL,
 
   CONSTRAINT enterprise_user_fk FOREIGN KEY (id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
 
@@ -64,6 +69,7 @@ CREATE TABLE IF NOT EXISTS agreement(
   id varchar(36) PRIMARY KEY,
   hirer varchar(36) NOT NULL,
   hired varchar(36) NOT NULL,
+  description varchar(256),
   price float unsigned NOT NULL,
   date date NOT NULL,
   start_time time NOT NULL,
@@ -71,7 +77,6 @@ CREATE TABLE IF NOT EXISTS agreement(
   art varchar(256) NOT NULL,
   status enum("send", "accepted", "recused", "canceled")  DEFAULT "send",
 
-  CONSTRAINT chk_time_is_future CHECK (start_time > CURRENT_TIME AND end_time > start_time),
   CONSTRAINT hirer_user_fk FOREIGN KEY (hirer) REFERENCES enterprise(id) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT hired_user_fk FOREIGN KEY (hired) REFERENCES artist(id) ON UPDATE CASCADE ON DELETE CASCADE
 
@@ -80,6 +85,7 @@ CREATE TABLE IF NOT EXISTS agreement(
 CREATE TABLE IF NOT EXISTS selection(
 
   id varchar(36) PRIMARY KEY,
+  title VARCHAR(256),
   owner varchar(36) NOT NULL,
   price float unsigned NOT NULL,
   start_timestamp timestamp NOT NULL,
@@ -87,9 +93,8 @@ CREATE TABLE IF NOT EXISTS selection(
   art varchar(256) NOT NULL,
   locked boolean DEFAULT 1,
   
-  CONSTRAINT chk_timestamp_is_future CHECK (start_timestamp > CURRENT_TIMESTAMP AND end_timestamp > start_timestamp),
   CONSTRAINT owner_fk FOREIGN KEY (owner) REFERENCES enterprise(id) ON UPDATE CASCADE ON DELETE CASCADE
-  
+
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -122,7 +127,8 @@ CREATE TABLE IF NOT EXISTS chat(
   id varchar(36) PRIMARY KEY,
   artist varchar(36),
   enterprise varchar(36),
-
+  last_message varchar(256),
+  
   CONSTRAINT artist_member_fk FOREIGN KEY (artist) REFERENCES artist (id) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT enterprise_member_fk FOREIGN KEY (enterprise) REFERENCES enterprise (id) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -152,14 +158,26 @@ CREATE TABLE IF NOT EXISTS rate(
     
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE IF NOT EXISTS post(
+    id varchar(36) PRIMARY KEY,
+    author varchar(36),
+    message varchar(256),
+    media varchar(256),
+    post_time timestamp DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT poster_fk FOREIGN KEY (author) REFERENCES users(id)
+    
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- CRIA VIEWS
+
 CREATE VIEW  artist_view AS
-SELECT usr.id, usr.name, usr.image, usr.CEP, usr.state, usr.city, artist.art, artist.wage, usr.rate, usr.website
+SELECT usr.id, usr.placing as 'index', usr.verified, usr.name, artist.birthday,usr.image, usr.CEP, usr.state, usr.city, artist.art, artist.wage, usr.rate, usr.website, usr.description
 FROM artist, users AS usr
 WHERE usr.id = artist.id;
 
 CREATE VIEW enterprise_view AS
-SELECT usr.id, usr.name, usr.image, usr.CEP, usr.state, usr.city, ent.neighborhood, ent.address, usr.rate, usr.website
+SELECT usr.id, usr.placing as 'index', usr.verified, usr.name, ent.company_name, ent.section, usr.image, usr.CEP, usr.state, usr.city, ent.neighborhood, ent.address, usr.rate, usr.website, usr.description
 FROM enterprise AS ent, users AS usr
 WHERE usr.id = ent.id;
 
@@ -168,6 +186,8 @@ WHERE usr.id = ent.id;
 SET GLOBAL event_scheduler = 1;
 SET @@GLOBAL.event_scheduler = 1;
 
+DELIMITER $
+  
 -- LIBERA SELEÇÕES CUJO TIMESTAMP INICAL FOI ALCANÇADO E O END NÃO
 CREATE EVENT IF NOT EXISTS
     start_selection ON SCHEDULE EVERY 5 MINUTE DO
@@ -180,3 +200,20 @@ CREATE EVENT IF NOT EXISTS
  finish_selection ON SCHEDULE EVERY 5 MINUTE DO
     UPDATE selection SET locked = 1 WHERE locked = 0
     AND end_timestamp <= CURRENT_TIMESTAMP;
+
+DELIMITER ;
+
+
+-- CRIA GATILHOS
+
+DELIMITER $
+
+CREATE TRIGGER IF NOT EXISTS
+tgr_update_last_message_in_chat AFTER INSERT
+ON message
+FOR EACH ROW
+BEGIN
+  UPDATE chat SET last_message = NEW.content WHERE chat.id = NEW.chat;
+END $$
+
+DELIMITER ;

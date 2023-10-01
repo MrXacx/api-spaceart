@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\DAO\Template;
 
+use App\Util\Exception\NoReturnRetrieve;
 use PDO;
 use PDOException;
 use PDOStatement;
@@ -77,7 +78,7 @@ abstract class DatabaseAcess
             return $response;
         }
 
-        throw new \RuntimeException('Registro(s) não encontrado(s)');
+        NoReturnRetrieve::throw();
     }
 
     final public static function isColumn(string $class, string $column): bool

@@ -8,6 +8,7 @@ use App\DAO\ArtistDB;
 use App\DAO\ChatDB;
 use App\DAO\EnterpriseDB;
 use App\DAO\MessageDB;
+use App\DAO\PostDB;
 use App\DAO\RateDB;
 use App\DAO\ReportDB;
 use App\DAO\SelectionDB;
@@ -58,14 +59,14 @@ final class DataValidator
             AgreementDB::HIRER, AgreementDB::HIRED, ChatDB::ARTIST, ChatDB::ENTERPRISE,
             SelectionDB::OWNER, ApplicationDB::ARTIST,
             ApplicationDB::SELECTION, MessageDB::CHAT, MessageDB::SENDER,
-            ReportDB::REPORTER, ReportDB::REPORTED => $this->isUUID($content),
+            ReportDB::REPORTER, ReportDB::REPORTED, PostDB::AUTHOR => $this->isUUID($content),
 
-            AgreementDB::PRICE, SelectionDB::PRICE, UsersDB::RATE, RateDB::RATE => is_numeric($content),
+            AgreementDB::PRICE, SelectionDB::PRICE, UsersDB::RATE, RateDB::RATE, ArtistDB::WAGE => is_numeric($content),
             SelectionDB::START_TIMESTAMP, SelectionDB::END_TIMESTAMP, MessageDB::DATETIME => $this->isTimestamp($content),
             AgreementDB::START_TIME, AgreementDB::END_TIME => $this->isTime($content),
             AgreementDB::DATE => $this->isDate($content),
 
-            UsersDB::SITE, UsersDB::IMAGE_URL => $this->isURL($content),
+            UsersDB::SITE => $this->isURL($content),
             UsersDB::EMAIL => $this->isEmail($content),
 
             UsersDB::CEP => $this->isCEP($content),

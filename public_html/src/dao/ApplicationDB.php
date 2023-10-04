@@ -39,6 +39,11 @@ class ApplicationDB extends DatabaseAcess
         parent::__construct();
     }
 
+    public static function isEditalbeColumn(string $column): bool
+    {
+        return false;
+    }
+
     /**
      * @see abstracts/DatabaseAcess.php
      */

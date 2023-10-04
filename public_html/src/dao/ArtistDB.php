@@ -222,7 +222,7 @@ class ArtistDB extends UsersDB
         }
 
         // Passa query SQL de atualização
-        $query = $this->getConnection()->prepare("UPDATE artist SET $column = ? WHERE token = ?");
+        $query = $this->getConnection()->prepare("UPDATE artist SET $column = ? WHERE id = ALL (SELECT id FROM users WHERE token = ?)");
 
         // Substitui interrogações
         $query->bindValue(1, $value);

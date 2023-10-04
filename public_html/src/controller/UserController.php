@@ -249,6 +249,7 @@ final class UserController
         
         $validator = new DataValidator;
         if ($validator->isValidToFlag($info, $column)) {
+
             if(UsersDB::isEditalbeColumn($column)){
                 $user = new User;
                 $db = new UsersDB($user);

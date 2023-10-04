@@ -9,6 +9,8 @@ use App\Util\Cache;
 use App\Server;
 use Monolog\Level;
 
+Server::replaceHTTPRequestForURI();
+
 Server::$logger->build(); // Cria log para o dia
 
 // Armazena endereço do client

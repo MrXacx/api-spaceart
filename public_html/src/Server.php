@@ -44,6 +44,28 @@ class Server
     {
         return $_SERVER['REQUEST_METHOD'];
     }
+    
+    public static function replaceHTTPRequestForURI(): void
+    {
+        $uri = static::getStrippedURI();
+        
+        if(static::getHTTPMethod() == 'POST'){
+            
+            if(str_ends_with($uri, '/delete')){
+                
+                $_SERVER['REQUEST_METHOD'] = 'DELETE';
+
+            } else if(str_ends_with($uri, '/update')){
+                
+                $_SERVER['REQUEST_METHOD'] = 'PUT';
+  
+            } 
+            
+            // Redireciona requisição finalizadas em "/delete" e "/update" para a camada anterior 
+            $_SERVER['REQUEST_URI'] = preg_replace('#/((delete)|(update)){1}$#', '', static::getURI());
+        }
+        
+    }
 
     /**
      * Obtém URI da consulta
@@ -53,6 +75,8 @@ class Server
     {
         return str_replace('src/index.php/', '', $_SERVER['REQUEST_URI']);
     }
+    
+    
 
     /**
      * Obtém URI sem parâmetros

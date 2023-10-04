@@ -46,8 +46,8 @@ class Enterprise extends \App\Model\Template\User
             $atributeName = match ($key) { // Retorna o nome do atributo correspondente na classe
                 'id' => 'id',
                 'index', 'placing' => 'index',
-                EnterpriseDB::EMAIL => 'image',
-                EnterpriseDB::IMAGE => 'email',
+                EnterpriseDB::EMAIL => 'email',
+                EnterpriseDB::IMAGE => 'image',
                 EnterpriseDB::PASSWORD => 'password',
                 EnterpriseDB::NAME => 'name',
                 EnterpriseDB::CNPJ => 'CNPJ',

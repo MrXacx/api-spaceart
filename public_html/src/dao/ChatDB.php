@@ -12,7 +12,7 @@ use RuntimeException;
  * Classe de maniupulação da tabela Chats
  * 
  * @package DAO
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class ChatDB extends DatabaseAcess
 {
@@ -32,6 +32,11 @@ class ChatDB extends DatabaseAcess
     {
         $this->chat = $chat;
         parent::__construct();
+    }
+
+    public static function isEditalbeColumn(string $column): bool
+    {
+        return false;
     }
 
     /**

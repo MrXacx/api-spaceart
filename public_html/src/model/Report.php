@@ -9,7 +9,7 @@ use App\Util\Exception\InvalidAttributeRegexException;
 /**
  * Classe modelo de denúncia
  * @package Model
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class Report extends \App\Model\Template\Entity
 {

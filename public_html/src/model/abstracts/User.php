@@ -13,7 +13,7 @@ use Exception;
 /**
  * Classe modelo de usuário
  * @package Model
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class User extends Entity
 {

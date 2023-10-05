@@ -13,9 +13,7 @@ use App\Controller\Tool\Controller;
  * Controlador de Post e mensagens
  * 
  * @package Controller
- * @author Ariel Santos <MrXacx>m   
- * @author Marcos Vinícius <>
- * @author Matheus Silva <>
+ * @author Ariel Santos <MrXacx>
  */
 final class PostController
 {

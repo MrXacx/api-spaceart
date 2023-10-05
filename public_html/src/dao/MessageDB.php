@@ -12,7 +12,7 @@ use App\Model\Message;
  * Classe de maniupulação da tabela Messages
  * 
  * @package DAO
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class MessageDB extends DatabaseAcess
 {

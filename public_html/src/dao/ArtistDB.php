@@ -11,7 +11,7 @@ use RuntimeException;
 /**
  * Classe de maniupulação da tabela Users
  * @package DAO
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class ArtistDB extends UsersDB
 {
@@ -217,12 +217,8 @@ class ArtistDB extends UsersDB
     public function update(string $column, string $value): bool
     {
 
-        if ($this->isColumn(parent::class, $column)) {
-            return parent::update($column, $value);
-        }
-
         // Passa query SQL de atualização
-        $query = $this->getConnection()->prepare("UPDATE artist SET $column = ? WHERE token = ?");
+        $query = $this->getConnection()->prepare("UPDATE artist SET $column = ? WHERE id = ALL (SELECT id FROM users WHERE token = ?)");
 
         // Substitui interrogações
         $query->bindValue(1, $value);

@@ -16,12 +16,15 @@ class PostDB extends DatabaseAcess
     public const MEDIA = 'media';
     public const AUTHOR = 'author';
 
-
-
     function __construct(private Post $post)
     {
         $this->post = $post;
         parent::__construct();
+    }
+
+    public static function isEditalbeColumn(string $column): bool
+    {
+        return false;
     }
 
     /**

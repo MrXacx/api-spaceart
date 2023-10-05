@@ -10,7 +10,7 @@ use DateTime;
 /**
  * Classe de modelo de mensagens
  * @package Model
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class Message extends \App\Model\Template\Entity
 {

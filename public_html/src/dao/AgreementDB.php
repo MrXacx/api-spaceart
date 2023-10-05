@@ -11,7 +11,7 @@ use App\Model\Agreement;
  * Classe de maniupulação da tabela Agreements
  * 
  * @package DAO
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class AgreementDB extends DatabaseAcess
 {

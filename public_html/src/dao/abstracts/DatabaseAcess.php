@@ -15,7 +15,7 @@ use Monolog\Level;
 /**
  * Classe de conexão com o banco de dados
  * @package DAO
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 abstract class DatabaseAcess
 {

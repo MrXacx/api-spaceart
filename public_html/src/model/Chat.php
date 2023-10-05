@@ -8,7 +8,7 @@ use App\Util\Exception\InvalidAttributeRegexException;
 /**
  * Classe modelo de chat
  * @package Model
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class Chat extends \App\Model\Template\Entity
 {

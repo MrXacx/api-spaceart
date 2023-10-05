@@ -26,7 +26,7 @@ use Exception;
  * 
  * @package Controller
  * @author Ariel Santos <MrXacx>
- * @author Marcos Vinícius <>
+ * @author Marcos Vinícius <Mvini15>
  * @author Matheus Silva <theubr78>
  */
 final class UserController
@@ -246,17 +246,17 @@ final class UserController
         if ($column == 'companyName') { // Executa caso o camel case tenha sido uitilzada para razão social
             $column = EnterpriseDB::COMPANY_NAME;
         }
-        
+
         $validator = new DataValidator;
         if ($validator->isValidToFlag($info, $column)) {
 
-            if(UsersDB::isEditalbeColumn($column)){
+            if (UsersDB::isEditalbeColumn($column)) {
                 $user = new User;
                 $db = new UsersDB($user);
-            } else if(ArtistDB::isEditalbeColumn($column)){
+            } else if (ArtistDB::isEditalbeColumn($column)) {
                 $user = new Artist;
                 $db = new ArtistDB($user);
-            } else if(EnterpriseDB::isEditalbeColumn($column)){
+            } else if (EnterpriseDB::isEditalbeColumn($column)) {
                 $user = new Enterprise;
                 $db = new EnterpriseDB($user);
             } else {

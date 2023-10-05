@@ -25,7 +25,7 @@ use Throwable;
 /**
  * Classe para controlar rotas
  * @package App
- * @author Ariel Santos MrXacx (Ariel Santos)
+ * @author Ariel Santos <MrXacx>
  */
 class RoutesBuilder
 {
@@ -271,7 +271,7 @@ class RoutesBuilder
         }
 
         return Response::HTTP_BAD_REQUEST; // Erro na requisição
-        
+
     }
 
 }

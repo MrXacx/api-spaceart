@@ -12,7 +12,7 @@ use RuntimeException;
  * Classe de maniupulação da tabela Selections
  * 
  * @package DAO
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class SelectionDB extends DatabaseAcess
 {

@@ -5,7 +5,7 @@ namespace App\Model\Enumerate;
 /**
  * Enumeração de status de contrato
  * @package App\Model\Enumerate
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 enum AgreementStatus: string
 {

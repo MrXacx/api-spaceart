@@ -15,7 +15,7 @@ use DateTime;
  * Classe modelo de contrato
  * 
  * @package Model
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class Agreement extends \App\Model\Template\Entity
 {
@@ -61,7 +61,7 @@ class Agreement extends \App\Model\Template\Entity
      * @var AgreementStatus
      */
     private AgreementStatus $status;
-    
+
     private string $description;
 
     public static function getInstanceOf(array $attr): self

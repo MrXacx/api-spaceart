@@ -13,7 +13,7 @@ use RuntimeException;
  * Classe de maniupulação da tabela Reports
  * 
  * @package DAO
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class ReportDB extends DatabaseAcess
 {

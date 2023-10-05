@@ -13,7 +13,7 @@ use App\Util\Exception\InvalidAttributeRegexException;
  * Classe modelo de empreendimento
  * @package Model
  * @abstract User
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class Enterprise extends \App\Model\Template\User
 {

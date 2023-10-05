@@ -14,7 +14,7 @@ use DateTime;
  * Classe modelo de artista
  * @package Model
  * @abstract User
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class Artist extends \App\Model\Template\User
 {

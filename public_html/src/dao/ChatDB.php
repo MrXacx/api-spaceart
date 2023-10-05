@@ -12,7 +12,7 @@ use RuntimeException;
  * Classe de maniupulação da tabela Chats
  * 
  * @package DAO
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class ChatDB extends DatabaseAcess
 {

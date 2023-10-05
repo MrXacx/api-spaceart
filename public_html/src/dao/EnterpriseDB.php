@@ -11,7 +11,7 @@ use RuntimeException;
 /**
  * Classe de maniupulação da tabela Users
  * @package DAO
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class EnterpriseDB extends UsersDB
 {

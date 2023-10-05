@@ -2,16 +2,16 @@
 
 namespace App\Util;
 class Cache{
-    public const TINY_INTERVAL_STORAGE = 3;
-    public const MEDIUM_INTERVAL_STORAGE = 5;
-    public const LARGE_INTERVAL_STORAGE = 7;
+    public const TINY_INTERVAL_STORAGE = 0.5;
+    public const MEDIUM_INTERVAL_STORAGE = 1.5;
+    public const LARGE_INTERVAL_STORAGE = 3;
 
     readonly public string $path;
     public function __construct(string $fileName) {
         $this->path = __DIR__."/../../../tmp/cache/$fileName.cache";
     }
 
-    public function create(string|array $content, int $expireTimeInMinutes): bool{
+    public function create(string|array $content, int|float $expireTimeInMinutes): bool{
         $content = json_encode([
             'expiration' => strtotime("+ $expireTimeInMinutes minutes", time()),
             'data' => $content,

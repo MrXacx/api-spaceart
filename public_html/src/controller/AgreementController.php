@@ -19,8 +19,8 @@ use DateTime;
  * 
  * @package Controller
  * @author Ariel Santos <MrXacx>
- * @author Marcos Vinícius <>
- * @author Matheus Silva <>
+ * @author Marcos Vinícius <Mvini15>
+ * @author Matheus Silva <theubr78>
  */
 final class AgreementController
 {
@@ -181,10 +181,10 @@ final class AgreementController
 
         $column = ($this->parameterList->getString('column')); // RECEBE A COLUNA QUE SERÁ ALTERADA
         $info = $this->parameterList->getString('info'); // RECEBE A INFORMAÇÃO QUE ELE DESEJA ALTERAR DE ACORDO COM A CONTA EM QUE ESTÁ CADASTRADO O ID
-        
+
         $validator = new DataValidator;
         if ($validator->isValidToFlag($info, $column) && RateDB::isEditalbeColumn($column)) {
-            
+
             $rate = new Rate($this->parameterList->getString('agreement')); // INICIANDO MODELO DO USUÁRIO 
             $rate->setAuthor($this->parameterList->getString('author')); // PASSA O ID DO AUTOR
 

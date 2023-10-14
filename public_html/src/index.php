@@ -9,6 +9,18 @@ use App\Util\Cache;
 use App\Server;
 use Monolog\Level;
 
+/**
+ * Atenção!
+ * Esta invocação substitui as rotas POST com final em '/delete' e '/update' 
+ * por rotas DELETE e PUT com final em '' respectivamente.
+ * 
+ * Remover esta invocação pode resultar no mau funcionamento de rotas DELETE e PUT
+ * caso o serviço de hospedagem não suporte-os nativamente.
+ * 
+ * Caso o suporte seja nativo, a remoção é encorajada.
+ */
+Server::replaceHTTPRequestForURI();
+
 Server::$logger->build(); // Cria log para o dia
 
 // Armazena endereço do client

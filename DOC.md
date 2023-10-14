@@ -2,30 +2,42 @@
 
 > `http://localhost:<port>/<path>?<parameters>`
 
-| Rota                        |       Métodos suportados       |       Status        |
-| :-------------------------- | :----------------------------: | :-----------------: |
-| /agreement                  | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
-| /agreement/list             |             `GET`              |     Funcionando     |
-| /agreement/rate             | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
-| /agreement/rate/list        |             `GET`              |     Funcionando     |
-| /chat                       |         `GET`, `POST`          |     Funcionando     |
-| /chat/list                  |             `GET`              |     Funcionando     |
-| /chat/message               |         `GET`, `POST`          |     Funcionando     |
-| /chat/message/list          |             `GET`              |     Funcionando     |
-| /post                       |    `GET`, `POST`, `DELETE`     |     Funcionando     |
-| /post/list                  |    `GET`                       |     Funcionando     |
-| /selection                  | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
-| /selection/list             |             `GET`              |     Funcionando     |
-| /selection/application      | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
-| /selection/application/list |             `GET`              |     Funcionando     |
-| /user                       | `GET`, `POST`, `PUT`, `DELETE` |     Funcionando     |
-| /user/sign-in               |             `GET`              |     Funcionando     |
-| /user/list                  |             `GET`              |     Funcionando     |
-| /user/report                |         `GET`, `POST`          |     Funcionando     |
-| /user/report/list           |             `GET`              |     Funcionando     |
+## Overview
+
+| Rota                               |       Métodos suportados       |       Status        |
+| :--------------------------------- | :----------------------------: | :-----------------: |
+| /agreement                         |        `GET`, `POST`           |     Funcionando     |
+| /agreement/delete                  |            `POST`              |     Funcionando     |
+| /agreement/update                  |            `POST`              |     Funcionando     |
+| /agreement/list                    |             `GET`              |     Funcionando     |
+| /agreement/rate                    |        `GET`, `POST`           |     Funcionando     |
+| /agreement/rate/delete             |            `POST`              |     Funcionando     |
+| /agreement/rate/update             |            `POST`              |     Funcionando     |
+| /agreement/rate/list               |             `GET`              |     Funcionando     |
+| /chat                              |         `GET`, `POST`          |     Funcionando     |
+| /chat/list                         |             `GET`              |     Funcionando     |
+| /chat/message                      |         `GET`, `POST`          |     Funcionando     |
+| /chat/message/list                 |             `GET`              |     Funcionando     |
+| /post                              |         `GET`, `POST`          |     Funcionando     |
+| /post/delete                       |            `POST`              |     Funcionando     |
+| /post/list                         |            `GET`               |     Funcionando     |
+| /selection                         |         `GET`, `POST`          |     Funcionando     |
+| /selection/update                  |            `POST`              |     Funcionando     |
+| /selection/delete                  |            `POST`              |     Funcionando     |
+| /selection/list                    |             `GET`              |     Funcionando     |
+| /selection/application             |         `GET`, `POST`          |     Funcionando     |
+| /selection/application/delete      |            `POST`              |     Funcionando     |
+| /selection/application/update      |            `POST`              |     Funcionando     |
+| /selection/application/list        |             `GET`              |     Funcionando     |
+| /user                              |         `GET`, `POST`          |     Funcionando     |
+| /user/delete                       |            `POST`              |     Funcionando     |
+| /user/update                       |            `POST`              |     Funcionando     |
+| /user/sign-in                      |             `GET`              |     Funcionando     |
+| /user/list                         |             `GET`              |     Funcionando     |
+| /user/report                       |         `GET`, `POST`          |     Funcionando     |
+| /user/report/list                  |             `GET`              |     Funcionando     |
 
 ## /user
-
 > GET
 
 | Parâmetro | Descrição                                                  | Formato                        | Obrigatório |
@@ -34,7 +46,6 @@
 | index     | Index do usuário. Obtém o mesmo resultado que o id público | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | false       |
 | token     | se o token informado é o token de acesso                   | boolean                        | false       |
 | type      | tipo de conta do usuário                                   | artist OR enterprise           | true        |
-<br>
   
 > POST
 
@@ -57,29 +68,9 @@
 | art          | tipo de arte                                               |                      | true        | `type=artist`     |
 | neighborhood | bairro                                                     | \w{1,256}            | true        | `type=enterprise` |
 | address      | logradouro, número, complemento, ponto de referência e etc | \w{1,256}            | true        | `type=enterprise` |
-| birthday     | data de nascimento do artista                              | dd/mm/yyyy           | true        | `type=artist` |
+| birthday     | data de nascimento do artista                              | dd/mm/yyyy           | true        | `type=artist`     |
 
-  <br>
-  
-  > PUT
-
-| Parâmetro | Descrição                | Formato                        | Obrigatório |
-| :-------- | :----------------------- | :----------------------------- | :---------- |
-| id        | ID do usuário            | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-| type      | tipo de conta do usuário | artist OR enterprise           | true        |
-| column    | parâmetro a ser alterado |                                | true        |
-| info      | novo valor do parâmetro  |                                | true        |
-
-  <br>
-  
-> DELETE
-  
-| Parâmetro | Descrição     | Formato                        | Obrigatório |
-| :-------- | :------------ | :----------------------------- | :---------- |
-| id        | ID do usuário | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-
-## /user/sign-in
-
+### /sign-in
 > GET
 
 | Parâmetro | Descrição | Formato                        | Obrigatório |
@@ -87,8 +78,7 @@
 | email     | email     | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | password  | senha     | \w{1,256}                      | true        |
 
-## /user/list
-
+### /list
 > GET
 
 | Parâmetro | Descrição                                   | Formato                        | Obrigatório |
@@ -105,18 +95,32 @@
 > | :------- | :--------------------------------------------------------- | :----------- |
 > | art      | Tipo de arte buscado.<br>OBS: `type=artist` é obrigatório. | art          |
 > | location | Cidade e Estado do usuário                                 | city e state |
-> | name     | Nome parcial, como "mu" em "munik" e "murilo"              | name         |
+> | name     | Nome parcial, como "mu" em "munik" e "murilo"              | name         | 
 
-## /user/report
+### /update
+> POST
 
+| Parâmetro | Descrição                | Formato                        | Obrigatório |
+| :-------- | :----------------------- | :----------------------------- | :---------- |
+| id        | ID do usuário            | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| type      | tipo de conta do usuário | artist OR enterprise           | true        |
+| column    | parâmetro a ser alterado |                                | true        |
+| info      | novo valor do parâmetro  |                                | true        |
+  
+### /delete
+> POST
+
+| Parâmetro | Descrição     | Formato                        | Obrigatório |
+| :-------- | :------------ | :----------------------------- | :---------- |
+| id        | ID do usuário | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+
+### /report
 > GET
 
 | Parâmetro | Descrição         | Formato                        | Obrigatório |
 | :-------- | :---------------- | :----------------------------- | :---------- |
 | id        | ID da denúncia    | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | reporter  | ID do denunciador | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-
-<br>
 
 > POST
 
@@ -126,8 +130,7 @@
 | reported  | ID do denunciado   | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | reason    | motivo da denúncia | \w{1,256}                      | true        |
   
-## /user/report/list
-
+### /report/list
 > GET
 
 | Parâmetro | Descrição                                   | Formato                        | Obrigatório |
@@ -137,7 +140,6 @@
 | limit     | máximo de dados retornados.<br>Default: 10. | 0 < limit =< 500               | false       |
 
 ## /agreement
-
 > GET
 
 | Parâmetro | Descrição      | Formato                        | Obrigatório |
@@ -145,7 +147,7 @@
 | id        | ID do contrato | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
  <br>
   
-  > POST  
+> POST  
   
 | Parâmetro   | Descrição                                          | Formato                        | Obrigatório |
 | :---------- | :------------------------------------------------- | :----------------------------- | :---------- |
@@ -156,26 +158,8 @@
 | price       | preço                                              | float                          | true        |
 | date        | data do evento                                     | dd/mm/yyyy                     | true        |
 | time        | horários de início e fim do evento respectivamente | hh:mm;hh:mm                    | true        |
-  <br>
-  
-  > PUT  
-  
-| Parâmetro | Descrição                | Formato                        | Obrigatório |
-| :-------- | :----------------------- | :----------------------------- | :---------- |
-| id        | ID do contrato           | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-| column    | parâmetro a ser alterado |                                | true        |
-| info      | novo valor do parâmetro  |                                | true        |
-<br>
-  
-> DELETE
- 
-| Parâmetro | Descrição      | Formato                        | Obrigatório |
-| :-------- | :------------- | :----------------------------- | :---------- |
-| id        | ID do contrato | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-<br>
-  
-## /agreement/list
-  
+
+### /list
 > GET
   
 | Parâmetro | Descrição                                   | Formato                        | Obrigatório |
@@ -183,17 +167,30 @@
 | user      | ID do contratante ou do contratado          | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | offset    | linha de início da consulta.<br>Default: 0. | 0 =< offset                    | false       |
 | limit     | máximo de dados retornados.<br>Default: 10. | 0 < limit =< 500               | false       |
-<br>
+
+### /update  
+> POST 
+
+| Parâmetro | Descrição                | Formato                        | Obrigatório |
+| :-------- | :----------------------- | :----------------------------- | :---------- |
+| id        | ID do contrato           | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| column    | parâmetro a ser alterado |                                | true        |
+| info      | novo valor do parâmetro  |                                | true        |
   
-## /agreement/rate
+### /delete
+> POST 
+
+| Parâmetro | Descrição      | Formato                        | Obrigatório |
+| :-------- | :------------- | :----------------------------- | :---------- |
+| id        | ID do contrato | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
   
+### /rate
 > GET
 
 | Parâmetro | Descrição      | Formato                        | Obrigatório |
 | :-------- | :------------- | :----------------------------- | :---------- |
 | agreemnt  | ID do contrato | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | author    | ID de autor    | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-<br>
    
 > POST
 
@@ -203,9 +200,18 @@
 | author      | ID de autor       | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | rate        | Nota da avaliação | float                          | true        |
 | description | ID de autor       | \w{1,256}                      | true        |
-<br>
+
+### /rate/list 
+> GET
   
-> PUT
+| Parâmetro | Descrição                                   | Formato                        | Obrigatório |
+| :-------- | :------------------------------------------ |:------------------------------ | :---------- |
+| agreemnt  | ID do contrato                              | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| offset    | linha de início da consulta.<br>Default: 0. | 0 =< offset                    | false       |
+| limit     | máximo de dados retornados.<br>Default: 10. | 0 < limit =< 500               | false       |
+
+### /rate/update
+> POST
 
 | Parâmetro | Descrição                | Formato                        | Obrigatório |
 | :-------- | :----------------------- | :----------------------------- | :---------- |
@@ -213,26 +219,14 @@
 | author    | ID de autor              | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | column    | parâmetro a ser alterado |                                | true        |
 | info      | novo valor do parâmetro  |                                | true        |
-<br>
   
-> DELETE
+### /rate/delete
+> POST 
 
 | Parâmetro | Descrição      | Formato                        | Obrigatório |
 | :-------- | :------------- | :----------------------------- | :---------- |
 | agreemnt  | ID do contrato | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | author    | ID de autor    | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-<br>
-  
-## /agreement/rate/list
-  
-  > GET
-  
-| Parâmetro | Descrição                                   | Formato                        | Obrigatório |
-| :-------- | :------------------------------------------ |:------------------------------ | :---------- |
-| agreemnt  | ID do contrato                              | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-| offset    | linha de início da consulta.<br>Default: 0. | 0 =< offset                    | false       |
-| limit     | máximo de dados retornados.<br>Default: 10. | 0 < limit =< 500               | false       |
-<br>
   
 ## /post
 > GET
@@ -240,7 +234,6 @@
 | Parâmetro | Descrição  | Formato                        | Obrigatório |
 | :-------- | :--------- | :----------------------------- | :---------- |
 | id        | ID do post | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-<br>
 
 > POST
 
@@ -250,16 +243,7 @@
 | message   | texto do post     | \w{1,256}                      | true        |
 | media     | mídia da postagem | \w{1,256}                      | true        |
 
-<br>
-  
-> DELETE
-
-| Parâmetro | Descrição      | Formato                        | Obrigatório |
-| :-------- | :------------- | :----------------------------- | :---------- |
-| id        | ID da postagem | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-
-## /post/list
-
+### /list
 > GET
 
 | Parâmetro  | Descrição                                   | Formato                        | Obrigatório | Caso                |
@@ -268,15 +252,20 @@
 | author     | ID do autor                                 | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        | `references=author` |
 | offset     | linha de início da consulta.<br>Default: 0. | 0 =< offset                    | false       | `default`           |
 | limit      | máximo de dados retornados.<br>Default: 10. | 0 < limit =< 500               | false       | `default`           |
+  
+### /delete
+> POST
+
+| Parâmetro | Descrição      | Formato                        | Obrigatório |
+| :-------- | :------------- | :----------------------------- | :---------- |
+| id        | ID da postagem | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 
 ## /selection
-
 > GET
 
 | Parâmetro | Descrição     | Formato                        | Obrigatório |
 | :-------- | :------------ | :----------------------------- | :---------- |
 | id        | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-<br>
 
 > POST
 
@@ -288,24 +277,8 @@
 | time      | horários de início e fim da seleção repectivamente | hh:mm;hh:mm                    | true        |
 | price     | preço                                              | float                          | true        |
 | art       | tipo de arte buscado                               |                                | true        |
-<br>
-  
-> PUT
 
-| Parâmetro | Descrição                | Formato                        | Obrigatório |
-| :-------- | :----------------------- | :----------------------------- | :---------- |
-| id        | ID da seleção            | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-| column    | parâmetro a ser alterado |                                | true        |
-| info      | novo valor do parâmetro  |                                | true        |
-<br>
-
-> DELETE
-
-| Parâmetro | Descrição     | Formato                        | Obrigatório |
-| :-------- | :------------ | :----------------------------- | :---------- |
-| id        | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-
-## /selection/list
+### /list
 
 > GET
 
@@ -315,7 +288,6 @@
 | offset    | linha de início da consulta.<br>Default: 0. | 0 =< offset                    | false       |
 | limit     | máximo de dados retornados.<br>Default: 10. | 0 < limit =< 500               | false       |
 | filter    | Tipo de filtro da busca                     |  `owner` ou `art`              | true        |
-<br>
 
 > Filters
 > | Filtro | Descrição                | Parâmetros |
@@ -323,15 +295,27 @@
 > | art    | Tipo de arte buscado     | art        |
 > | owner  | ID do criador da seleção | owner      |
 
-## /selection/application
+### /update
 
+| Parâmetro | Descrição                | Formato                        | Obrigatório |
+| :-------- | :----------------------- | :----------------------------- | :---------- |
+| id        | ID da seleção            | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+| column    | parâmetro a ser alterado |                                | true        |
+| info      | novo valor do parâmetro  |                                | true        |
+
+### /delete
+
+| Parâmetro | Descrição     | Formato                        | Obrigatório |
+| :-------- | :------------ | :----------------------------- | :---------- |
+| id        | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+
+### /application
 > GET
 
 | Parâmetro | Descrição     | Formato                        | Obrigatório |
 | :-------- | :------------ | :----------------------------- | :---------- |
 | selection | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | artist    | ID do artista | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-<br>
   
 > POST
 
@@ -339,9 +323,16 @@
 | :-------- | :------------ | :----------------------------- | :---------- |
 | selection | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | artist    | ID do artista | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-<br>
 
-> PUT
+### /application/list
+> GET
+
+| Parâmetro | Descrição     | Formato                        | Obrigatório |
+| :-------- | :------------ | :----------------------------- | :---------- |
+| selection | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
+
+### /application/update
+> POST
 
 | Parâmetro | Descrição                | Formato                        | Obrigatório |
 | :-------- | :----------------------- | :----------------------------- | :---------- |
@@ -349,31 +340,21 @@
 | artist    | ID do artista            | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | column    | parâmetro a ser alterado |                                | true        |
 | info      | novo valor do parâmetro  |                                | true        |
-<br>
 
-> DELETE
+### /application/delete
+> POST
 
 | Parâmetro | Descrição     | Formato                        | Obrigatório |
 | :-------- | :------------ | :----------------------------- | :---------- |
 | selection | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | artist    | ID do artista | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 
-## /selection/application/list
-
-> GET
-
-| Parâmetro | Descrição     | Formato                        | Obrigatório |
-| :-------- | :------------ | :----------------------------- | :---------- |
-| selection | ID da seleção | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-
 ## /chat
-
 > GET
 
 | Parâmetro | Descrição  | Formato                        | Obrigatório |
 | :-------- | :--------- | :----------------------------- | :---------- |
 | id        | ID do chat | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-<br>
   
 > POST
 
@@ -382,8 +363,7 @@
 | artist     | ID da artista       | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | enterprise | ID do empreedimento | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 
-## /chat/list
-
+### /list
 > GET
 
 | Parâmetro | Descrição                                   | Formato                        | Obrigatório |
@@ -392,8 +372,7 @@
 | offset    | linha de início da consulta.<br>Default: 0. | 0 =< offset                    | false       |
 | limit     | máximo de dados retornados.<br>Default: 10. | 0 < limit =< 500               | false       |
 
-## /chat/message
-
+### /message
 > GET
 
 | Parâmetro | Descrição                           | Formato                        | Obrigatório |
@@ -409,10 +388,8 @@
 | :-------- | :------------ | :----------------------------- | :---------- |
 | chat      | ID do chat    | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
 | sender    | ID do emissor | \d{8}-\d{4}-\d{4}-\d{4}-\d{12} | true        |
-<br>
 
-## /chat/list
-
+### /message/list
 > GET
 
 | Parâmetro | Descrição                                   | Formato                        | Obrigatório |

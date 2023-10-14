@@ -9,7 +9,7 @@ use DateTime;
 /**
  * Classe modelo de aplicação a uma seleção
  * @package Model
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class Application extends \App\Model\Template\Entity
 {

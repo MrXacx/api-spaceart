@@ -8,7 +8,7 @@ use App\Util\Exception\InvalidAttributeRegexException;
 /**
  * Classe abstrata de uma entidade
  * @package App\Model\Template
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 abstract class Entity
 {

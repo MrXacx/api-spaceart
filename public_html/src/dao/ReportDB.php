@@ -13,7 +13,7 @@ use RuntimeException;
  * Classe de maniupulação da tabela Reports
  * 
  * @package DAO
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class ReportDB extends DatabaseAcess
 {
@@ -35,6 +35,11 @@ class ReportDB extends DatabaseAcess
     {
         $this->report = $report;
         parent::__construct();
+    }
+
+    public static function isEditalbeColumn(string $column): bool
+    {
+        return false;
     }
 
     /**

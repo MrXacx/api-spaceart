@@ -25,7 +25,7 @@ use Throwable;
 /**
  * Classe para controlar rotas
  * @package App
- * @author Ariel Santos MrXacx (Ariel Santos)
+ * @author Ariel Santos <MrXacx>
  */
 class RoutesBuilder
 {
@@ -34,7 +34,7 @@ class RoutesBuilder
     /**
      * Inicia as rotas da API
      */
-    public static function build()
+    public static function build(): void
     {
 
         static::$dispatcher = FastRoute\simpleDispatcher(
@@ -177,7 +177,7 @@ class RoutesBuilder
 
                     try {
                         $content = call_user_func_array([new $class, $method], $vars); // Instancia classe e chama o método passando os parâmetros retornados pela rota
-                        $this->handleResponse($responseHandler, $content);
+                        $status = $this->handleResponse($responseHandler, $content);
                     } catch (PDOException $ex) {
                         DatabaseException::throw($ex->getMessage());
                     }
@@ -253,26 +253,25 @@ class RoutesBuilder
         }
     }
 
-    private function handleResponse(Response $responseHandler, mixed $content): void
+    private function handleResponse(Response $responseHandler, mixed $content): int
     {
         if ($content === true) { // Executa caso o retorno seja true
 
-            $status = match (Server::getHTTPMethod()) { // Obtém código HTTP adequado
+            return match (Server::getHTTPMethod()) { // Obtém código HTTP adequado
                 'DELETE', 'PUT' => Response::HTTP_NO_CONTENT, // Funcionou, mas não retorna dados
                 'POST' => Response::HTTP_CREATED, // Novo recurso disponível
+                'GET' => Response::HTTP_OK, // Funcionou
                 default => Response::HTTP_INTERNAL_SERVER_ERROR,
             };
-            $responseHandler->setStatusCode($status); // Define o status da resposta
 
         } else if (is_array($content)) { // Executa caso o conteúdo obtido seja um vetor
 
-            $responseHandler->setStatusCode(Response::HTTP_OK); // Funcionou e retorna conteúdo
             $responseHandler->setContent(json_encode($content, JSON_INVALID_UTF8_IGNORE)); // Define conteúdo a ser repondido ao cliente
-
-        } else { // Caso a execução falhe
-
-            $responseHandler->setStatusCode(Response::HTTP_BAD_REQUEST); // Erro na requisição
+            return Response::HTTP_OK; // Funcionou e retorna conteúdo
         }
+
+        return Response::HTTP_BAD_REQUEST; // Erro na requisição
+
     }
 
 }

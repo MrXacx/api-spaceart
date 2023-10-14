@@ -14,8 +14,8 @@ use App\Model\Message;
  * 
  * @package Controller
  * @author Ariel Santos <MrXacx>
- * @author Marcos Vinícius <>
- * @author Matheus Silva <>
+ * @author Marcos Vinícius <Mvini15>
+ * @author Matheus Silva <theubr78>
  */
 final class ChatController
 {
@@ -126,7 +126,7 @@ final class ChatController
 
         $list = (new MessageDB($message))->getList($offset, $limit);
         return array_map(fn($user) => $this->filterNulls($user->toArray()), $list);
-    } 
+    }
 
     /**
      * Deleta chat

@@ -5,7 +5,7 @@ namespace App\Model\Enumerate;
 /**
  * Enumeração de tipo de conta
  * @package App\Model\Enumerate
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 enum AccountType: string
 {

@@ -20,8 +20,8 @@ use DateTime;
  * 
  * @package Controller
  * @author Ariel Santos <MrXacx>
- * @author Marcos Vinícius <>
- * @author Matheus Silva <>
+ * @author Marcos Vinícius <Mvini15>
+ * @author Matheus Silva <theubr78>
  */
 final class SelectionController
 {
@@ -40,7 +40,7 @@ final class SelectionController
         $selection->setPrice(floatval($this->parameterList->getString('owner')));
 
         $date = explode(';', $this->parameterList->getString('date')); // separa datas nos ';'
-        if(sizeof($date) == 2 ){ // Executa apenas se o comprimento do vetor for 2
+        if (sizeof($date) == 2) { // Executa apenas se o comprimento do vetor for 2
 
             $selection->setDate(
                 DateTime::createFromFormat(SelectionDB::USUAL_DATE_FORMAT, $date[0]),
@@ -49,7 +49,7 @@ final class SelectionController
         }
 
         $time = explode(';', $this->parameterList->getString('time')); // separa horários nos ';'
-        if(sizeof($time) == 2){ // Executa apenas se o comprimento do vetor for 2
+        if (sizeof($time) == 2) { // Executa apenas se o comprimento do vetor for 2
             $selection->setTime(
                 DateTime::createFromFormat(SelectionDB::USUAL_TIME_FORMAT, $time[0]),
                 DateTime::createFromFormat(SelectionDB::USUAL_TIME_FORMAT, $time[1])
@@ -149,14 +149,14 @@ final class SelectionController
     {
         $column = $this->parameterList->getString('column'); // RECEBE A COLUNA QUE SERÁ ALTERADA
         $info = $this->parameterList->getString('info'); // RECEBE A INFORMAÇÃO QUE ELE DESEJA ALTERAR DE ACORDO COM A CONTA EM QUE ESTÁ CADASTRADO O ID
-        
+
         $validator = new DataValidator;
-        if ($validator->isValidToFlag($info, $column) && SelectionDB::isEditalbeColumn($column)){
-            
+        if ($validator->isValidToFlag($info, $column) && SelectionDB::isEditalbeColumn($column)) {
+
             $selection = new Selection; // INICIANDO MODELO DO USUÁRIO 
             // Define ID do usuário
             $selection->setID($this->parameterList->getString('id')); // PASSA O ID DO USUARIO PARA O MODELO
-            
+
             return (new SelectionDB($selection))->update($column, $info); //RETORNA SE ALTEROU OU NÃO, DE ACORDO COM A VERIFICAÇÃO DO IF
         }
         return false; // RETORNA FALSO CASO NÃO TENHA PASSADO DA VERIFICAÇÃO

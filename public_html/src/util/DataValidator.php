@@ -20,7 +20,7 @@ use DateTime;
  * Classe de validação de dados
  * 
  * @package Util
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 final class DataValidator
 {

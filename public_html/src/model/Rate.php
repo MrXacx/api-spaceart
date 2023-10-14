@@ -9,7 +9,7 @@ use App\Util\Exception\InvalidAttributeRegexException;
 /**
  * Classe modelo de avaliação
  * @package Model
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class Rate extends \App\Model\Template\Entity
 {

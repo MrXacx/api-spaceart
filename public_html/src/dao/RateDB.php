@@ -12,7 +12,7 @@ use App\Model\Rate;
  * Classe de maniupulação da tabela Rates
  * 
  * @package DAO
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class RateDB extends DatabaseAcess
 {

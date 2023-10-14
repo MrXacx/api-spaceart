@@ -13,7 +13,7 @@ use DateTime;
 /**
  * Classe modelo de seleção
  * @package Model
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class Selection extends \App\Model\Template\Entity
 {
@@ -202,11 +202,13 @@ class Selection extends \App\Model\Template\Entity
         return $this->locked;
     }
 
-    public function setTitle(string $title): void{
+    public function setTitle(string $title): void
+    {
         $this->title = $this->validator->isFit($title, SelectionDB::TITLE) ? $title : InvalidAttributeLengthException::throw('title', __FILE__);
     }
 
-    public function getTitle(): string{
+    public function getTitle(): string
+    {
         return $this->title;
     }
 

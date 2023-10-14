@@ -13,7 +13,7 @@ use RuntimeException;
  * Classe de maniupulação da tabela Selection_Applications
  * 
  * @package DAO
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class ApplicationDB extends DatabaseAcess
 {
@@ -37,6 +37,11 @@ class ApplicationDB extends DatabaseAcess
     {
         $this->application = $application;
         parent::__construct();
+    }
+
+    public static function isEditalbeColumn(string $column): bool
+    {
+        return false;
     }
 
     /**
@@ -63,7 +68,7 @@ class ApplicationDB extends DatabaseAcess
     {
         // Determina query SQL de leitura
         $query = $this->getConnection()->prepare('SELECT * FROM selection_application WHERE selection = ? AND artist = ?');
-        
+
         $query->bindValue(1, $this->application->getSelection()); // Substitui interrogação na query pelo ID da seleção
         $query->bindValue(2, $this->application->getUser()); // Substitui interrogação na query pelo ID do usuário
 

@@ -11,7 +11,7 @@ use RuntimeException;
 /**
  * Classe de maniupulação da tabela Users
  * @package DAO
- * @author Ariel Santos (MrXacx)
+ * @author Ariel Santos <MrXacx>
  */
 class UsersDB extends DatabaseAcess
 {
@@ -212,7 +212,7 @@ class UsersDB extends DatabaseAcess
     public function delete(): bool
     {
         // Define a query SQL de remoção
-        $query = $this->getConnection()->prepare('DELETE FROM users WHERE token = ?');
+        $query = $this->getConnection()->prepare('DELETE FROM users WHERE id = ?');
         $query->bindValue(1, $this->user->getID()); // Substitui interrogação pelo ID informado
 
         return $query->execute();

@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS users(
   CEP varchar(8) NOT NULL,
   state varchar(2) NOT NULL,
   city varchar(50) NOT NULL,
-  image varchar(256),
+  image text,
   website varchar(256),
   rate float DEFAULT 0,
   description varchar(256) DEFAULT '',

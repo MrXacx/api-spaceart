@@ -68,7 +68,7 @@ final class DataValidator
 
             UsersDB::SITE => $this->isURL($content),
             UsersDB::EMAIL => $this->isEmail($content),
-
+            UsersDB::IMAGE => strlen($content) >= 1,
             UsersDB::CEP => $this->isCEP($content),
             ArtistDB::CPF => $this->isCPF($content),
             EnterpriseDB::CNPJ => $this->isCNPJ($content),

@@ -2,7 +2,7 @@
 
 ini_set('display_errors', 1); // Deixa de exibir erros 
 header('Access-Control-Allow-Origin: *'); // Libera o acesso à API
-header('Access-Control-Allow-Origin: Content-Type'); // Define retorno como json
+header('Accept: multipart/form-data'); // Define formato de entrada como form-data
 header('Content-Type: application/json'); // Define retorno como json
 
 require_once __DIR__.'/../vendor/autoload.php'; // Carrega dependências
@@ -19,7 +19,7 @@ $_ENV = array_merge($_ENV, $_ENV['DATABASE_PRODUCTION']) ;
 
 Server::$logger = new Log(
     new Logger('SpaceartAPI'),
-    Level::Debug
+    Level::Notice
 );
 
 App\RoutesBuilder::build(); // Inicia rotas do servidor

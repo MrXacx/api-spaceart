@@ -93,17 +93,9 @@ class Server
 
     public static function getParameters(): \Symfony\Component\HttpFoundation\ParameterBag {
         
-        $requestParameters =  $_REQUEST;
-        if(count($requestParameters) <= 0) { // executa apenas se nem dado via form-data ou url for enviado
-            $requestParameters = (array)json_decode(file_get_contents("php://input")); // Obtém dados enviados em json
+        $requestParameters = static::getHTTPMethod() !== 'GET' ? (array) json_decode(file_get_contents("php://input")) : $_REQUEST;
         
-            foreach($requestParameters as &$json){ // converte objetos interno em arrays
-                if($json instanceof stdClass) $json = (array)$json;
-            }
-        }
-        
-        
-        return (new Request($_GET, $_POST, $requestParameters))->attributes;
+        return (new Request([], [], $requestParameters))->attributes;
     }
 
 }

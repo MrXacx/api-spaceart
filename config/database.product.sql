@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS post(
     id varchar(36) PRIMARY KEY,
     author varchar(36),
     message varchar(256),
-    media varchar(256),
+    media text,
     post_time timestamp DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT poster_fk FOREIGN KEY (author) REFERENCES users(id)

@@ -21,8 +21,8 @@ class Post extends \App\Model\Template\Entity{
         $model->id = $attr['id'];
         
         $model->author = $attr[PostDB::AUTHOR];
-        $model->message = $attr[PostDB::POST_TIME];
-        $model->media = $attr[PostDB::POST_TIME];
+        $model->message = $attr[PostDB::MESSAGE];
+        $model->media = $attr[PostDB::MEDIA];
         $model->postTime = DateTime::createFromFormat(PostDB::DB_TIMESTAMP_FORMAT, $attr[PostDB::POST_TIME]);
 
         return $model;

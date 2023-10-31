@@ -229,7 +229,7 @@ final class UserController
         return match ($type) { // RECEBENDO O TIPO DA CONTA
             AccountType::ARTIST => [$artist = new Artist(), new ArtistDB($artist)],
             AccountType::ENTERPRISE => [$enterprise = new Enterprise(), new EnterpriseDB($enterprise)],
-            default => UnexpectedHttpParameterException::throw(strval($type), 'TYPE ACCOUNT')
+            default => [$user = new User(), new UsersDB($user)],
         };
     }
 

@@ -13,7 +13,7 @@ use Exception;
 /**
  * Classe modelo de usuário
  * @package Model
- * @author Ariel Santos <MrXacx>
+ * @author Ariel Santos (MrXacx)
  */
 class User extends Entity
 {
@@ -66,18 +66,43 @@ class User extends Entity
     protected string $description;
     protected AccountType $type;
     protected bool|int|string $verified; // Variável para controlar se o usuário já foi verificado na aplicação servida
-
-    /**
-     * Obtém um modelo de usuário inicializado
-     * 
-     * @param array $attr Array associativo contento todas as informações do modelo
-     * @return self Instância da classe
-     * @throws Exception Caso chamado em User
-     */
+    
     public static function getInstanceOf(array $attr): self
     {
-        throw new Exception('Este método não está disponível nesta classe');
+        $entity = new User;
+
+        foreach ($attr as $key => $value) {
+
+            $atributeName = match ($key) {
+                'id' => 'id',
+                'index', 'placing' => 'index',
+                UsersDB::EMAIL => 'email',
+                UsersDB::IMAGE => 'image',
+                UsersDB::PASSWORD => 'password',
+                UsersDB::NAME => 'name',
+                UsersDB::PHONE => 'phone',
+                UsersDB::CEP => 'CEP',
+                UsersDB::STATE => 'state',
+                UsersDB::CITY => 'city',
+                UsersDB::SITE => 'website',
+                UsersDB::RATE => 'rate',
+                UsersDB::DESCRIPTION => 'description',
+                UsersDB::VERIFIED => 'verified',
+
+                default => null
+            };
+
+            if (isset($atributeName)) {
+                $entity->$atributeName = $value;
+            }
+
+        }
+        
+        $entity->verified = boolval($attr[UsersDB::VERIFIED]);
+        $entity->type = AccountType::tryFrom($attr[UsersDB::TYPE]);
+        return $entity;
     }
+    
 
     public function setIndex(int|string $index): void
     {

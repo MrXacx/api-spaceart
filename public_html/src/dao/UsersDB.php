@@ -11,7 +11,7 @@ use RuntimeException;
 /**
  * Classe de maniupulação da tabela Users
  * @package DAO
- * @author Ariel Santos <MrXacx>
+ * @author Ariel Santos (MrXacx)
  */
 class UsersDB extends DatabaseAcess
 {
@@ -106,7 +106,7 @@ class UsersDB extends DatabaseAcess
     public function getPublicDataFromUserForID(): User
     {
         // Define query SQL para obter todas as colunas da linha do usuário
-        $query = $this->getConnection()->prepare('SELECT id, index, name, image, CEP, state, city, rate, website, description FROM users WHERE id = ?');
+        $query = $this->getConnection()->prepare('SELECT id, placing AS "index", name, image, CEP, state, city, rate, website, description FROM users WHERE id = ?');
         $query->bindValue(1, $this->user->getID()); // Substitui interrogação pelo ID
 
         if ($query->execute()) { // Executa se a query for aceita
@@ -123,7 +123,7 @@ class UsersDB extends DatabaseAcess
     public function getPublicDataFromUserForIndex(): User
     {
         // Define query SQL para obter todas as colunas da linha do usuário
-        $query = $this->getConnection()->prepare('SELECT id, index, name, image, CEP, state, city, rate, website, description FROM users WHERE placing = ?');
+        $query = $this->getConnection()->prepare('SELECT id, index, name, image, CEP, state, city, rate, website, description, type, verified FROM users WHERE placing = ?');
         $query->bindValue(1, $this->user->getIndex()); // Substitui interrogação pelo index
 
         if ($query->execute()) { // Executa se a query for aceita

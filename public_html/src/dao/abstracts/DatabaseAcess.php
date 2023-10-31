@@ -118,7 +118,7 @@ abstract class DatabaseAcess
     /**
      * Deleta linha do banco
      * 
-     * @return int Número de linhas deletadas
+     * @return bool se a operação foi executada
      * @throws \RuntimeException Falha causada pela conexão com o banco de dados
      */
     abstract public function delete(): bool;

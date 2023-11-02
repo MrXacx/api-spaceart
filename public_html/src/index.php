@@ -1,13 +1,33 @@
 <?php
 
-$startTime = microtime(true);
+ini_set('display_errors', 1); // Deixa de exibir erros 
+header('Access-Control-Allow-Origin: *'); // Libera o acesso à API
+header('Accept: multipart/form-data'); // Define formato de entrada como form-data
+header('Content-Type: application/json'); // Define retorno como json
 
-require_once __DIR__ . '/../../config/setup.php';
+require_once __DIR__.'/../../vendor/autoload.php'; // Carrega dependências
+
+use App\Server;
+use App\Util\Log;
+use Monolog\Logger;
+use Monolog\Level;
+
+$_ENV = array_merge($_ENV, parse_ini_file('setup.ini', true));
+$_ENV = array_merge($_ENV, $_ENV['DATABASE_PRODUCTION']) ;
+
+Server::$logger = new Log(
+    new Logger('SpaceartAPI'),
+    Level::Debug
+);
+
+App\RoutesBuilder::build(); // Inicia rotas do servidor
+
+$startTime = microtime(true);
 
 use App\Controller\Tool\Controller;
 use App\Util\Cache;
-use App\Server;
-use Monolog\Level;
+//use App\Server;
+//use Monolog\Level;
 
 /**
  * Atenção!
@@ -20,8 +40,7 @@ use Monolog\Level;
  * Caso o suporte seja nativo, a remoção é encorajada.
  */
 Server::replaceHTTPRequestForURI();
-
-Server::$logger->build(); // Cria log para o dia
+//Server::$logger->build(); // Cria log para o dia
 
 // Armazena endereço do client
 Server::$logger->push('requisição feita por ' . Server::getClientIP(), Level::Info);
@@ -37,7 +56,7 @@ Controller::$cache = new Cache(
 try {
     if (!Controller::$cache->isUsable()) { // Executa se o cache não existir ou estiver expirado
 
-        Server::$logger->push('rotina de consulta ao banco de dados remoto inicializada', Level::Notice); // Informa consulta ao banco de dados
+       Server::$logger->push('rotina de consulta ao banco de dados remoto inicializada', Level::Notice); // Informa consulta ao banco de dados
         $routes = new App\RoutesBuilder;
         $routes->fetchResponse($response, $routes->dispatch()); // Obtém a resposta da rota
 
@@ -49,10 +68,11 @@ try {
     }
     
 } catch (Exception $ex) {
-    Server::$logger->push('exceção lançada: ' . $ex->getMessage(), Level::Critical); 
+   Server::$logger->push('exceção lançada: ' . $ex->getMessage(), Level::Critical);
+    $response->setStatusCode(500);
 }
 
-$response->send(); // Exibe resposta
+$response->send();
 
 $time = microtime(true) - $startTime;
 
@@ -60,3 +80,4 @@ Server::$logger->push('resposta enviada para ' . Server::getClientIP(), Level::I
 Server::$logger->push("tempo de resposta: $time ms", Level::Debug);
 
 ?>
+

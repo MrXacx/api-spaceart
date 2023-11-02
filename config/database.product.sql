@@ -15,8 +15,8 @@ SET time_zone = "+00:00";
 -- Banco de dados: id21258140_dbspaceart
 --
 -- --------------------------------------------------------
-CREATE DATABASE IF NOT EXISTS id21258140_dbspaceart;
-USE id21258140_dbspaceart;
+CREATE DATABASE IF NOT EXISTS id21492551_spaceart;
+USE id21492551_spaceart;
 
 -- CRIAÇÃO DAS ENTIDADES
 

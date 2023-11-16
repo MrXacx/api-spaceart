@@ -20,14 +20,14 @@ Server::$logger = new Log(
     Level::Debug
 );
 
+Server::$logger->build();
+
 App\RoutesBuilder::build(); // Inicia rotas do servidor
 
 $startTime = microtime(true);
 
 use App\Controller\Tool\Controller;
 use App\Util\Cache;
-//use App\Server;
-//use Monolog\Level;
 
 /**
  * Atenção!

@@ -21,6 +21,8 @@ use App\Util\Exception\UnexpectedHttpParameterException;
 use \DateTime;
 use Exception;
 
+use Monolog\Level;
+
 /**
  * Controlador de usuários e denúncia
  * 
@@ -43,7 +45,7 @@ final class UserController
         $db = false;
 
         $type = $this->parameterList->getEnum('type', AccountType::class);
-
+    
         switch ($type) {
             case AccountType::ARTIST:
 
@@ -157,7 +159,8 @@ final class UserController
         $limit = $this->fetchListLimit(); // Obtém máximo de elementos da leitura
 
         list($user, $dao) = $this->getAccountType();
-
+        \App\Server::$logger->push(json_encode(['FILTER' => $this->parameterList->getString('filter')]), Level::Critical);
+        
         $list = match ($this->parameterList->getString('filter')) {
             'location' => $this->getRandomUserListByLocation($user, $dao, $limit),
             'art' => $this->getRandomUserListByArt($user, $dao, $limit),
@@ -225,12 +228,17 @@ final class UserController
      */
     private function getAccountType(): array
     {
-        $type = $this->parameterList->getEnum('type', AccountType::class);
-        return match ($type) { // RECEBENDO O TIPO DA CONTA
-            AccountType::ARTIST => [$artist = new Artist(), new ArtistDB($artist)],
-            AccountType::ENTERPRISE => [$enterprise = new Enterprise(), new EnterpriseDB($enterprise)],
-            default => [$user = new User(), new UsersDB($user)],
-        };
+        try{
+            $type = $this->parameterList->getEnum('type', AccountType::class);
+        } catch(\Exception $e){
+            $type = '';
+        } finally {
+            return match ($type) { // RECEBENDO O TIPO DA CONTA
+                AccountType::ARTIST => [$artist = new Artist(), new ArtistDB($artist)],
+                AccountType::ENTERPRISE => [$enterprise = new Enterprise(), new EnterpriseDB($enterprise)],
+                default => [$user = new User(), new UsersDB($user)],
+            };
+        }
     }
 
     /**

@@ -243,6 +243,7 @@ class RoutesBuilder
                         ,
                         Level::Critical
                     );
+                    $responseHandler->setContent(json_encode($ex->getMessage()));
                     $status = Response::HTTP_INTERNAL_SERVER_ERROR;
 
                 } finally {

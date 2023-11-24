@@ -51,7 +51,7 @@ final class UserController
 
                 $user = new Artist;
 
-                $user->setCPF($this->parameterList->getString('cpf'));
+                $user->setCPF($this->parameterList->getString('CPF'));
                 $user->setArt(ArtType::tryFrom($this->parameterList->getString('art')));
                 $user->setWage(floatval($this->parameterList->getString('wage')));
                 $user->setBirthday(
@@ -62,7 +62,7 @@ final class UserController
 
             case AccountType::ENTERPRISE:
                 $user = new Enterprise;
-                $user->setCNPJ($this->parameterList->getString('cnpj'));
+                $user->setCNPJ($this->parameterList->getString('CNPJ'));
                 $user->setNeighborhood($this->parameterList->getString('neighborhood'));
                 $user->setAddress($this->parameterList->getString('address'));
                 $user->setCompanyName($this->parameterList->getString('companyName'));
@@ -81,7 +81,7 @@ final class UserController
             $user->setEmail($this->parameterList->getString('email'));
             $user->setPassword($this->parameterList->getString('password'));
             $user->setPhone($this->parameterList->getString('phone'));
-            $user->setCEP($this->parameterList->getString('cep'));
+            $user->setCEP($this->parameterList->getString('CEP'));
             $user->setState($this->parameterList->getString('state'));
             $user->setCity($this->parameterList->getString('city'));
             $user->setImage($this->parameterList->getString('image'));

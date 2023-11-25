@@ -48,7 +48,7 @@ final class DataValidator
             UsersDB::STATE => 2,
             UsersDB::CITY, EnterpriseDB::NEIGHBORHOOD => 30,
             EnterpriseDB::CNPJ => 14,
-            default => 191
+            default => 256
         };
     }
 

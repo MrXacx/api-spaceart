@@ -141,7 +141,7 @@ class RoutesBuilder
      * @param Response Objeto manipulador de resposta
      * @param array informações da rota
      */
-    public function fetchResponse(Response $responseHandler, array $fetchParams): void
+    public function fetchResponse(Response $responseHandler, array $fetchParams)
     {
 
         //Busca callback para o status da requisição
@@ -243,12 +243,11 @@ class RoutesBuilder
                         ,
                         Level::Critical
                     );
+                    $responseHandler->setContent(json_encode($ex->getMessage()));
                     $status = Response::HTTP_INTERNAL_SERVER_ERROR;
 
                 } finally {
-
                     $responseHandler->setStatusCode($status);
-
                 }
         }
     }
@@ -256,7 +255,6 @@ class RoutesBuilder
     private function handleResponse(Response $responseHandler, mixed $content): int
     {
         if ($content === true) { // Executa caso o retorno seja true
-
             return match (Server::getHTTPMethod()) { // Obtém código HTTP adequado
                 'DELETE', 'PUT' => Response::HTTP_NO_CONTENT, // Funcionou, mas não retorna dados
                 'POST' => Response::HTTP_CREATED, // Novo recurso disponível

@@ -13,12 +13,14 @@ use Monolog\Logger;
 use Monolog\Level;
 
 $_ENV = array_merge($_ENV, parse_ini_file('setup.ini', true));
-$_ENV = array_merge($_ENV, $_ENV['DATABASE_PRODUCTION']) ;
+$_ENV = array_merge($_ENV, $_ENV['DATABASE_DEVELOPMENT']) ;
 
 Server::$logger = new Log(
     new Logger('SpaceartAPI'),
     Level::Debug
 );
+
+Server::$logger->build();
 
 App\RoutesBuilder::build(); // Inicia rotas do servidor
 
@@ -26,8 +28,6 @@ $startTime = microtime(true);
 
 use App\Controller\Tool\Controller;
 use App\Util\Cache;
-//use App\Server;
-//use Monolog\Level;
 
 /**
  * Atenção!
@@ -40,7 +40,7 @@ use App\Util\Cache;
  * Caso o suporte seja nativo, a remoção é encorajada.
  */
 Server::replaceHTTPRequestForURI();
-//Server::$logger->build(); // Cria log para o dia
+Server::$logger->build(); // Cria log para o dia
 
 // Armazena endereço do client
 Server::$logger->push('requisição feita por ' . Server::getClientIP(), Level::Info);

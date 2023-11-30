@@ -221,7 +221,7 @@ class Selection extends \App\Model\Template\Entity
             'art' => $this->art ?? null,
             'date' => array_map(fn(DateTime $date) => $date->format(SelectionDB::USUAL_DATE_FORMAT), $this->date ?? []),
             'time' => array_map(fn(DateTime $time) => $time->format(SelectionDB::USUAL_TIME_FORMAT), $this->time ?? []),
-            'locked' => boolval($this->time ?? null),
+            'locked' => boolval($this->locked ?? null),
         ]), fn($value) => isset($value));
     }
 }

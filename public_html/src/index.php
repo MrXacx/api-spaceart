@@ -50,7 +50,7 @@ $response->headers->set('Content-Type', 'application/json'); // Define o formato
 
 Controller::$cache = new Cache(
     // Inicializa manipulação de cache
-    str_replace('/', '@', Server::getURI())
+    preg_replace('#[/?;=]#', '@', Server::getURI())
 );
 
 try {
@@ -80,4 +80,3 @@ Server::$logger->push('resposta enviada para ' . Server::getClientIP(), Level::I
 Server::$logger->push("tempo de resposta: $time ms", Level::Debug);
 
 ?>
-

@@ -7,7 +7,7 @@ use Monolog\Level;
 use Monolog\Logger;
 
 class Log{
-    private const path = __DIR__. './../../../tmp/log/';
+    private const path = __DIR__. '/../../../tmp/log/';
     /**
      * Summary of currentFile
      * @var string

@@ -1,35 +1,41 @@
-# SpaceArt
+# API-SpaceArt
 
-> API em PHP para servir a aplicação SpaceArt.
+> REST API to manage sign, posts and services from SpaceArt.
 
-**ATENÇÃO!** Este repositório foi criado após o commit [ad0a4b4](https://github.com/MrXacx/spaceart/commit/e7915af8d6122693a4a91090e14335389acbf07b) do repositório [MrXacx/spaceart](https://github.com/MrXacx/spaceart/)
+**ATTENTION!** This repository was created after the commit [ad0a4b4](https://github.com/MrXacx/spaceart/commit/e7915af8d6122693a4a91090e14335389acbf07b) from [MrXacx/spaceart](https://github.com/MrXacx/spaceart/)
 
-## Para usar
+**ATTENTION**: Our routes are [here](./docs).
 
-### Endpoint
+## Prerequisites
 
-```
+Before you begin, ensure you have met the following requirements:
 
-    https://service-spaceart.000webhostapp.com/
+- PHP: Make sure you have PHP for runnig the API. You can download it [here](https://www.php.net/downloads.php).
 
-```
+- Composer: Make sure you have Composer installed on your system to install our dependencies. You can download it [here](https://getcomposer.org/download/).
 
-**OBS**: Consulte as rotas [aqui](./DOC.md)
+- XAMPP: Make sure you have XAMPP to manager your database. You can download it [here](https://www.apachefriends.org/pt_br/download.html).
 
-## Para contribuir
+- Git: Make sure you have Git to clone our project. You can download it [here](https://git-scm.com/).
 
-### Requisitos
+## Getting Started
 
-1. PHP 8.2
-2. Composer
-3. SGBD MySQL/MariaDB
+To get started with the API SpaceArt, follow these steps:
 
-## Documentações
+1. Clone the repository to your local machine using the following command:
 
-1. [PHP](https://www.php.net/manual/pt_BR/)
-2. [MySQL](https://docs.oracle.com/pt-br/iaas/mysql-database/doc/getting-started.html)
+`git clone https://github.com/MrXacx/api-spaceart.git`
 
-### Links úteis
+2. Install the project dependencies:
 
-1. [Download PHP](https://www.php.net/downloads)
-2. [Download Composer](https://getcomposer.org/download/)
+`composer install`
+
+3. Start Apache and MySQL on XAMPP
+
+4. Create the database structure with [config's files](./config/)
+
+5. Insert your phpMyAdmin credentials into [setup.ini](./public_html/src/setup.ini)
+
+6. Start the development server:
+
+`php -S localhost:8000 -t public_html`

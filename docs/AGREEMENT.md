@@ -54,7 +54,7 @@
 ## Delete an agreement
 
 `POST: /agreement/update`
-`PUT: /agreement`
+`DELETE: /agreement`
 
 | Param | Format |
 | :---- | :----- |

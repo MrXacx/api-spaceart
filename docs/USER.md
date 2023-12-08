@@ -142,7 +142,7 @@
 ## Delete user
 
 `POST": /user/delete`
-`PUT": /user`
+`DELETE": /user`
 
 | Param | Description | Format |
 | :---- | :---------- | :----- |

@@ -9,11 +9,11 @@ namespace App\Model\Enumerate;
  */
 enum ArtType: string
 {
-    case SONG = 'música';
-    case SCULPTURE = 'escultura';
+    case SONG = 'music';
+    case SCULPTURE = 'sculpture';
     case PAINTING = 'pintura';
-    case DANCE = 'dança';
-    case THEATER = 'teatro';
+    case DANCE = 'dance';
+    case ACTING = 'acting';
 
 }
 

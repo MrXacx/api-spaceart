@@ -4,7 +4,7 @@
 
 **ATTENTION!** This repository was created after the commit [ad0a4b4](https://github.com/MrXacx/spaceart/commit/e7915af8d6122693a4a91090e14335389acbf07b) from [MrXacx/spaceart](https://github.com/MrXacx/spaceart/)
 
-**ATTENTION**: Our routes are [here](./DOC.md).
+**ATTENTION**: Our routes are [here](./docs).
 
 ## Prerequisites
 

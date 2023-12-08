@@ -2,7 +2,7 @@
 
 > This is useful for get and manage user informations
 
-## Retrieve an user
+## Retrieve a user
 
 ### Get public data
 
@@ -17,25 +17,25 @@
 **Response**
 
 ```json
-  {
-    "id": "018c4a1f-8888-7115-8da5-9ac2755862ff",
-    "index": 0,
-    "name": string,
-    "verified": false,
-    "image": string,
-    "type": string,
-    "location": {
-      "cep": string,
-      "state": string,
-      "city": string,
-      "neighborhood": null,
-      "address": null
-    },
-    "companyName": null,
-    "section": null,
-    "art": null,
-    "wage": double or null
-  }
+{
+  "id": "018c4a1f-8888-7115-8da5-9ac2755862ff",
+  "index": 0,
+  "name": "Bia Assunção",
+  "verified": false,
+  "image": "base64_encoded_image",
+  "type": "artist",
+  "location": {
+    "cep": "00000000",
+    "state": "SP",
+    "city": "São Paulo",
+    "neighborhood": null,
+    "address": null
+  },
+  "companyName": null,
+  "section": null,
+  "art": "dance",
+  "wage": 1200.0
+}
 ```
 
 ### Get private data":
@@ -68,12 +68,12 @@
   "section": null,
   "CPF": "00000000000",
   "birthday": "31/12/2000",
-  "art": "dança",
+  "art": "dance",
   "wage": 1200.0
 }
 ```
 
-## Sign up an user
+## Sign up a user
 
 `POST": /user`
 
@@ -113,7 +113,7 @@
 }
 ```
 
-## Get an users list
+## Get a users list
 
 - Filter by art
 

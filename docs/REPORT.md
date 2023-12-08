@@ -4,7 +4,7 @@
 
 ## Retrieve a report
 
-`GET": /user/report?id={UUID}&reporter={UUID}`
+`GET: /user/report?id={UUID}&reporter={UUID}`
 
 **Response**
 
@@ -28,6 +28,6 @@
 | reported | reported id | UUID               |
 | reason   |             | string (until 256) |
 
-## Retrieve a reported list for an user
+## Retrieve a reported list for a user
 
-`GET": /user/report?offset=[0]&limit=[500]&reporter={UUID}`
+`GET: /user/report?offset=[0]&limit=[500]&reporter={UUID}`

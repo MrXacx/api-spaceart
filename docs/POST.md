@@ -14,7 +14,7 @@
   "author": "018c4a1f-8888-7115-8da5-9ac2755862ff",
   "message": "",
   "media": "base64_encoded_image",
-  "postTime": "01/01/2023 10:30:52"
+  "post_time": "01/01/2023 10:30:52"
 }
 ```
 
@@ -30,7 +30,7 @@
 
 ## Retrieve posts
 
-- from an user
+- from a user
 
 `GET: /post/list?references=author&offset=[0]&limit=[500]&author={UUID}`
 

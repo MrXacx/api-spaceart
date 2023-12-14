@@ -51,6 +51,7 @@ class RoutesBuilder
                     $collector->post('', UserController::class . '@storeUser'); // Busca id do usuário  
                     $collector->put('', UserController::class . '@updateUser'); // Busca id do usuário     
                     $collector->delete('', UserController::class . '@deleteUser'); // Deleta usuário
+                    $collector->get('/stats', UserController::class . '@getUserStats'); // Exibe estatísticas de um usuário
     
                     $collector->addGroup('/report', function (RouteCollector $collector) // rotas com início "/user/report"
                     {
@@ -84,6 +85,7 @@ class RoutesBuilder
                     $collector->put('', AgreementController::class . '@updateAgreement'); // Atualiza as informações do contrato
                     $collector->delete('', AgreementController::class . '@deleteAgreement'); // Deleta um contrato
                     $collector->get('/list', AgreementController::class . '@getAgreementList'); // Exibe lista de contratos
+                    $collector->get('/stats', AgreementController::class . '@getAgreementStats'); // Exibe estatísticas dos contratos de um usuário
     
                     $collector->addGroup('/rate', function (RouteCollector $collector) //rotas com início '/agreement/rate'
                     {

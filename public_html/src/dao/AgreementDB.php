@@ -141,4 +141,26 @@ class AgreementDB extends DatabaseAcess
         $query->bindValue(1, $this->agreement->getID());
         return $query->execute();
     }
+
+    public function getStats(): array{
+        $query = $this->getConnection()
+        ->prepare(
+            "
+                SELECT u.id AS 'user', status, COUNT(*) AS total
+                FROM agreement AS a
+                INNER JOIN users AS u
+                ON u.id IN (a.hirer, a.hired)
+                GROUP BY u.id, a.status
+                HAVING u.id = ?
+            "
+        );
+
+        $query->bindValue(1, $this->agreement->getID());
+
+        if($query->execute()){
+            return $this->fetchRecord($query, false);
+        }
+
+        throw new \RuntimeException('Operação falhou!');   
+    }
 }

@@ -226,4 +226,21 @@ class ArtistDB extends UsersDB
 
         return $query->execute();
     }
+
+    public function getStats(): array{
+        $query = $this->getConnection()
+        ->prepare(
+            "
+                SELECT art, COUNT(*) as total 
+                FROM artist
+                GROUP BY art;
+            "
+        );
+
+        if($query->execute()){
+            return $this->fetchRecord($query, false);
+        }
+
+        throw new \RuntimeException('Operação falhou!');   
+    }
 }

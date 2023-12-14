@@ -342,6 +342,15 @@ final class UserController
 
     }
 
+    public function getUserStats(): array{
+        try{
+            $type = $this->parameterList->getEnum('type', AccountType::class);   
+            $db = $type == AccountType::ARTIST ? new ArtistDB : new EnterpriseDB;
+            return $db->getStats();
+        } catch(Exception $e){
+            throw new UnexpectedHttpParameterException("É necessário apresentar um tipo de conta");
+        } 
+    }
 }
 
 ?>

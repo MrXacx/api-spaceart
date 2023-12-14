@@ -205,6 +205,16 @@ final class AgreementController
         return $db->delete(); // deleta avaliação
     }
 
+    public function getAgreementStats(): array{
+        $user = $this->parameterList->getString('user');
+
+        $agreement = new Agreement();
+        $agreement->setHired($user);
+        $agreement->setHirer($user);
+
+        $stats = (new AgreementDB($agreement))->getStats();
+        return $stats;
+    }
 }
 
 ?>

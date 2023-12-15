@@ -9,6 +9,8 @@ use Enumerate\Account;
 use Enumerate\State;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Crypt;
 
 class User extends Authenticatable
 {
@@ -45,8 +47,32 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'state' => State::class,
-        'type' => Account::class,
         'password' => 'hashed',
     ];
+
+    protected function state(): Attribute
+    {
+        return Attribute::make(fn(string $value) => State::tryFrom($value));
+    }
+
+    protected function type(): Attribute
+    {
+        return Attribute::make(
+            get: fn(string $account) => Account::tryFrom($account),
+        );
+    }
+
+    protected function password(): Attribute
+    {
+        return Attribute::make(
+            set: fn(string $password) => Crypt::encryptString($password),
+        );
+    }
+
+    protected function token(): Attribute
+    {
+        return Attribute::make(
+            get: fn(string $password) => Crypt::encryptString($password),
+        );
+    }
 }

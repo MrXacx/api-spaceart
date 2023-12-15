@@ -4,15 +4,12 @@ namespace Database\Factories;
 
 use Enumerate\Account;
 use Enumerate\State;
-use Faker\Provider\pt_BR\Address as AddressProvider;
-use Faker\Provider\pt_BR\Person as PersonProvider;
-use Faker\Provider\pt_BR\PhoneNumber as PhoneNumberProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
-class UserFactory extends Factory
+class UserFactory extends LocalFactory
 {
     /**
      * Define the model's default state.
@@ -21,13 +18,9 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $this->faker->addProvider(new PersonProvider($this->faker));
-        $this->faker->addProvider(new AddressProvider($this->faker));
-        $this->faker->addProvider(new PhoneNumberProvider($this->faker));
-
         return [
             'name' => $this->faker->name,
-            'email' => $this->faker->safeEmail,
+            'email' => $this->faker->unique()->safeEmail,
             'password' => $this->faker->password,
             'state' => State::get(array_rand(State::cases(), 1)),
             'city' => $this->faker->city,

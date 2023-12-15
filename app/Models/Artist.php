@@ -34,7 +34,10 @@ class Artist extends Model
 
     protected function CPF(): Attribute
     {
-        return Attribute::make(fn (string $value) => Crypt::encrypt($value));
+        return Attribute::make(
+            get: fn (string $value) => Crypt::decrypt($value),
+            set: fn (string $value) => Crypt::encryptString($value)
+        );
     }
 
     protected function art(): Attribute

@@ -58,7 +58,7 @@ class User extends Authenticatable
     protected function type(): Attribute
     {
         return Attribute::make(
-            get: fn (string $account) => Account::tryFrom($account),
+            get: fn (string $value) => Account::tryFrom($value),
         );
     }
 
@@ -72,7 +72,45 @@ class User extends Authenticatable
     protected function token(): Attribute
     {
         return Attribute::make(
-            get: fn (string $password) => Crypt::encryptString($password),
+            set: fn (string $value) => Crypt::encryptString($value),
+        );
+    }
+
+    protected function email(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => Crypt::decrypt($value),
+            set: fn (string $value) => Crypt::encryptString($value),
+        );
+    }
+    protected function address(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => Crypt::decrypt($value),
+            set: fn (string $value) => Crypt::encryptString($value),
+        );
+    }
+
+    protected function neighborhood(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => Crypt::decrypt($value),
+            set: fn (string $value) => Crypt::encryptString($value),
+        );
+    }
+    protected function phone(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => Crypt::decrypt($value),
+            set: fn (string $value) => Crypt::encryptString($value),
+        );
+    }
+
+    protected function CEP(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => Crypt::decrypt($value),
+            set: fn (string $value) => Crypt::encryptString($value),
         );
     }
 }

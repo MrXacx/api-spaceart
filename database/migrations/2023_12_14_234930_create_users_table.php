@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
+use Enumerate\Account;
+use Enumerate\State;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
@@ -14,22 +17,23 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->uuid('id')->primary()->default(uuid_create());
-            $table->uuid('token')->unique()->default(uuid_create());
-            $table->integer('index')->autoIncrement()->unique();
+            $table->id('id');
+            $table->uuid('token')->unique()->default(new Expression('UUID()'));
+            $table->enum('type', Account::parseCases());
             $table->string('email')->unique();
             $table->string('phone', 11);
             $table->string('password');
             $table->string('name');
-            $table->longText('image');
+            $table->longText('image')->nullable();
             $table->string('CEP', 8);
-            $table->enum('state', \Enumerate\States::cases());
+            $table->enum('state', State::parseCases());
             $table->string('city');
             $table->string('neighborhood')->nullable();
             $table->string('address')->nullable();
             $table->string('website')->nullable();
-            $table->float('rate', 1, 2, true)->default(0);
-            $table->text('')->nullable();
+            $table->float('rate', 3, 2, true)->default(0.00);
+            $table->text('description')->nullable();
+            $table->timestamps();
         });
     }
 

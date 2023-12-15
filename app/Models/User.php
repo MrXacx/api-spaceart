@@ -7,9 +7,9 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Enumerate\Account;
 use Enumerate\State;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Crypt;
 
 class User extends Authenticatable
@@ -52,27 +52,27 @@ class User extends Authenticatable
 
     protected function state(): Attribute
     {
-        return Attribute::make(fn(string $value) => State::tryFrom($value));
+        return Attribute::make(fn (string $value) => State::tryFrom($value));
     }
 
     protected function type(): Attribute
     {
         return Attribute::make(
-            get: fn(string $account) => Account::tryFrom($account),
+            get: fn (string $account) => Account::tryFrom($account),
         );
     }
 
     protected function password(): Attribute
     {
         return Attribute::make(
-            set: fn(string $password) => Crypt::encryptString($password),
+            set: fn (string $password) => Crypt::encryptString($password),
         );
     }
 
     protected function token(): Attribute
     {
         return Attribute::make(
-            get: fn(string $password) => Crypt::encryptString($password),
+            get: fn (string $password) => Crypt::encryptString($password),
         );
     }
 }

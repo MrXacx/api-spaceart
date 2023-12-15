@@ -2,8 +2,8 @@
 
 namespace Enumerate\Extension;
 
-trait BackedEnumTrait {
-
+trait BackedEnumTrait
+{
     /**
      * @return array<int,int|string>
      */

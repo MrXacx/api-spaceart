@@ -2,9 +2,8 @@
 
 namespace Database\Factories;
 
-use Enumerate\Art;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\Factory;
+use Enumerate\Art;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Artist>
@@ -19,10 +18,10 @@ class ArtistFactory extends LocalFactory
     public function definition(): array
     {
         return [
-            "id" => $this->faker->unique()->randomElement(User::all()->where('type', '=','artist')->count()),
-            "CPF" => $this->faker->cpf,
-            "art" => Art::get(array_rand(Art::cases(), 1)),
-            "wage" => $this->faker->randomFloat(2, 500, 1200),
+            'id' => $this->faker->unique()->randomElement(User::all()->where('type', '=', 'artist')->count()),
+            'CPF' => $this->faker->cpf,
+            'art' => Art::get(array_rand(Art::cases(), 1)),
+            'wage' => $this->faker->randomFloat(2, 500, 1200),
         ];
     }
 }

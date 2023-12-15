@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use Enumerate\Account;
 use Enumerate\State;
-use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>

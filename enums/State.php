@@ -4,7 +4,7 @@ namespace Enumerate;
 
 use Enumerate\Extension\BackedEnumTrait;
 
-enum State: string 
+enum State: string
 {
     use BackedEnumTrait;
 

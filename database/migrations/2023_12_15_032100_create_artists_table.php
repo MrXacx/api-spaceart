@@ -1,9 +1,9 @@
 <?php
 
 use Enumerate\Art;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -16,9 +16,8 @@ return new class extends Migration
             $table->foreignId('id')->unique()->references('id')->on('users')->cascadeOnDelete()->cascadeOnDelete();
             $table->enum('art', Art::values());
             $table->float('wage', places: 2, unsigned: true);
-            $table->string('CPF',8)->unique();
+            $table->string('CPF', 8)->unique();
         });
-
     }
 
     /**

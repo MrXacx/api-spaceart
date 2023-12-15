@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Enumerate\Art;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Crypt;
 
 class Artist extends Model
@@ -20,7 +20,7 @@ class Artist extends Model
     protected $fillable = [
         'CPF',
         'art',
-        'birthday'
+        'birthday',
     ];
 
     /**
@@ -29,16 +29,16 @@ class Artist extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'birthday' => 'date'
+        'birthday' => 'date',
     ];
 
     protected function CPF(): Attribute
     {
-        return Attribute::make(fn(string $value) => Crypt::encrypt($value));
-    }
-    protected function art(): Attribute
-    {
-        return Attribute::make(fn(string $value) => Art::tryFrom($value));
+        return Attribute::make(fn (string $value) => Crypt::encrypt($value));
     }
 
+    protected function art(): Attribute
+    {
+        return Attribute::make(fn (string $value) => Art::tryFrom($value));
+    }
 }

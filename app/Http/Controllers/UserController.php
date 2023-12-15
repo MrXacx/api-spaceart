@@ -15,15 +15,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+       return User::all()->toJson();
     }
 
     /**
@@ -31,7 +23,6 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        //
     }
 
     /**
@@ -53,7 +44,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request)
     {
         //
     }

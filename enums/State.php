@@ -1,10 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Enumerate;
 
-enum States: string
+enum State: string implements Enumerate
 {
     case AM = 'AM';
     case BA = 'BA';
@@ -31,4 +29,14 @@ enum States: string
     case RS = 'RS';
     case SC = 'SC';
     case PR = 'PR';
+
+    public static function parseCases(): array
+    {
+        return array_map(fn (State $state) => $state->value, self::cases());
+    }
+
+    public static function get(string $n): Enumerate
+    {
+        return self::cases()[$n];
+    }
 }

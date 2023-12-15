@@ -5,16 +5,14 @@ declare(strict_types=1);
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Enumerate\Account;
+use Enumerate\State;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens;
     use HasFactory;
-    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -25,6 +23,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'image',
+        'CEP',
+        'state',
+        'city',
+        'neighborhood',
+        'address',
     ];
 
     /**
@@ -32,10 +37,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = ['password', 'token'];
 
     /**
      * The attributes that should be cast.
@@ -43,7 +45,8 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'state' => State::class,
+        'type' => Account::class,
         'password' => 'hashed',
     ];
 }

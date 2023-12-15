@@ -19,14 +19,14 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id('id');
             $table->uuid('token')->unique()->default(new Expression('UUID()'));
-            $table->enum('type', Account::parseCases());
+            $table->enum('type', Account::values());
             $table->string('email')->unique();
             $table->string('phone', 11);
             $table->string('password');
             $table->string('name');
             $table->longText('image')->nullable();
             $table->string('CEP', 8);
-            $table->enum('state', State::parseCases());
+            $table->enum('state', State::values());
             $table->string('city');
             $table->string('neighborhood')->nullable();
             $table->string('address')->nullable();

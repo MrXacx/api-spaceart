@@ -29,7 +29,7 @@ class EnterpriseDB extends UsersDB
     function __construct(Enterprise $enterprise = null)
     {
         parent::__construct($enterprise);
-        $this->enterprise = $enterprise;
+        if($enterprise) $this->enterprise = $enterprise;
     }
 
     public static function isEditalbeColumn(string $column): bool

@@ -37,7 +37,7 @@ class UsersDB extends DatabaseAcess
      */
     function __construct(User $user = null)
     {
-        $this->user = $user;
+        if($user) $this->user = $user;
         parent::__construct();
     }
 

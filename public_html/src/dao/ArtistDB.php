@@ -28,7 +28,7 @@ class ArtistDB extends UsersDB
     function __construct(Artist $artist = null)
     {
         parent::__construct($artist);
-        $this->artist = $artist;
+        if($artist) $this->artist = $artist;
     }
 
     public static function isEditalbeColumn(string $column): bool

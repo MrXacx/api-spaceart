@@ -39,10 +39,6 @@ class RoutesBuilder
 
         static::$dispatcher = FastRoute\simpleDispatcher(
             function (RouteCollector $collector) { // Inicia rotas
-    
-                $collector->post('', UserController::class . '@storeUser'); // Busca id do usuário
-    
-
                 $collector->addGroup('/user', function (RouteCollector $collector) // rotas com início "/user"
                 {
                     $collector->get('', UserController::class . '@getUser'); // Busca todos os dados de um usuário

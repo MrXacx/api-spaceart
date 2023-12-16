@@ -11,7 +11,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::createOrReplaceView(
-            'views_artist_users',
+            'view_artist_users',
             <<<'SQL'
                 SELECT
                 u.id, u.name, u.image,

@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             ArtistSeeder::class,
             EnterpriseSeeder::class,
             AgreementSeeder::class,
+            RateSeeder::class,
         ]);
     }
 }

@@ -230,7 +230,7 @@ final class UserController
     {
         try{
             $type = $this->parameterList->getEnum('type', AccountType::class);
-        } catch(\Exception $e){
+        } catch(Exception $e){
             $type = '';
         } finally {
             return match ($type) { // RECEBENDO O TIPO DA CONTA

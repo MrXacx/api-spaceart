@@ -211,18 +211,18 @@ class EnterpriseDB extends UsersDB
     public function getStats(): array{
         $query = $this->getConnection()
         ->prepare(
-            "
+            <<<SQL
                 SELECT city, state, COUNT(*) as total
                 FROM enterprise AS e
                 JOIN users AS u ON e.id = u.id
                 GROUP BY city, state;
-            "
+            SQL
         );
 
         if($query->execute()){
-            return $this->fetchRecord($query, false);
+            return $this->fetchRecord($query, true);
         }
 
-        throw new \RuntimeException('Operação falhou!');   
+        throw new RuntimeException('Operação falhou!');   
     }
 }

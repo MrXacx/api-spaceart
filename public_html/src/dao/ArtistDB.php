@@ -230,17 +230,17 @@ class ArtistDB extends UsersDB
     public function getStats(): array{
         $query = $this->getConnection()
         ->prepare(
-            "
-                SELECT art, COUNT(*) as total 
+            <<<SQL
+                SELECT art, COUNT(art) as total 
                 FROM artist
                 GROUP BY art;
-            "
+            SQL
         );
 
         if($query->execute()){
-            return $this->fetchRecord($query, false);
+            return $this->fetchRecord($query, true);
         }
 
-        throw new \RuntimeException('Operação falhou!');   
+        throw new RuntimeException('Operação falhou!');   
     }
 }

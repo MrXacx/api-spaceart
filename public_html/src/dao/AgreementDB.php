@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\DAO;
 
-use App\DAO\Template\DatabaseAcess;
 use App\Model\Agreement;
+use App\Model\Template\User;
+use App\DAO\Template\DatabaseAcess;
 
 /**
  * Classe de maniupulação da tabela Agreements
@@ -35,9 +36,9 @@ class AgreementDB extends DatabaseAcess
     /**
      * @param Agreement $agreement Modelo de contrato a ser utilizado na manipulação
      */
-    function __construct(Agreement $agreement)
+    function __construct(?Agreement $agreement)
     {
-        $this->agreement = $agreement;
+        if($agreement) $this->agreement = $agreement;
         parent::__construct();
     }
 
@@ -142,7 +143,7 @@ class AgreementDB extends DatabaseAcess
         return $query->execute();
     }
 
-    public function getStats(): array{
+    public function getStats(User $user): array{
         $query = $this->getConnection()
         ->prepare(
             "
@@ -155,10 +156,10 @@ class AgreementDB extends DatabaseAcess
             "
         );
 
-        $query->bindValue(1, $this->agreement->getID());
+        $query->bindValue(1, $user->getID());
 
         if($query->execute()){
-            return $this->fetchRecord($query, false);
+            return $this->fetchRecord($query, true);
         }
 
         throw new \RuntimeException('Operação falhou!');   

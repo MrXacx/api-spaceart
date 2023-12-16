@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ArtistSeeder::class,
             EnterpriseSeeder::class,
+            AgreementSeeder::class,
         ]);
     }
 }

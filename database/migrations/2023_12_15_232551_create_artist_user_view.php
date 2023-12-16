@@ -12,7 +12,7 @@ return new class extends Migration
     {
         Schema::createOrReplaceView(
             'views_artist_users',
-            <<<SQL
+            <<<'SQL'
                 SELECT
                 u.id, u.name, u.image,
                 u.email,

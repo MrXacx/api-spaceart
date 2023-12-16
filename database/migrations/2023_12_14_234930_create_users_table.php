@@ -22,14 +22,14 @@ return new class extends Migration
             $table->enum('type', Account::values());
             $table->string('email')->unique();
             $table->string('phone');
-            $table->string('password');
+            $table->text('password');
             $table->string('name');
             $table->longText('image')->nullable();
             $table->string('CEP');
             $table->enum('state', State::values());
             $table->string('city');
-            $table->string('neighborhood')->nullable();
-            $table->string('address')->nullable();
+            $table->text('neighborhood')->nullable();
+            $table->text('address')->nullable();
             $table->string('website')->nullable();
             $table->float('rate', 3, 2, true)->default(0.00);
             $table->text('description')->nullable();

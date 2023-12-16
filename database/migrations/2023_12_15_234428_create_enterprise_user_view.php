@@ -12,7 +12,7 @@ return new class extends Migration
     {
         Schema::createOrReplaceView(
             'enterprise_user_view',
-            <<<SQL
+            <<<'SQL'
                 SELECT
                 u.id, u.name, e.company_name, u.image,
                 u.email, 

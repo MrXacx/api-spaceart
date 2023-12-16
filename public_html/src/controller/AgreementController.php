@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Controller\Tool\Controller;
-use App\DAO\AgreementDB;
+use DateTime;
 use App\DAO\RateDB;
-use App\Model\Agreement;
-use App\Model\Enumerate\ArtType;
 use App\Model\Rate;
 use App\Util\Cache;
+use App\DAO\AgreementDB;
+use App\Model\Agreement;
 use App\Util\DataValidator;
-use DateTime;
+use App\Model\Template\User;
+use App\Model\Enumerate\ArtType;
+use App\Controller\Tool\Controller;
 
 /**
  * Controlador de contrato e avaliações
@@ -205,14 +206,13 @@ final class AgreementController
         return $db->delete(); // deleta avaliação
     }
 
-    public function getAgreementStats(): array{
-        $user = $this->parameterList->getString('user');
+    public function getAgreementStats(): array
+    {
+        $userId = $this->parameterList->getString('user');
+        $user = new User();
+        $user->setID($userId);
 
-        $agreement = new Agreement();
-        $agreement->setHired($user);
-        $agreement->setHirer($user);
-
-        $stats = (new AgreementDB($agreement))->getStats();
+        $stats = (new AgreementDB(null))->getStats($user);
         return $stats;
     }
 }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('id')->unique()->references('id')->on('users')->cascadeOnDelete()->cascadeOnDelete();
             $table->enum('art', Art::values());
             $table->float('wage', places: 2, unsigned: true);
-            $table->string('CPF', 8)->unique();
+            $table->string('CPF')->unique();
             $table->timestamps();
         });
     }

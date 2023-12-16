@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use App\Models\Artist;
+use Enumerate\Account;
 use Illuminate\Database\Seeder;
 
 class ArtistSeeder extends Seeder
@@ -12,6 +14,8 @@ class ArtistSeeder extends Seeder
      */
     public function run(): void
     {
-        Artist::factory(10)->create();
+        User::all(['id', 'type'])
+        ->whereStrict('type', Account::ARTIST)
+        ->each(fn(User $user) => Artist::factory(1)->create(['id' => $user->id]));
     }
 }

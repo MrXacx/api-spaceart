@@ -8,7 +8,7 @@ use Enumerate\State;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
-class UserFactory extends LocalFactory
+class UserFactory extends FakerFactory
 {
     /**
      * Define the model's default state.
@@ -25,7 +25,7 @@ class UserFactory extends LocalFactory
             'city' => $this->faker->city,
             'CEP' => preg_replace('/[^0-9]/', '', $this->faker->postcode()),
             'type' => Account::get(array_rand(Account::cases(), 1)),
-            'phone' => $this->faker->phoneNumberCleared,
+            'phone' => '85858',
             'image' => $this->faker->imageUrl(350, 350, 'person', true),
         ];
     }

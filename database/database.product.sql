@@ -150,7 +150,7 @@ CREATE TABLE post(
     media text,
     post_time timestamp DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT poster_fk FOREIGN KEY (author) REFERENCES users(id)
+    CONSTRAINT poster_fk FOREIGN KEY (author) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- CRIA VIEWS

@@ -212,10 +212,10 @@ class EnterpriseDB extends UsersDB
         $query = $this->getConnection()
         ->prepare(
             <<<SQL
-                SELECT city, state, COUNT(*) as total
+                SELECT state, COUNT(*) as total
                 FROM enterprise AS e
                 JOIN users AS u ON e.id = u.id
-                GROUP BY city, state;
+                GROUP BY state;
             SQL
         );
 

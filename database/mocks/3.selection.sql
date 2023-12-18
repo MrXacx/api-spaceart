@@ -1,0 +1,3 @@
+INSERT INTO `selection` (`id`, `title`, `owner`, `price`, `start_timestamp`, `end_timestamp`, `art`, `locked`) VALUES
+('3e2d0b91-87c2-11ee-9dbd-0ccc47e5f2d5', 'Testando novamente', '018bc0df-8852-710a-b2ae-76a57ea07432', 18, '2023-11-20 16:35:00', '2023-11-20 16:40:00', 'dance', 1),
+('522837e2-80f8-11ee-bd48-81d6addf550f', 'Inauguração da DROGARIA D\'AILE - Salvador ', '018bc0df-8852-710a-b2ae-76a57ea07432', 980, '2023-11-12 01:10:51', '2023-12-16 23:59:59', 'music', 0);

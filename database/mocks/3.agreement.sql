@@ -1,0 +1,6 @@
+INSERT INTO `agreement` (`id`, `hirer`, `hired`, `description`, `price`, `date`, `start_time`, `end_time`, `art`, `status`) VALUES
+('0d6a89a8-87b7-11ee-9dbd-0ccc47e5f2d5', '018bc0df-8852-710a-b2ae-76a57ea07432', '018b918c-0b9a-7014-afa5-5d47d4582fb9', 'Novo teste', 0, '2023-11-18', '15:35:00', '20:00:00', 'acting', 'accepted'),
+('29f98882-87b6-11ee-9dbd-0ccc47e5f2d5', '018bc0df-8852-710a-b2ae-76a57ea07432', '018b9169-1a2e-71de-8a91-1d1c7a94b2e3', 'testando aqui', 0, '2023-11-30', '13:10:00', '16:04:00', 'music', 'accepted'),
+('91048006-80f9-11ee-bd48-81d6addf550f', '018bc0df-8852-710a-b2ae-76a57ea07432', '018b918c-0b9a-7014-afa5-5d47d4582fb9', 'Pintura de um mural de 12m² com as cores azul e branco e que contenha a logo do contratante.\r\nA alimentação será fornecida pelo contratante.', 5000, '2023-12-02', '08:00:00', '18:00:00', 'pintura', 'accepted'),
+('df01dd09-87b6-11ee-9dbd-0ccc47e5f2d5', '018bc0df-8852-710a-b2ae-76a57ea07432', '018b918c-0b9a-7014-afa5-5d47d4582fb9', 'Novo teste', 0, '2023-11-30', '15:35:00', '20:00:00', 'acting', 'recused'),
+('ea8c5c3d-87b5-11ee-9dbd-0ccc47e5f2d5', '018bc0df-8852-710a-b2ae-76a57ea07432', '018b9169-1a2e-71de-8a91-1d1c7a94b2e3', 'testando aqui', 0, '2023-11-30', '12:02:00', '17:08:00', 'music', 'canceled');

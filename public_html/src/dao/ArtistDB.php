@@ -28,7 +28,7 @@ class ArtistDB extends UsersDB
     function __construct(Artist $artist = null)
     {
         parent::__construct($artist);
-        $this->artist = $artist;
+        if($artist) $this->artist = $artist;
     }
 
     public static function isEditalbeColumn(string $column): bool
@@ -225,5 +225,22 @@ class ArtistDB extends UsersDB
         $query->bindValue(2, $this->artist->getID());
 
         return $query->execute();
+    }
+
+    public function getStats(): array{
+        $query = $this->getConnection()
+        ->prepare(
+            <<<SQL
+                SELECT art, COUNT(art) as total 
+                FROM artist
+                GROUP BY art;
+            SQL
+        );
+
+        if($query->execute()){
+            return $this->fetchRecord($query, true);
+        }
+
+        throw new RuntimeException('Operação falhou!');   
     }
 }

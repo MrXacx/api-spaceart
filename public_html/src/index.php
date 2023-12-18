@@ -1,6 +1,6 @@
 <?php
 
-ini_set('display_errors', 0); // Deixa de exibir erros 
+ini_set('display_errors', 1); // Deixa de exibir erros 
 header('Access-Control-Allow-Origin: *'); // Libera o acesso à API
 header('Accept: multipart/form-data'); // Define formato de entrada como form-data
 header('Content-Type: application/json'); // Define retorno como json

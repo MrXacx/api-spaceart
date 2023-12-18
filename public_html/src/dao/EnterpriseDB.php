@@ -29,7 +29,7 @@ class EnterpriseDB extends UsersDB
     function __construct(Enterprise $enterprise = null)
     {
         parent::__construct($enterprise);
-        $this->enterprise = $enterprise;
+        if($enterprise) $this->enterprise = $enterprise;
     }
 
     public static function isEditalbeColumn(string $column): bool
@@ -206,5 +206,23 @@ class EnterpriseDB extends UsersDB
         $query->bindValue(2, $this->enterprise->getID());
 
         return $query->execute();
+    }
+
+    public function getStats(): array{
+        $query = $this->getConnection()
+        ->prepare(
+            <<<SQL
+                SELECT state, COUNT(*) as total
+                FROM enterprise AS e
+                JOIN users AS u ON e.id = u.id
+                GROUP BY state;
+            SQL
+        );
+
+        if($query->execute()){
+            return $this->fetchRecord($query, true);
+        }
+
+        throw new RuntimeException('Operação falhou!');   
     }
 }

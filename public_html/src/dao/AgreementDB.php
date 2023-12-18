@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\DAO;
 
-use App\DAO\Template\DatabaseAcess;
 use App\Model\Agreement;
+use App\Model\Template\User;
+use App\DAO\Template\DatabaseAcess;
 
 /**
  * Classe de maniupulação da tabela Agreements
@@ -35,9 +36,9 @@ class AgreementDB extends DatabaseAcess
     /**
      * @param Agreement $agreement Modelo de contrato a ser utilizado na manipulação
      */
-    function __construct(Agreement $agreement)
+    function __construct(?Agreement $agreement)
     {
-        $this->agreement = $agreement;
+        if($agreement) $this->agreement = $agreement;
         parent::__construct();
     }
 
@@ -140,5 +141,27 @@ class AgreementDB extends DatabaseAcess
         $query = $this->getConnection()->prepare('DELETE FROM agreement WHERE id = ?');
         $query->bindValue(1, $this->agreement->getID());
         return $query->execute();
+    }
+
+    public function getStats(User $user): array{
+        $query = $this->getConnection()
+        ->prepare(
+            "
+                SELECT u.id AS 'user', status, COUNT(*) AS total
+                FROM agreement AS a
+                INNER JOIN users AS u
+                ON u.id IN (a.hirer, a.hired)
+                GROUP BY u.id, a.status
+                HAVING u.id = ?
+            "
+        );
+
+        $query->bindValue(1, $user->getID());
+
+        if($query->execute()){
+            return $this->fetchRecord($query, true);
+        }
+
+        throw new \RuntimeException('Operação falhou!');   
     }
 }

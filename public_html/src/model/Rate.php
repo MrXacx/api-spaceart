@@ -103,7 +103,7 @@ class Rate extends \App\Model\Template\Entity
      */
     public function setDescription(string $description): void
     {
-        $this->description = $this->validator->isFit($description) ? $description : InvalidAttributeLengthException::throw('owner', __FILE__);
+        $this->description = $this->validator->isFit($description) ? $description : InvalidAttributeLengthException::throw('description', __FILE__);
     }
 
     /**

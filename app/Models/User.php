@@ -83,6 +83,7 @@ class User extends Authenticatable
             set: fn (string $value) => Crypt::encryptString($value),
         );
     }
+
     protected function address(): Attribute
     {
         return Attribute::make(
@@ -98,6 +99,7 @@ class User extends Authenticatable
             set: fn (string $value) => Crypt::encryptString($value),
         );
     }
+
     protected function phone(): Attribute
     {
         return Attribute::make(

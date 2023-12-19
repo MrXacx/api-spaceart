@@ -16,14 +16,13 @@ class AgreementFactory extends Factory
      */
     public function definition(): array
     {
-
         $maxTime = $this->faker->dateTimeBetween('+1 month', '+1 year');
 
         return [
-            "description" => $this->faker->text,
-            "date" => $maxTime->format('Y-m-d'),
-            "start_time" => $this->faker->time(max:$maxTime->format('H:i:s')),
-            "end_time" => $maxTime->format('H:i:s')
+            'description' => $this->faker->text,
+            'date' => $maxTime->format('Y-m-d'),
+            'start_time' => $this->faker->time(max: $maxTime->format('H:i:s')),
+            'end_time' => $maxTime->format('H:i:s'),
         ];
     }
 }

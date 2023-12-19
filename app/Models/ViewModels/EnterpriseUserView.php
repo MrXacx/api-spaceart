@@ -4,6 +4,7 @@ namespace App\Models\ViewModels;
 
 use Illuminate\Database\Eloquent\Model;
 
-class EnterpriseUserView extends Model {
-  protected $table = "view_enterprises";
+class EnterpriseUserView extends Model
+{
+    protected $table = 'view_enterprises';
 }

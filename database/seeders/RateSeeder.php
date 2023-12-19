@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Rate;
 use App\Models\Agreement;
+use App\Models\Rate;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class RateSeeder extends Seeder
 {
@@ -16,12 +15,12 @@ class RateSeeder extends Seeder
     {
         Agreement::all()->each(function (Agreement $agreement) {
             Rate::factory()->create([
-                "agreement" => $agreement->id,
-                "author" => $agreement->hirer,
+                'agreement' => $agreement->id,
+                'author' => $agreement->hirer,
             ]);
             Rate::factory()->create([
-                "agreement" => $agreement->id,
-                "author" => $agreement->hired,
+                'agreement' => $agreement->id,
+                'author' => $agreement->hired,
             ]);
         });
     }

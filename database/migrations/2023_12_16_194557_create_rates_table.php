@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('description');
             $table->timestamps();
 
-            $table->primary(['author','agreement']);
+            $table->primary(['author', 'agreement']);
         });
     }
 

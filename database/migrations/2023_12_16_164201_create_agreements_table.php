@@ -2,9 +2,9 @@
 
 use Enumerate\AgreementStatus;
 use Enumerate\Art;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->time('end_time');
             $table->enum('art', Art::values());
             $table->enum('status', AgreementStatus::values())->default(AgreementStatus::SEND->value);
-            $table->float('price', places:2, unsigned: true);
+            $table->float('price', places: 2, unsigned: true);
             $table->timestamps();
         });
     }

@@ -10,14 +10,14 @@ class Agreement extends Model
     use HasFactory;
 
     protected $fillable = [
-        "hirer",
-        "hired",
-        "description",
-        "date",
-        "start_time",
-        "end_time",
-        "price",
-        "art",
-        "status",
+        'hirer',
+        'hired',
+        'description',
+        'date',
+        'start_time',
+        'end_time',
+        'price',
+        'art',
+        'status',
     ];
 }

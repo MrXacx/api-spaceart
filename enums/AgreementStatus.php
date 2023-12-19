@@ -10,6 +10,6 @@ enum AgreementStatus: string
 
     case SEND = 'send';
     case ACCEPTED = 'accepted';
-    case RECUSED = 'recused';
+    case REFUSED = 'refused';
     case CENCELED = 'canceled';
 }

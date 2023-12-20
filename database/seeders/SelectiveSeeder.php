@@ -14,8 +14,8 @@ class SelectiveSeeder extends Seeder
     public function run(): void
     {
         Enterprise::all()
-            ->some(
-                fn (Enterprise $enterprise) => Selective::factory()->create(['owner' => $enterprise->id])
+            ->each(
+                fn ($enterprise) => Selective::factory()->create(['owner' => $enterprise->id])
             );
     }
 }

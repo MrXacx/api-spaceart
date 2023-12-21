@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use App\Models\ViewModels\ArtistUserView;
+use App\Models\ViewModels\EnterpriseUserView;
+use Enumerate\Account;
+use Illuminate\Database\Eloquent\Collection;
+use Symfony\Component\HttpFoundation\Request;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function list()
     {
         return User::all()->toJson();
     }
@@ -21,32 +24,46 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request)
+    public function store(Request $request)
     {
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(Request $request)
     {
-        //
+        $user = match (Account::tryFrom((string) $request->type)) {
+            Account::ARTIST => new ArtistUserView,
+            Account::ENTERPRISE => new EnterpriseUserView,
+            default => new User
+        };
+
+        return
+            (
+                $user
+                    ->all()
+                    ->firstWhere(
+                        fn ($user) => $user->id == $request->id
+                    )
+                ?? Collection::empty()
+            )->toJson();
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Display the specified resource.
      */
-    public function edit(User $user)
+    public function showPrivate(User $user)
     {
-        //
+        return dd($user->toArray());
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request)
+    public function update(Request $request)
     {
-        //
+        return dd($request);
     }
 
     /**

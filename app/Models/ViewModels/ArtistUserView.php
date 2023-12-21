@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class ArtistUserView extends Model
 {
-    protected $table = 'view_artists';
+    protected $table = 'view_artist_users';
 }

@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class EnterpriseUserView extends Model
 {
-    protected $table = 'view_enterprises';
+    protected $table = 'view_enterprise_users';
 }

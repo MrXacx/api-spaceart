@@ -17,12 +17,12 @@ class SelectiveFactory extends FakerFactory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->words(asText:true),
+            'name' => $this->faker->words(asText: true),
             'price' => $this->faker->randomFloat(2, 500, 1500),
             'start_moment' => $this->faker->dateTimeBetween('now', '+1 month'),
             'end_moment' => $this->faker->dateTimeBetween('+2 months', '+5 months'),
             'art' => $this->faker->randomElement(Art::cases()),
-            'description' => $this->faker->sentence(variableNbWords:true),
+            'description' => $this->faker->sentence(variableNbWords: true),
         ];
     }
 }

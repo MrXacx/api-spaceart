@@ -79,7 +79,7 @@ class User extends Authenticatable
     protected function email(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => Crypt::decrypt($value),
+            get: fn (string $value) => Crypt::decryptString($value),
             set: fn (string $value) => Crypt::encryptString($value),
         );
     }
@@ -87,7 +87,7 @@ class User extends Authenticatable
     protected function address(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => Crypt::decrypt($value),
+            get: fn (?string $value) => $value ? Crypt::decryptString($value) : null,
             set: fn (string $value) => Crypt::encryptString($value),
         );
     }
@@ -95,7 +95,7 @@ class User extends Authenticatable
     protected function neighborhood(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => Crypt::decrypt($value),
+            get: fn (?string $value) => $value ? Crypt::decryptString($value) : null,
             set: fn (string $value) => Crypt::encryptString($value),
         );
     }
@@ -103,7 +103,7 @@ class User extends Authenticatable
     protected function phone(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => Crypt::decrypt($value),
+            get: fn (string $value) => Crypt::decryptString($value),
             set: fn (string $value) => Crypt::encryptString($value),
         );
     }
@@ -111,7 +111,7 @@ class User extends Authenticatable
     protected function CEP(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => Crypt::decrypt($value),
+            get: fn (string $value) => Crypt::decryptString($value),
             set: fn (string $value) => Crypt::encryptString($value),
         );
     }

@@ -29,9 +29,12 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-php-
 
+    - name: Update composer
+      run: php composer.phar update
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
     - name: Setup Database
       run: php artisan migrate
     - name: Setup
       run: php artisan serve
+      

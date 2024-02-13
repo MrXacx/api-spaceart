@@ -15,8 +15,8 @@ return new class extends Migration
             <<<'SQL'
                 SELECT
                 u.id, u.name, e.company_name, u.image,
-                u.email, 
-                u.CEP, u.state, u.city, u.neighborhood, u.address,
+                u.email, u.phone, e.cnpj,
+                u.postal_code, u.state, u.city, u.neighborhood, u.address,
                 u.rate, u.description, u.website
                 
                 FROM users AS u, enterprises AS e

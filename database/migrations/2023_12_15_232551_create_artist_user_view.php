@@ -14,11 +14,11 @@ return new class extends Migration
             'view_artist_users',
             <<<'SQL'
                 SELECT
-                u.id, u.name, u.image,
-                u.email,
-                u.CEP, u.state, u.city, u.neighborhood, u.address,
-                u.rate, u.description, u.website, 
-                a.art, a.wage
+                    u.id, u.name, u.image,
+                    u.email, u.phone, a.cpf,
+                    u.postal_code, u.state, u.city, u.neighborhood, u.address,
+                    u.rate, u.description, u.website, 
+                    a.art, a.wage
                 FROM users AS u, artists AS a
                 WHERE u.id = a.id
             SQL

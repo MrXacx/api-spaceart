@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('enterprises', function (Blueprint $table) {
             $table->foreignId('id')->unique()->references('id')->on('users')->cascadeOnDelete()->cascadeOnDelete();
-            $table->string('CNPJ')->unique();
+            $table->string('cnpj')->unique();
             $table->string('company_name')->unique();
             $table->timestamps();
         });

@@ -15,7 +15,7 @@ class EnterpriseFactory extends FakerFactory
     public function definition(): array
     {
         return [
-            'CNPJ' => $this->faker->cnpj,
+            'cnpj' => preg_replace("/[\.\/-]/", '',$this->faker->cnpj),
             'company_name' => $this->faker->company,
         ];
     }

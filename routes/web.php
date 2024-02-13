@@ -11,35 +11,30 @@ Route::get('/', function () {
 
 Route::prefix('user')
     ->name('user.')->group(function () {
-        Route::get('/', [UserController::class, 'list'])->name('list');
-        Route::post('/', [UserController::class, 'store'])->name('store');
+        Route::get('/', [UserController::class, 'list'])->name('list'); // GET: host/user
+        Route::post('/', [UserController::class, 'store'])->name('store'); // POST: host/user
+    
+        Route::prefix('/{id}')->group(function () {
+            Route::get('/{type?}', [UserController::class, 'show'])->name('show'); // GET: host/user/{id}/{type?}    
+            Route::put('/', [UserController::class, 'update'])->name('update');  // PUT: host/user/{token}
+            Route::delete('/', [UserController::class, 'destroy'])->name('delete'); // DELETE: host/user/{token}
+        })->whereNumber('id');
 
-        Route::name('show.')->group(function () {
-            Route::get('/{id}/{type?}', [UserController::class, 'show'])
+        Route::name('alias.')->group(function () {
+            Route::get('/update/{id}', fn($token) => redirect()->route( // GET: host/user/update/{token}
+                'user.update',
+                parameters: ['id' => $id],
+                headers: ['method' => 'PUT']
+            ))
                 ->whereNumber('id')
-                ->name('public');
+                ->name('update');
 
-            Route::get('/{token}/{type?}', [UserController::class, 'show'])
-                ->whereUuid('token')
-                ->name('private');
-        });
-
-        Route::prefix('/{token}')->group(function () {
-            Route::put('/', [UserController::class, 'update'])->name('update');
-            Route::delete('/', [UserController::class, 'destroy'])->name('delete');
-        })->whereUuid('token');
-
-        Route::name('alt')->group(function () {
-            Route::get('/update/{token}', fn ($token) => redirect()->route('user.update',
-                ['token' => $token],
-                headers: [
-                    'method' => 'PUT',
-                ]))
-                ->whereUuid('token')
-                ->name('update.alt');
-
-            Route::get('/delete/{token}', fn ($token) => redirect()->route('user.delete'))
-                ->whereUuid('token')
-                ->name('delete.alt');
+            Route::get('/delete/{id}', fn($id) => redirect()->route(
+                'user.delete',
+                parameters: ['id' => $id],
+                headers: ['method' => 'PUT']
+            )) // GET: host/user/update/{token}
+                ->whereNumber('id')
+                ->name('delete');
         });
     });

@@ -16,10 +16,17 @@ class Enterprise extends User
         'companyName',
     ];
 
+    public function __construct() {
+        parent::__construct();
+        $this->hidden = array_merge($this->hidden, [
+            'cnpj',
+        ]);
+    }
+
     protected function cnpj(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => Crypt::decrypt($value),
+            get: fn (string $value) => Crypt::decryptString($value),
             set: fn (string $value) => Crypt::encryptString($value)
         );
     }

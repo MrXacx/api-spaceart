@@ -25,7 +25,7 @@ return new class extends Migration
             $table->text('password');
             $table->string('name');
             $table->longText('image')->nullable();
-            $table->string('CEP');
+            $table->text('postal_code');
             $table->enum('state', State::values());
             $table->string('city');
             $table->text('neighborhood')->nullable();

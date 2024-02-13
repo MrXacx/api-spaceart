@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Crypt;
 
-class Artist extends Model
+class Artist extends User
 {
     use HasFactory;
 
@@ -18,7 +18,7 @@ class Artist extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'CPF',
+        'cpf',
         'art',
         'birthday',
     ];
@@ -30,18 +30,14 @@ class Artist extends Model
      */
     protected $casts = [
         'birthday' => 'date',
+        'art' => Art::class,
     ];
 
-    protected function CPF(): Attribute
+    protected function cpf(): Attribute
     {
         return Attribute::make(
             get: fn (string $value) => Crypt::decrypt($value),
             set: fn (string $value) => Crypt::encryptString($value)
         );
-    }
-
-    protected function art(): Attribute
-    {
-        return Attribute::make(fn (string $value) => Art::tryFrom($value));
     }
 }

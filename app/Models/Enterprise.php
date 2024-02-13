@@ -7,16 +7,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Crypt;
 
-class Enterprise extends Model
+class Enterprise extends User
 {
     use HasFactory;
 
     protected $fillable = [
-        'CNPJ',
-        'company_name',
+        'cnpj',
+        'companyName',
     ];
 
-    protected function CNPJ(): Attribute
+    protected function cnpj(): Attribute
     {
         return Attribute::make(
             get: fn (string $value) => Crypt::decrypt($value),

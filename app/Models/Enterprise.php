@@ -16,12 +16,9 @@ class Enterprise extends User
         'companyName',
     ];
 
-    public function __construct() {
-        parent::__construct();
-        $this->hidden = array_merge($this->hidden, [
-            'cnpj',
-        ]);
-    }
+    protected $hidden = [
+        'cnpj'
+    ];
 
     protected function cnpj(): Attribute
     {

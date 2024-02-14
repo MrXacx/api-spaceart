@@ -23,6 +23,7 @@ class Artist extends User
         'birthday',
     ];
 
+    protected $hidden = ['cpf'];
 
     /**
      * The attributes that should be cast.
@@ -34,17 +35,10 @@ class Artist extends User
         'art' => Art::class,
     ];
 
-    public function __construct() {
-        parent::__construct();
-        $this->hidden = array_merge($this->hidden, [
-            'cpf',
-        ]);
-    }
-
     protected function cpf(): Attribute
     {
         return Attribute::make(
-            get: fn(string $value) => Crypt::decrypt($value),
+            get: fn(string $value) => Crypt::decryptString($value),
             set: fn(string $value) => Crypt::encryptString($value)
         );
     }

@@ -14,6 +14,7 @@ return new class extends Migration
             'view_enterprise_users',
             <<<'SQL'
                 SELECT
+                u.token,
                 u.id, u.name, e.company_name, u.image,
                 u.email, u.phone, e.cnpj,
                 u.postal_code, u.state, u.city, u.neighborhood, u.address,

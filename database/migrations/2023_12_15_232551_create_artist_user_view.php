@@ -14,6 +14,7 @@ return new class extends Migration
             'view_artist_users',
             <<<'SQL'
                 SELECT
+                    u.token,
                     u.id, u.name, u.image,
                     u.email, u.phone, a.cpf,
                     u.postal_code, u.state, u.city, u.neighborhood, u.address,

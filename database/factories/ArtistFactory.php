@@ -17,7 +17,7 @@ class ArtistFactory extends FakerFactory
     public function definition(): array
     {
         return [
-            'cpf' => $this->faker->cpf,
+            'cpf' => preg_replace('/[\.-]/', '', $this->faker->cpf),
             'art' => $this->faker->randomElement(Art::cases()),
             'wage' => $this->faker->randomFloat(2, 500, 1200),
         ];

@@ -29,7 +29,7 @@ class UserController extends Controller
     }
 
 
-    public function show(Request $request)
+    public function show(Request $request): User
     {
         $user = match (Account::tryFrom((string) $request->type)) {
             Account::ARTIST => new ArtistUserView,

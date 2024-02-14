@@ -5,32 +5,30 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\ViewModels\ArtistUserView;
-use App\Models\ViewModels\EnterpriseUserView;
 use Enumerate\Account;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\ViewModels\ArtistUserView;
 use Illuminate\Database\Eloquent\Collection;
-use Symfony\Component\HttpFoundation\Request;
+use App\Models\ViewModels\EnterpriseUserView;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function list()
+    public function list(): Collection
     {
-        return User::all()->toJson();
+        return User::all();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+
+    public function store(Request $request): User
     {
+        return $this->show($request);
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(Request $request)
     {
         $user = match (Account::tryFrom((string) $request->type)) {
@@ -39,38 +37,23 @@ class UserController extends Controller
             default => new User
         };
 
-        return
-            (
-                $user
-                    ->all()
-                    ->firstWhere(
-                        fn ($user) => $user->id == $request->id
-                    )
-                ?? Collection::empty()
-            )->toJson();
+        $user = $user->find($request->id); // Fetch by PK
+
+        if ($user->token === $request->get('token')) {
+            $user->makeVisible(['phone', 'cnpj', 'cpf']); // Turn visible
+        }
+
+        return $user;
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function showPrivate(User $user)
+    public function update(Request $request): User
     {
-        return dd($user->toArray());
+        return $this->show($request);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request)
-    {
-        return dd($request);
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $user)
+    public function destroy(Request $user): void
     {
-        //
+        dd($user);
     }
 }

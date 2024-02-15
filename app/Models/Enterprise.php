@@ -13,7 +13,7 @@ class Enterprise extends User
 
     protected $fillable = [
         'cnpj',
-        'companyName',
+        'company_name',
     ];
 
     protected $hidden = [

@@ -27,7 +27,7 @@ abstract class UserRequest extends \App\Http\Requests\Request
             'password' => 'required|string|min:8',
             'phone' => 'required|string',
             'image' => 'required|string',
-            'postalCode' => 'required|string',
+            'postal_code' => 'required|string',
             'address' => 'string',
             'type' => 'required|string'
         ];

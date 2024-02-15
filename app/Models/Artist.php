@@ -42,4 +42,10 @@ class Artist extends User
             set: fn(string $value) => Crypt::encryptString($value)
         );
     }
+
+    protected function art(): Attribute {
+        return Attribute::make(
+            set: fn($value) => $value instanceof Art ? $value : Art::tryFrom($value)
+        );
+    }
 }

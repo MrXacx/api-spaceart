@@ -11,6 +11,7 @@ enum Art: string
     case ACTING = 'acting';
     case DANCE = 'dance';
     case MUSIC = 'music';
-    case PAINTING = 'paintin';
+    case PAINTING = 'painting';
     case SCULPTURE = 'sculpture';
 }
+

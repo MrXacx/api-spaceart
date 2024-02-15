@@ -17,14 +17,14 @@ abstract class Request extends \Illuminate\Foundation\Http\FormRequest
   /**
    * @return array|true fails
    */
-  final public function validate(array $rules = null, array $params = null): array|true
+  final public function validate(array $rules = null, array $params = null): array|false
   {
     $validator = Validator::make(
       $rules ?? $this->all(),
       $params ?? $this->rules()
     )->stopOnFirstFailure(false);
 
-    return $validator->fails() ? $validator->getMessageBag()->messages() : true;
+    return $validator->fails() ? $validator->getMessageBag()->messages() : false;
   }
 
   abstract protected function rules(): array;

@@ -12,6 +12,7 @@ class ArtistRequest extends UserRequest
         'cpf' => 'required|string',
         'birthday' => 'required|string',
         'art' => 'required|string',
+        'wage' => 'required|numeric',
       ]);
   }
 
@@ -19,7 +20,10 @@ class ArtistRequest extends UserRequest
   {
     return array_merge(
       parent::rules(),
-      ['art' => 'nullable|string']
+      [
+        'art' => 'nullable|string',
+        'wage' => 'nullable|numeric',
+      ]
     );
   }
 }

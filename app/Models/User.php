@@ -33,6 +33,7 @@ class User extends Model
         'city',
         'neighborhood',
         'address',
+        'type',
     ];
 
     /**
@@ -119,6 +120,7 @@ class User extends Model
         );
     }
 
+    protected function postalCode(): Attribute { return $this->postal_code(); }
     protected function type(): Attribute {
         return Attribute::make(
             set: fn($value) => $value instanceof Account ? $value : Account::tryFrom($value)

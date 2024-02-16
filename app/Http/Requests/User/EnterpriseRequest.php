@@ -9,15 +9,15 @@ class EnterpriseRequest extends UserRequest
     return array_merge(
       parent::store(),
       [
-        'cnpj' => 'required|string',
-        'company_name' => 'required|string'
+        'cnpj' => 'required|cnpj',
+        'company_name' => 'required|string|min:1',
       ]);
   }
 
   protected function update(): array{
     return array_merge(
       parent::update(),
-      ['company_name' => 'nullable|string']
+      ['company_name' => 'nullable|string|min:1']
     );
   }
 }

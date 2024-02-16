@@ -9,7 +9,7 @@ class ArtistRequest extends UserRequest
     return array_merge(
       parent::store(),
       [
-        'cpf' => 'required|string',
+        'cpf' => 'required|cpf',
         'birthday' => 'required|string',
         'art' => 'required|string',
         'wage' => 'required|numeric',

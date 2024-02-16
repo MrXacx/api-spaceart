@@ -23,11 +23,11 @@ abstract class UserRequest extends \App\Http\Requests\IRequest
     {
         return [
             'name' => 'required|string|min:3|max:30',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
-            'phone' => 'required|string',
+            'phone' => 'required|phone',
             'image' => 'required|string',
-            'postal_code' => 'required|string',
+            'postal_code' => 'required|postal_code',
             'address' => 'string',
             'type' => 'required|string'
         ];
@@ -41,9 +41,9 @@ abstract class UserRequest extends \App\Http\Requests\IRequest
             'type' => 'required|string',
             'name' => 'nullable|string|min:3|max:30',
             'password' => 'nullable|string|min:8',
-            'phone' => 'nullable|string',
+            'phone' => 'nullable|phone',
             'image' => 'nullable|string',
-            'postalCode' => 'nullable|string',
+            'postal_code' => 'nullable|postal_code',
             'address' => 'nullable|string',
         ];
     }

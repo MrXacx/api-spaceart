@@ -97,7 +97,8 @@ class User extends Model
         );
     }
 
-    protected function state(): Attribute {
+    protected function state(): Attribute
+    {
         return Attribute::make(
             set: fn($value) => $value instanceof State ? $value : State::tryFrom($value)
         );
@@ -112,16 +113,15 @@ class User extends Model
     }
 
 
-    protected function postal_code(): Attribute
-    {
+    protected function postalCode(): Attribute { 
         return Attribute::make(
             get: fn(string $value) => Crypt::decryptString($value),
             set: fn(string $value) => Crypt::encryptString($value),
         );
-    }
+     }
 
-    protected function postalCode(): Attribute { return $this->postal_code(); }
-    protected function type(): Attribute {
+    protected function type(): Attribute
+    {
         return Attribute::make(
             set: fn($value) => $value instanceof Account ? $value : Account::tryFrom($value)
         );

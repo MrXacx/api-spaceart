@@ -21,6 +21,7 @@ class Artist extends User
         'cpf',
         'art',
         'birthday',
+        'wage',
     ];
 
     protected $hidden = ['cpf'];

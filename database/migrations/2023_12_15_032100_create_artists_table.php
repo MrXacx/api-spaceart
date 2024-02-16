@@ -17,6 +17,7 @@ return new class extends Migration
             $table->enum('art', Art::values());
             $table->float('wage', places: 2, unsigned: true);
             $table->string('cpf')->unique();
+            $table->date('birthday');
             $table->timestamps();
         });
     }

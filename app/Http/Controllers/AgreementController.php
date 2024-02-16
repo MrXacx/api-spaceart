@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Agreement;
 use Symfony\Component\HttpFoundation\Request;
 
-class AgreementController extends Controller
+class AgreementController extends IController
 {
     /**
      * Display a listing of the resource.

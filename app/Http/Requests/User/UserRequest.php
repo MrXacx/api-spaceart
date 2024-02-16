@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\User;
 
-abstract class UserRequest extends \App\Http\Requests\Request
+abstract class UserRequest extends \App\Http\Requests\IRequest
 {
     /**
      * Get the validation rules that apply to the request.

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Selective;
 use Illuminate\Http\Request;
 
-class SelectiveController extends Controller
+class SelectiveController extends IController
 {
     /**
      * Display a listing of the resource.

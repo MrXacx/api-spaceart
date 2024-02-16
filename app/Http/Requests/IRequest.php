@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Validator;
 
-abstract class Request extends \Illuminate\Foundation\Http\FormRequest
+abstract class IRequest extends \Illuminate\Foundation\Http\FormRequest
 {
   final protected function habitualBodyRules(): array
   {

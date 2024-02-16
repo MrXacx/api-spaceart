@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SelectiveCandidate;
 use Illuminate\Http\Request;
 
-class SelectiveCandidateController extends Controller
+class SelectiveCandidateController extends IController
 {
     /**
      * Display a listing of the resource.

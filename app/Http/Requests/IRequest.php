@@ -9,8 +9,8 @@ abstract class IRequest extends \Illuminate\Foundation\Http\FormRequest
   final protected function habitualBodyRules(): array
   {
     return [
-      'id' => 'required|int',
-      'token' => 'required|string',
+      'id' => ['required', 'int'],
+      'token' => ['required','string'],
     ];
   }
 

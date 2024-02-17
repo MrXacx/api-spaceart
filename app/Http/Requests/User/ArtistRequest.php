@@ -9,21 +9,20 @@ class ArtistRequest extends UserRequest
     return array_merge(
       parent::store(),
       [
-        'cpf' => 'required|cpf',
-        'birthday' => 'required|string',
-        'art' => 'required|string',
-        'wage' => 'required|numeric',
+        'cpf' => ['required', 'cpf'],
+        'birthday' => ['required', 'string'],
+        'art' => ['required', 'string'],
+        'wage' => ['required', 'numeric'],
       ]);
   }
 
   protected function update(): array
   {
     return array_merge(
-      parent::rules(),
+      parent::update(),
       [
-        'art' => 'nullable|string',
-        'wage' => 'nullable|numeric',
-      ]
-    );
+      'art' => 'string',
+      'wage' => 'numeric',
+    ]);
   }
 }

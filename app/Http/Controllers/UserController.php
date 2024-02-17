@@ -60,23 +60,18 @@ class UserController extends IController
             );
 
             $user = new User($requestParameters);
+            $account = $user->type == Account::ARTIST ? new Artist : new Enterprise;
+            $account->fill($requestParameters)->id = $user->id; // build artist or enterprise
+            
+            DB::transaction(function() use ($user, $account) {
+                $user->save();
+                $account->id = $user->id;
+                $account->save();
+            });
 
-            if ($user->save()) { // Resume if insert works
-
-                $specificUser = $user->type == Account::ARTIST ? new Artist : new Enterprise;
-                $specificUser->fill($requestParameters)->id = $user->id; // build artist or enterprise
-
-                if ($specificUser->save()) { // Resume if insert works
-                    DB::commit();
-                    $request->id = $user->id;
-                    $request->token = $user->token;
-                    return $this->show($request);
-                }
-
-            }
-
-            DB::rollBack();
-            throw new Exception("Usuário não foi criado");
+            $request->id = $user->id;
+            $request->token = $user->token;
+            return $this->show($request);
 
         } catch (Exception $e) {
             return response()->json($e->getMessage(), options: JSON_INVALID_UTF8_IGNORE);

@@ -171,6 +171,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\RegexProvider::class,
+        App\Providers\ResponseProvider::class,
     ])->toArray(),
 
     /*

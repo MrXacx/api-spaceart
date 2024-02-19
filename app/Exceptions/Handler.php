@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
+use App\Services\ResponseService;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
+
     /**
      * The list of the inputs that are never flashed to the session on validation exceptions.
      *
@@ -20,13 +23,13 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
-    /**
-     * Register the exception handling callbacks for the application.
-     */
-    public function register(): void
+
+    public function render($request, Throwable $e)
     {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
+        $serviceResponse = ResponseService::make();
+        return $e instanceof DBQueryException || $e instanceof HttpRequestException ?
+        $serviceResponse->sendError($e->getMessage()) :
+        $serviceResponse->sendError("Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/", status: 500);
     }
+    
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Services\ResponseService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -16,6 +17,8 @@ abstract class IController extends \Illuminate\Routing\Controller
 {
     use AuthorizesRequests;
     use ValidatesRequests;
+
+    public function __construct(protected ResponseService $responseService){}
 
     /**
      * Display the all resources.

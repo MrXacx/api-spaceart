@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Exception;
-use App\Models\User;
-use App\Models\Artist;
-use Enumerate\Account;
-use App\Models\Enterprise;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
-use App\Http\Requests\User\ArtistRequest;
-use App\Models\ViewModels\ArtistUserView;
 use App\Exceptions\NotFoundRecordException;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Database\Eloquent\Collection;
-use App\Http\Requests\User\EnterpriseRequest;
-use App\Models\ViewModels\EnterpriseUserView;
 use App\Exceptions\UnprocessableEntityException;
+use App\Http\Requests\User\ArtistRequest;
+use App\Http\Requests\User\EnterpriseRequest;
+use App\Models\Artist;
+use App\Models\Enterprise;
+use App\Models\User;
+use App\Models\ViewModels\ArtistUserView;
+use App\Models\ViewModels\EnterpriseUserView;
 use App\Services\Clients\PostalCodeClientService;
+use Enumerate\Account;
+use Exception;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends IController
 {
@@ -29,7 +29,7 @@ class UserController extends IController
         return match (Account::tryFrom((string) $request->type)) { // Find correct request for account type
             Account::ARTIST => ArtistRequest::createFrom($request),
             Account::ENTERPRISE => EnterpriseRequest::createFrom($request),
-            default => UnprocessableEntityException::throw("Account type not found."),
+            default => UnprocessableEntityException::throw('Account type not found.'),
         };
     }
 
@@ -43,7 +43,6 @@ class UserController extends IController
 
     public function store(FormRequest $request): User|JsonResponse
     {
-
         $request = $this->handleFormRequest($request);
         $errors = $request->validate();
 
@@ -71,8 +70,8 @@ class UserController extends IController
 
             $request->id = $user->id;
             $request->token = $user->token;
-            return $this->show($request);
 
+            return $this->show($request);
         } catch (Exception $e) {
             return response()->json($e->getMessage(), options: JSON_INVALID_UTF8_IGNORE);
         }
@@ -86,7 +85,7 @@ class UserController extends IController
             default => new User
         };
 
-        $user = $user->findOr($request->id, fn() => NotFoundRecordException::throw("user $request->id were not found")); // Fetch by PK
+        $user = $user->findOr($request->id, fn () => NotFoundRecordException::throw("user $request->id were not found")); // Fetch by PK
         $user->makeVisibleIf($request->token !== null && $user->token === $request->token, ['phone', 'cnpj', 'cpf']);
 
         /* if () {
@@ -113,7 +112,7 @@ class UserController extends IController
                 $request->all(),
                 $addressData
             ),
-            fn($item) => !is_null($item)
+            fn ($item) => ! is_null($item)
         );
 
         DB::transaction(function () use ($user, $userData) {
@@ -128,24 +127,19 @@ class UserController extends IController
         return $this->show($request);
     }
 
-
     public function destroy(FormRequest $request): JsonResponse
     {
-
         $user = User::where([
             'id' => $request->id,
             'token' => $request->token,
         ]);
 
         if ($user->delete()) {
-
             $message = "The user $request->id were not deleted";
-
         } else {
             $message = "The user $request->id were deleted";
         }
 
         return response()->json(['message' => $message]);
-
     }
 }

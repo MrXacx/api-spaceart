@@ -14,4 +14,3 @@ enum Art: string
     case PAINTING = 'painting';
     case SCULPTURE = 'sculpture';
 }
-

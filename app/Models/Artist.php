@@ -5,7 +5,6 @@ namespace App\Models;
 use Enumerate\Art;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Crypt;
 
 class Artist extends User
@@ -39,14 +38,15 @@ class Artist extends User
     protected function cpf(): Attribute
     {
         return Attribute::make(
-            get: fn(string $value) => Crypt::decryptString($value),
-            set: fn(string $value) => Crypt::encryptString($value)
+            get: fn (string $value) => Crypt::decryptString($value),
+            set: fn (string $value) => Crypt::encryptString($value)
         );
     }
 
-    protected function art(): Attribute {
+    protected function art(): Attribute
+    {
         return Attribute::make(
-            set: fn($value) => $value instanceof Art ? $value : Art::tryFrom($value)
+            set: fn ($value) => $value instanceof Art ? $value : Art::tryFrom($value)
         );
     }
 }

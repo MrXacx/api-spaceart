@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\User\CreateArtistRequest;
 use App\Models\Rate;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class RateController extends IController

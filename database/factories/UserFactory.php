@@ -25,7 +25,7 @@ class UserFactory extends FakerFactory
             'city' => $this->faker->city,
             'postal_code' => preg_replace('/[^0-9]/', '', $this->faker->postcode()),
             'type' => Account::get(array_rand(Account::cases(), 1)),
-            'phone' => preg_replace('/[\s)(-]/', '',$this->faker->phoneNumber),
+            'phone' => preg_replace('/[\s)(-]/', '', $this->faker->phoneNumber),
             'image' => $this->faker->imageUrl(350, 350, 'person', true),
         ];
     }

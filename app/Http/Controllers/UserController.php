@@ -62,8 +62,8 @@ class UserController extends IController
             $user = new User($requestParameters);
             $account = $user->type == Account::ARTIST ? new Artist : new Enterprise;
             $account->fill($requestParameters)->id = $user->id; // build artist or enterprise
-            
-            DB::transaction(function() use ($user, $account) {
+
+            DB::transaction(function () use ($user, $account) {
                 $user->save();
                 $account->id = $user->id;
                 $account->save();
@@ -129,8 +129,23 @@ class UserController extends IController
     }
 
 
-    public function destroy(FormRequest $user): JsonResponse
+    public function destroy(FormRequest $request): JsonResponse
     {
-        return response()->json($user);
+
+        $user = User::where([
+            'id' => $request->id,
+            'token' => $request->token,
+        ]);
+
+        if ($user->delete()) {
+
+            $message = "The user $request->id were not deleted";
+
+        } else {
+            $message = "The user $request->id were deleted";
+        }
+
+        return response()->json(['message' => $message]);
+
     }
 }

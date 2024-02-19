@@ -39,7 +39,6 @@ class UserController extends IController
      */
     public function list(): Collection|JsonResponse
     {
-        throw Exception("ex");
         return $this->responseService->sendMessage("Lista de usuário encontrada", User::all()->toArray());
     }
 

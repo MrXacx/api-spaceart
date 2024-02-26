@@ -19,7 +19,7 @@ Route::prefix('user')
             })->whereNumber('id');
 
             Route::name('alias.')->group(function () {
-                Route::get('/update/{id}', fn ($token) => redirect()->route( // GET: host/user/update/{token}
+                Route::get('/update/{id}', fn ($id) => redirect()->route( // GET: host/user/update/{token}
                     'user.update',
                     parameters: ['id' => $id],
                     headers: ['method' => 'PUT']

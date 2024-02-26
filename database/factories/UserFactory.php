@@ -20,7 +20,7 @@ class UserFactory extends FakerFactory
         return [
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
-            'password' => $this->faker->password,
+            'password' => "Senha@10",
             'state' => State::get(array_rand(State::cases(), 1)),
             'city' => $this->faker->city,
             'postal_code' => preg_replace('/[^0-9]/', '', $this->faker->postcode()),

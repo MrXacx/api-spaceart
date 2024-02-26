@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Enumerate\Account;
 use Enumerate\State;
+use Enumerate\Account;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Crypt;
 
-class User extends Model
+class User extends Authenticatable 
 {
     use HasFactory;
 
@@ -56,13 +55,6 @@ class User extends Model
         'type' => Account::class,
         'state' => State::class,
     ];
-
-    protected function password(): Attribute
-    {
-        return Attribute::make(
-            set: fn (string $password) => Crypt::encryptString($password),
-        );
-    }
 
     protected function token(): Attribute
     {

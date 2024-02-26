@@ -14,9 +14,7 @@ use App\Models\User;
 use App\Models\ViewModels\ArtistUserView;
 use App\Models\ViewModels\EnterpriseUserView;
 use App\Services\Clients\PostalCodeClientService;
-use App\Services\ResponseService;
 use Enumerate\Account;
-use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
@@ -85,7 +83,7 @@ class UserController extends IController
         $user = $user->findOr($request->id, fn() => NotFoundRecordException::throw("User $request->id not found")); // Fetch by PK
         $user->makeVisibleIf($request->token !== null && $user->token === $request->token, ['phone', 'cnpj', 'cpf']);
 
-        return $this->responseService->sendMessage("Search finished without errors", $user);
+        return $this->responseService->sendMessage("Search finished without errors", [$user]);
     }
 
     public function update(FormRequest $request): JsonResponse

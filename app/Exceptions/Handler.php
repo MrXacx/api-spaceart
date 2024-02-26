@@ -7,6 +7,8 @@ namespace App\Exceptions;
 use App\Services\ResponseService;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Log\Logger;
+use Psr\Log\LoggerInterface;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -27,9 +29,18 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $e)
     {
         $serviceResponse = ResponseService::make();
-        return $e instanceof DBQueryException || $e instanceof HttpRequestException ?
-        $serviceResponse->sendError($e->getMessage()) :
-        $serviceResponse->sendError("Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/", status: 500);
+        if ($e instanceof DBQueryException || $e instanceof HttpRequestException) {
+            return $serviceResponse->sendError($e->getMessage());
+        }
+        return $serviceResponse
+            ->sendError(
+                "Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/",
+                [
+                    $e->getMessage(),
+                    $e->getTraceAsString(),
+                ],
+                500
+            );
     }
-    
+
 }

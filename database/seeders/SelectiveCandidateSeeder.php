@@ -14,14 +14,6 @@ class SelectiveCandidateSeeder extends Seeder
      */
     public function run(): void
     {
-        Selective::all()->each(fn (Selective $selective) => Artist::all()
-            ->each(
-                fn (Artist $artist) => SelectiveCandidate::factory()
-                    ->create([
-                        'artist' => $artist->id,
-                        'selective' => $selective->id,
-                    ])
-            )
-        );
+        SelectiveCandidate::factory(10)->create();
     }
 }

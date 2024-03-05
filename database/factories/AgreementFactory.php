@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Artist;
+use App\Models\Enterprise;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,8 +20,15 @@ class AgreementFactory extends Factory
     {
         $maxTime = $this->faker->dateTimeBetween('+1 month', '+1 year');
 
+        $artist = Artist::find(Artist::pluck('id')->random());
+
         return [
-            'description' => $this->faker->text,
+            'artist_id' => $artist->id,
+            'enterprise_id' => Enterprise::pluck('id')->random(),
+            'art_id' => $artist->art_id,
+            'price' => $artist->wage,
+
+            'note' => $this->faker->text,
             'date' => $maxTime->format('Y-m-d'),
             'start_time' => $this->faker->time(max: $maxTime->format('H:i:s')),
             'end_time' => $maxTime->format('H:i:s'),

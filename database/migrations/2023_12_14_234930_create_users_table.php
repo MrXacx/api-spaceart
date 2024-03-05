@@ -17,22 +17,27 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id('id');
-            $table->uuid('token')->unique()->default(new Expression('(UUID())'));
-            $table->enum('type', Account::values());
-            $table->string('email')->unique();
-            $table->string('phone');
-            $table->text('password');
+            $table->id();
+
             $table->string('name');
-            $table->longText('image')->nullable();
+            $table->string('email')->unique();
+            $table->string('phone')->unique();
+            $table->text('password');
+            $table->enum('type', Account::values());
+            $table->boolean('active')->default(true);
+            
             $table->text('postal_code');
             $table->enum('state', State::values());
             $table->string('city');
             $table->text('neighborhood')->nullable();
-            $table->text('address')->nullable();
-            $table->string('website')->nullable();
+            $table->text('street')->nullable();
+            $table->text('address_complement')->nullable();
+            
+            $table->longText('image')->nullable();
             $table->float('rate', 3, 2, true)->default(0.00);
-            $table->text('description')->nullable();
+            $table->string('slug')->nullable();
+            $table->text('biography')->nullable();
+
             $table->timestamps();
         });
     }

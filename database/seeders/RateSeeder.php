@@ -13,15 +13,9 @@ class RateSeeder extends Seeder
      */
     public function run(): void
     {
-        Agreement::all()->each(function (Agreement $agreement) {
-            Rate::factory()->create([
-                'agreement' => $agreement->id,
-                'author' => $agreement->hirer,
-            ]);
-            Rate::factory()->create([
-                'agreement' => $agreement->id,
-                'author' => $agreement->hired,
-            ]);
-        });
+        Agreement::all()->random()->each(fn($a) => Rate::factory(1)->create([
+            'user_id' => array_rand([$a->artist_id, $a->enterprise_id]),
+            'agreement_id' => $a->id,
+        ]));
     }
 }

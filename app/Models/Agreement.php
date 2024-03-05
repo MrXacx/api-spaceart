@@ -10,14 +10,33 @@ class Agreement extends Model
     use HasFactory;
 
     protected $fillable = [
-        'hirer',
-        'hired',
-        'description',
+        'enterprise_id',
+        'artist_id',
+        'note',
         'date',
         'start_time',
         'end_time',
         'price',
-        'art',
+        'art_id',
         'status',
     ];
+
+    protected $cast = [
+        'date' => 'date',
+        'start_time' => 'time',
+        'end_time' => 'time',
+    ];
+
+    protected function enterprise()
+    {
+        return $this->belongsTo(Art::class, 'enterprise_id');
+    }
+    protected function artist()
+    {
+        return $this->belongsTo(Art::class, 'artist_id');
+    }
+    protected function art()
+    {
+        return $this->belongsTo(Art::class, 'art_id');
+    }
 }

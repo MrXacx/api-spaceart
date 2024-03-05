@@ -1,12 +1,12 @@
 <?php
 
-use Enumerate\Art;
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Art;
+use App\Models\Enterprise;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,13 +14,16 @@ return new class extends Migration
     {
         Schema::create('selectives', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('owner')->references('id')->on('enterprises')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(Enterprise::class)->cascadeOnDelete()->cascadeOnUpdate();
+
+            $table->string('title');
+            $table->foreignIdFor(Art::class)->cascadeOnUpdate();
             $table->float('price', places: 2, unsigned: true);
+            $table->text('note')->nullable();
+
             $table->dateTime('start_moment');
             $table->dateTime('end_moment');
-            $table->enum('art', Art::values());
-            $table->text('description')->nullable();
+
             $table->timestamps();
         });
     }

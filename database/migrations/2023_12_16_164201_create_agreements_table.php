@@ -1,10 +1,12 @@
 <?php
 
+use App\Models\Art;
+use App\Models\Artist;
+use App\Models\Enterprise;
 use Enumerate\AgreementStatus;
-use Enumerate\Art;
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -15,15 +17,20 @@ return new class extends Migration
     {
         Schema::create('agreements', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('hired')->references('id')->on('artists')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('hirer')->references('id')->on('enterprises')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->text('description');
+
+            $table->foreignIdFor(Artist::class)->cascadeOnUpdate();
+            $table->foreignIdFor(Enterprise::class)->cascadeOnUpdate();
+
+            $table->text('note');
+            
             $table->date('date');
             $table->time('start_time');
             $table->time('end_time');
-            $table->enum('art', Art::values());
-            $table->enum('status', AgreementStatus::values())->default(AgreementStatus::SEND->value);
+
+            $table->foreignIdFor(Art::class)->cascadeOnUpdate();
             $table->float('price', places: 2, unsigned: true);
+            $table->enum('status', AgreementStatus::values())->default(AgreementStatus::SEND->value);
+            
             $table->timestamps();
         });
     }

@@ -14,16 +14,6 @@ class AgreementSeeder extends Seeder
      */
     public function run(): void
     {
-        $enterprises = Enterprise::all();
-
-        Artist::all()
-            ->each(
-                fn (Artist $artist) => Agreement::factory()->create([
-                    'hired' => $artist->id,
-                    'hirer' => $enterprises->random()->id,
-                    'art' => $artist->art,
-                    'price' => $artist->wage,
-                ])
-            );
+        Agreement::factory(10)->create();
     }
 }

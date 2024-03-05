@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class User extends Authenticatable 
+class User extends Authenticatable
 {
     use HasFactory;
 
@@ -22,16 +22,20 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'active',
         'email',
-        'password',
         'phone',
-        'image',
+        'password',
+        'type',
         'postal_code',
         'state',
         'city',
         'neighborhood',
-        'address',
-        'type',
+        'street',
+        'address_complement',
+        'image',
+        'slug',
+        'biography',
     ];
 
     /**
@@ -41,7 +45,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        //'token',
         'phone',
     ];
 
@@ -56,64 +59,41 @@ class User extends Authenticatable
         'state' => State::class,
     ];
 
-    protected function token(): Attribute
+
+    protected function password(): Attribute
     {
-        return Attribute::make(
-            set: fn (string $value) => Crypt::encryptString($value),
-        );
+        return Attribute::make(set: fn(string $value) => bcrypt($value));
     }
 
-    protected function email(): Attribute
+    protected function addressComplement(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => Crypt::decryptString($value),
-            set: fn (string $value) => Crypt::encryptString($value),
-        );
-    }
-
-    protected function address(): Attribute
-    {
-        return Attribute::make(
-            get: fn (?string $value) => $value ? Crypt::decryptString($value) : null,
-            set: fn (string $value) => Crypt::encryptString($value),
+            get: fn(?string $value) => $value ? Crypt::decryptString($value) : null,
+            set: fn(string $value) => Crypt::encryptString($value),
         );
     }
 
     protected function neighborhood(): Attribute
     {
         return Attribute::make(
-            get: fn (?string $value) => ! is_null($value) ? Crypt::decryptString($value) : null,
-            set: fn (string $value) => Crypt::encryptString($value),
-        );
-    }
-
-    protected function state(): Attribute
-    {
-        return Attribute::make(
-            set: fn ($value) => $value instanceof State ? $value : State::tryFrom($value)
+            get: fn(?string $value) => !is_null($value) ? Crypt::decryptString($value) : null,
+            set: fn(string $value) => Crypt::encryptString($value),
         );
     }
 
     protected function phone(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => Crypt::decryptString($value),
-            set: fn (string $value) => Crypt::encryptString($value),
+            get: fn(string $value) => Crypt::decryptString($value),
+            set: fn(string $value) => Crypt::encryptString($value),
         );
     }
 
     protected function postalCode(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => Crypt::decryptString($value),
-            set: fn (string $value) => Crypt::encryptString($value),
-        );
-    }
-
-    protected function type(): Attribute
-    {
-        return Attribute::make(
-            set: fn ($value) => $value instanceof Account ? $value : Account::tryFrom($value)
+            get: fn(string $value) => Crypt::decryptString($value),
+            set: fn(string $value) => Crypt::encryptString($value),
         );
     }
 }

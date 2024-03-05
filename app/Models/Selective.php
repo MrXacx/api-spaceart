@@ -12,13 +12,26 @@ class Selective extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'owner', 'start_moment', 'end_moment', 'art', 'description', 'price',
+        'title',
+        'enterprise_id',
+        'start_moment',
+        'end_moment',
+        'art_id',
+        'note',
+        'price',
     ];
 
+    protected $cast = [
+        'start_moment' => 'datetime',
+        'end_moment' => 'datetime',
+    ];
+
+    protected function enterprise()
+    {
+        return $this->belongsTo(Art::class, 'enterprise_id');
+    }
     protected function art()
     {
-        return Attribute::make(
-            get: fn (string $art) => Art::tryFrom($art),
-        );
+        return $this->belongsTo(Art::class, 'art_id');
     }
 }

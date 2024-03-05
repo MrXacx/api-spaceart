@@ -1,9 +1,10 @@
 <?php
 
-use Enumerate\Art;
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Art;
+use App\Models\User;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -13,11 +14,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('artists', function (Blueprint $table) {
-            $table->foreignId('id')->unique()->references('id')->on('users')->cascadeOnDelete()->cascadeOnDelete();
-            $table->enum('art', Art::values());
-            $table->float('wage', places: 2, unsigned: true);
+            $table->foreignIdFor(User::class, 'id')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->primary('id');
+
             $table->string('cpf')->unique();
             $table->date('birthday');
+
+            $table->foreignIdFor(Art::class)->cascadeOnUpdate();
+
+            $table->float('wage', places: 2, unsigned: true);
+
             $table->timestamps();
         });
     }

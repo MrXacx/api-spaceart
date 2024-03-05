@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Agreement;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,8 +19,9 @@ class RateFactory extends Factory
     public function definition(): array
     {
         return [
+            
             'score' => $this->faker->randomFloat(2, 0, 5),
-            'description' => $this->faker->text,
+            'note' => $this->faker->text,
         ];
     }
 }

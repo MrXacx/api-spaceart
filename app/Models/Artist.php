@@ -5,9 +5,10 @@ namespace App\Models;
 use Enumerate\Art;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Crypt;
 
-class Artist extends User
+class Artist extends Model
 {
     use HasFactory;
 
@@ -17,8 +18,9 @@ class Artist extends User
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'cpf',
-        'art',
+        'art_id',
         'birthday',
         'wage',
     ];
@@ -32,7 +34,6 @@ class Artist extends User
      */
     protected $casts = [
         'birthday' => 'date',
-        'art' => Art::class,
     ];
 
     protected function cpf(): Attribute
@@ -43,10 +44,13 @@ class Artist extends User
         );
     }
 
-    protected function art(): Attribute
+    protected function user()
     {
-        return Attribute::make(
-            set: fn ($value) => $value instanceof Art ? $value : Art::tryFrom($value)
-        );
+        return $this->belongsTo(User::class, 'id');
+    }
+
+    protected function art()
+    {
+        return $this->belongsTo(Art::class, 'art_id');
     }
 }

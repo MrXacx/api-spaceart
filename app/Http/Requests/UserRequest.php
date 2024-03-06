@@ -1,9 +1,16 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests;
 
-abstract class UserRequest extends \App\Http\Requests\IRequest
+use Illuminate\Foundation\Http\FormRequest;
+
+class UserRequest extends FormRequest
 {
+    protected function authorize()
+    {
+        return true;
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -12,10 +19,10 @@ abstract class UserRequest extends \App\Http\Requests\IRequest
     public function rules(): array
     {
         return match ($this->method()) {
-            'GET' => $this->habitualBodyRules(),
+            'GET' => ['id' => ['required', 'int']],
             'POST' => $this->store(),
             'PUT' => $this->update(),
-            'DELETE' => $this->habitualBodyRules(),
+            default => []
         };
     }
 
@@ -23,12 +30,11 @@ abstract class UserRequest extends \App\Http\Requests\IRequest
     {
         return [
             'name' => ['required', 'string', 'min:3', 'max:30'],
-            'email' => ['required', 'email', 'unique:users,email'],
+            'email' => ['required', 'email', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
             'phone' => ['required', 'phone'],
             'image' => ['required', 'string'],
             'postal_code' => ['required', 'postal_code'],
-            'address' => ['string'],
             'type' => ['required', 'string'],
         ];
     }
@@ -36,15 +42,12 @@ abstract class UserRequest extends \App\Http\Requests\IRequest
     protected function update(): array
     {
         return [
-            'id' => ['required', 'int'],
-            'token' => ['required', 'string'],
-            'type' => ['required', 'string'],
-            'name' => ['nullable', 'string', 'min:3', 'max:30'],
-            'password' => ['nullable', 'string', 'min:8'],
-            'phone' => ['nullable', 'phone'],
-            'image' => ['nullable', 'string'],
-            'postal_code' => ['nullable', 'postal_code'],
-            'address' => ['nullable', 'string'],
+            'name' => ['string', 'min:3', 'max:30'],
+            'password' => ['string', 'min:8'],
+            'phone' => ['phone'],
+            'image' => ['string'],
+            'postal_code' => ['postal_code'],
+            'address' => ['string'],
         ];
     }
 }

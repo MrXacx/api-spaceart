@@ -19,6 +19,7 @@ abstract class IController extends \Illuminate\Routing\Controller
 
     public function __construct(protected ResponseService $responseService)
     {
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
     }
 
     /**

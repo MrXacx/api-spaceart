@@ -11,22 +11,25 @@ use App\Models\Enterprise;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\ArtistRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
-use App\Http\Requests\ArtistRequest;
-use App\Exceptions\NotFoundRecordException;
 use App\Http\Requests\EnterpriseRequest;
+use App\Exceptions\NotFoundRecordException;
+use Illuminate\Foundation\Http\FormRequest;
 use App\Exceptions\UnprocessableEntityException;
 use App\Services\Clients\PostalCodeClientService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class UserController extends IController
 {
-    private function suitRequestRecursive(Request $request): void
+    use AuthorizesRequests;
+    private function suitRequest(Request $request): FormRequest
     {
-        $request = match (Account::tryFrom((string) $request->type)) { // Find correct request for account type
-            Account::ARTIST => ArtistRequest::createFrom($request),
-            Account::ENTERPRISE => EnterpriseRequest::createFrom($request),
+        return match (Account::tryFrom((string) $request->type)) { // Find correct request for account type
+            Account::ARTIST => app()->make(ArtistRequest::class, $request->all()),
+            Account::ENTERPRISE => app()->make(EnterpriseRequest::class, $request->all()),
             default => UnprocessableEntityException::throw('Account type not found'),
         };
     }
@@ -38,9 +41,7 @@ class UserController extends IController
     {
         return $this->responseService->sendMessage(
             "Lista de usuário encontrada",
-            User::all()
-                ->filter(fn($u) => $u->active)
-                ->toArray()
+            User::where('active', true)->get()->toArray()
         );
     }
 
@@ -59,10 +60,7 @@ class UserController extends IController
             NotFoundRecordException::throw("User $id not found");
         }
 
-        dd(auth()->user());
-
         $user->makeVisibleIf(auth()->user()?->id === $id, ['phone', 'cnpj', 'cpf']);
-
         return $user;
     }
 
@@ -77,13 +75,7 @@ class UserController extends IController
 
     public function store(Request $request): JsonResponse|RedirectResponse
     {
-        $this->suitRequestRecursive($request);
-
-        /*$errors = $request->validate();
-
-        if ($errors) {
-            return $this->responseService->sendError("Falha na validação", $errors);
-        }*/
+        $request = $this->suitRequest($request);
 
         $addressData = PostalCodeClientService::make()->get($request->postal_code); // Fetch city and state
 
@@ -112,28 +104,22 @@ class UserController extends IController
 
     public function update(Request $request): JsonResponse|RedirectResponse
     {
-        $this->suitRequestRecursive($request);
+        $request = $this->suitRequest($request);
+        $userData = $request->validated(); // Get all validated data
 
-        /*if ($errors = $request->validate()) {
-             return $this->responseService->sendError("Validate failed", $errors);
-         }*/
+        if ($request->exists('postal_code')) { // Fetch information derived from the zip code
+            $userData = $userData + (array) PostalCodeClientService::make()->get($request->postal_code)->getData();
+        }
 
-        $account = $this->fetch(auth()->user()->id, [
-            'type' => auth()->user()->type
-        ]);
-
-        $addressData = $request->exists('postal_code') ? (array) PostalCodeClientService::make()->get($request->postal_code)->getData() : [];
-
-        $userData = array_filter(
-            array_merge(
-                $request->all(),
-                $addressData
-            ),
-            fn($item) => !is_null($item),
+        $account = $this->fetch( // Fetch user
+            (string) auth()->user()->id,
+            [
+                'type' => auth()->user()->type
+            ]
         );
 
-        $account->fill($userData);
-        $account->user->fill($userData);
+        $account->fill($userData); // Fill artist/enterprise
+        $account->user->fill($userData); // Fill general user
 
 
         DB::transaction(function () use ($account) {
@@ -147,6 +133,11 @@ class UserController extends IController
     public function destroy(Request $request): JsonResponse|RedirectResponse
     {
         $user = User::find(auth()->user()->id);
+        $user->fill([
+            'image' => null,
+            'slug' => null,
+            'active' => false
+        ]);
         $user->active = false;
 
         return $user->save() ?

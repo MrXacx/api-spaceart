@@ -9,9 +9,8 @@ use App\Http\Controllers\UserController;
 
 
 Route::get('/auth', [AuthController::class, 'authenticate'])->name('auth');
-Route::resource('/user', UserController::class, [
-    'except' => ['edit']
-]);
+
+Route::apiResource('/user', UserController::class);
 Route::prefix('/user')->name('user.alt.')->group(function() {
    Route::get('/update', fn(Request $request) => redirect()->route('user.update', $request->all()))->name('update');
    Route::get('/delete', fn(Request $request) => redirect()->route('user.destroy', $request->all()))->name('destroy');

@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UserRequest extends FormRequest
 {
-    protected function authorize()
+    public function authorize()
     {
         return true;
     }
@@ -42,6 +42,7 @@ class UserRequest extends FormRequest
     protected function update(): array
     {
         return [
+            'type' => ['required', 'string'],
             'name' => ['string', 'min:3', 'max:30'],
             'password' => ['string', 'min:8'],
             'phone' => ['phone'],

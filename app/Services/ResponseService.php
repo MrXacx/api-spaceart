@@ -2,56 +2,37 @@
 
 namespace App\Services;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 
 class ResponseService
 {
-
-  private JsonResponse $response;
-
 
   public static function make(): self
   {
     return new ResponseService;
   }
 
-  public static function from(JsonResponse $response): self {
-    $service = static::make();
-    $service->response = $response;
-    return $service;
-  }
-
-  public function resend(): JsonResponse {
-    return $this->response;
-  }
-
   private function send(array $response, int $status = 200)
   {
-    return $this->response = response()->json($response, $status, [], JSON_PRETTY_PRINT);
+    return response()->json($response, $status, [], JSON_PRETTY_PRINT);
   }
 
-  public function updateResponseMessage(string $message): void
-  {
-    $this->response->setData(array_merge(
-      (array) $this->response->getData(),
-      ["message" => $message],
-    ));
-
-  }
-
-  public function sendMessage(string $message, array $data = []): JsonResponse
+  public function sendMessage(string $message, array|Model $data = [], int $status = 200): JsonResponse
   {
     return $this->send([
       "message" => $message,
-      "data" => $data,
+      "data" => is_array($data) ? $data : [$data],
+      "errors" => [],
       "fails" => false
-    ]);
+    ], $status);
   }
 
   public function sendError(string $message, array $errors = [], int $status = 422): JsonResponse
   {
     return $this->send([
       "message" => $message,
+      "data" => [],
       "errors" => $errors,
       "fails" => true
     ], $status);

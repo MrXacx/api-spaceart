@@ -2,38 +2,17 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthController;
+use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
-Route::prefix('user')
-    ->name('user.')
-    ->group(
-        function () {
-            Route::get('/', [UserController::class, 'list'])->name('list'); // GET: host/user
-            Route::post('/', [UserController::class, 'store'])->name('store'); // POST: host/user
 
-            Route::prefix('/{id}')->group(function () {
-                Route::get('/{type?}', [UserController::class, 'show'])->name('show'); // GET: host/user/{id}/{type?}
-                Route::put('/', [UserController::class, 'update'])->name('update');  // PUT: host/user/{token}
-                Route::delete('/', [UserController::class, 'destroy'])->name('delete'); // DELETE: host/user/{token}
-            })->whereNumber('id');
-
-            Route::name('alias.')->group(function () {
-                Route::get('/update/{id}', fn ($id) => redirect()->route( // GET: host/user/update/{token}
-                    'user.update',
-                    parameters: ['id' => $id],
-                    headers: ['method' => 'PUT']
-                ))
-                    ->whereNumber('id')
-                    ->name('update');
-
-                Route::get('/delete/{id}', fn ($id) => redirect()->route(
-                    'user.delete',
-                    parameters: ['id' => $id],
-                    headers: ['method' => 'PUT']
-                )) // GET: host/user/update/{token}
-                    ->whereNumber('id')
-                    ->name('delete');
-            });
-        }
-    );
+Route::get('/auth', [AuthController::class, 'authenticate'])->name('auth');
+Route::resource('/user', UserController::class, [
+    'except' => ['edit']
+]);
+Route::prefix('/user')->name('user.alt.')->group(function() {
+   Route::get('/update', fn(Request $request) => redirect()->route('user.update', $request->all()))->name('update');
+   Route::get('/delete', fn(Request $request) => redirect()->route('user.destroy', $request->all()))->name('destroy');
+});

@@ -8,42 +8,44 @@ use App\Services\ResponseService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 abstract class IController extends \Illuminate\Routing\Controller
 {
-    use AuthorizesRequests;
-    use ValidatesRequests;
+    use AuthorizesRequests, ValidatesRequests;
 
-    public function __construct(protected ResponseService $responseService){}
+    public function __construct(protected ResponseService $responseService)
+    {
+    }
 
     /**
      * Display the all resources.
      *
      * @return Collection<Model>
      */
-    abstract protected function list(): Collection|JsonResponse;
+    abstract public function index(): JsonResponse|RedirectResponse;
 
+    abstract protected function fetch(string $id, array $options = []): Model;
     /**
      * Display the specified resource.
      */
-    abstract protected function show(Request $request): Model|JsonResponse;
+    abstract public function show(Request $request): JsonResponse|RedirectResponse;
 
     /**
      * Store a newly created resource in storage.
      */
-    abstract protected function store(FormRequest $request): Model|JsonResponse;
+    abstract public function store(Request $request): JsonResponse|RedirectResponse;
 
     /**
      * Update the specified resource in storage.
      */
-    abstract protected function update(FormRequest $request): Model|JsonResponse;
+    abstract public function update(Request $request): JsonResponse|RedirectResponse;
 
     /**
      * Remove the specified resource from storage.
      */
-    abstract protected function destroy(FormRequest $request): JsonResponse;
+    abstract public function destroy(Request $request): JsonResponse|RedirectResponse;
 }

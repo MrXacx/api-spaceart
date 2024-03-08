@@ -21,19 +21,25 @@ class Agreement extends Model
         'status',
     ];
 
+    protected $hidden = [
+        'enterprise_id',
+        'artist_id',
+        'art_id',
+    ];
+
     protected $cast = [
-        'date' => 'date',
-        'start_time' => 'time',
-        'end_time' => 'time',
+        'date' => 'date:d/m/Y',
+        'start_time' => 'time:H:i',
+        'end_time' => 'time:H:i',
     ];
 
     protected function enterprise()
     {
-        return $this->belongsTo(Art::class, 'enterprise_id');
+        return $this->belongsTo(Enterprise::class, 'enterprise_id');
     }
     protected function artist()
     {
-        return $this->belongsTo(Art::class, 'artist_id');
+        return $this->belongsTo(Artist::class, 'artist_id');
     }
     protected function art()
     {

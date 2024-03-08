@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Traits\HasHiddenTimestamps;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Art extends Model
 {
-    use HasFactory;
+    use HasFactory, HasHiddenTimestamps;
 
     protected $table = 'arts';
 }

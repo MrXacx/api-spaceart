@@ -3,14 +3,15 @@
 namespace App\Models;
 
 use Enumerate\Art;
+use App\Models\Traits\HasHiddenTimestamps;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Crypt;
 
 class Artist extends Model
 {
-    use HasFactory;
+    use HasFactory, HasHiddenTimestamps;
 
     /**
      * The attributes that are mass assignable.
@@ -25,7 +26,9 @@ class Artist extends Model
         'wage',
     ];
 
-    protected $hidden = ['cpf'];
+    protected $hidden = [
+        'cpf',
+    ];
 
     /**
      * The attributes that should be cast.
@@ -33,14 +36,14 @@ class Artist extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'birthday' => 'date',
+        'birthday' => 'date:d/m/Y',
     ];
 
     protected function cpf(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => Crypt::decryptString($value),
-            set: fn (string $value) => Crypt::encryptString($value)
+            get: fn(string $value) => Crypt::decryptString($value),
+            set: fn(string $value) => Crypt::encryptString($value)
         );
     }
 

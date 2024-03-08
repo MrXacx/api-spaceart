@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Enumerate\Art;
+use App\Models\Traits\HasHiddenTimestamps;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 class Selective extends Model
 {
-    use HasFactory;
+    use HasFactory, HasHiddenTimestamps;
 
     protected $fillable = [
         'title',
@@ -21,9 +22,10 @@ class Selective extends Model
         'price',
     ];
 
+
     protected $cast = [
-        'start_moment' => 'datetime',
-        'end_moment' => 'datetime',
+        'start_moment' => 'datetime:d/m/Y H:i:s',
+        'end_moment' => 'datetime:d/m/Y H:i:s',
     ];
 
     protected function enterprise()

@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Traits\HasHiddenTimestamps;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class SelectiveCandidate extends Model
 {
-    use HasFactory;
+    use HasFactory, HasHiddenTimestamps;
 
     protected $fillable = ['artist_id', 'selective_id'];
 

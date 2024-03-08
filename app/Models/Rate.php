@@ -2,18 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Traits\HasHiddenTimestamps;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Rate extends Model
 {
-    use HasFactory;
+    use HasFactory, HasHiddenTimestamps;
 
     protected $fillable = [
         'user_id',
         'agreement_id',
         'score',
         'note',
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
     ];
 
     protected function user()

@@ -6,15 +6,16 @@ namespace App\Models;
 
 use Enumerate\State;
 use Enumerate\Account;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
+use App\Models\Traits\HasHiddenTimestamps;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory;
+    use HasApiTokens, HasFactory, HasHiddenTimestamps;
 
     /**
      * The attributes that are mass assignable.

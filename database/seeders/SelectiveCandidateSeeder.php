@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Artist;
-use App\Models\Selective;
 use App\Models\SelectiveCandidate;
 use Illuminate\Database\Seeder;
 

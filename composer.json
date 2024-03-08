@@ -27,8 +27,7 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
-            "Enumerate\\": "enums/",
-            "Enumerate\\Extension\\": "enums/traits/"
+            "Enumerate\\": "enums/"
         }
     },
     "autoload-dev": {

@@ -12,6 +12,6 @@ class ResponseProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->app->bind(ResponseService::class, fn() => ResponseService::make());
+        $this->app->bind(ResponseService::class, fn () => ResponseService::make());
     }
 }

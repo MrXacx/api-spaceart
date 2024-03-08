@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Enumerate\State;
-use Enumerate\Account;
-use Laravel\Sanctum\HasApiTokens;
 use App\Models\Traits\HasHiddenTimestamps;
-use Illuminate\Support\Facades\Crypt;
+use Enumerate\Account;
+use Enumerate\State;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Crypt;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -61,41 +61,40 @@ class User extends Authenticatable
         'state' => State::class,
     ];
 
-
     protected function password(): Attribute
     {
-        return Attribute::make(set: fn(string $value) => bcrypt($value));
+        return Attribute::make(set: fn (string $value) => bcrypt($value));
     }
 
     protected function addressComplement(): Attribute
     {
         return Attribute::make(
-            get: fn(?string $value) => $value ? Crypt::decryptString($value) : null,
-            set: fn(string $value) => Crypt::encryptString($value),
+            get: fn (?string $value) => $value ? Crypt::decryptString($value) : null,
+            set: fn (string $value) => Crypt::encryptString($value),
         );
     }
 
     protected function neighborhood(): Attribute
     {
         return Attribute::make(
-            get: fn(?string $value) => !is_null($value) ? Crypt::decryptString($value) : null,
-            set: fn(string $value) => Crypt::encryptString($value),
+            get: fn (?string $value) => ! is_null($value) ? Crypt::decryptString($value) : null,
+            set: fn (string $value) => Crypt::encryptString($value),
         );
     }
 
     protected function phone(): Attribute
     {
         return Attribute::make(
-            get: fn(string $value) => Crypt::decryptString($value),
-            set: fn(string $value) => Crypt::encryptString($value),
+            get: fn (string $value) => Crypt::decryptString($value),
+            set: fn (string $value) => Crypt::encryptString($value),
         );
     }
 
     protected function postalCode(): Attribute
     {
         return Attribute::make(
-            get: fn(string $value) => Crypt::decryptString($value),
-            set: fn(string $value) => Crypt::encryptString($value),
+            get: fn (string $value) => Crypt::decryptString($value),
+            set: fn (string $value) => Crypt::encryptString($value),
         );
     }
 }

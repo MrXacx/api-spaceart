@@ -2,7 +2,7 @@
 
 namespace Enumerate;
 
-use Enumerate\Extension\BackedEnumTrait;
+use Enumerate\Traits\BackedEnumTrait;
 
 enum Art: string
 {

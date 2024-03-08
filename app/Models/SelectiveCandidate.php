@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use App\Models\Traits\HasHiddenTimestamps;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class SelectiveCandidate extends Model
 {
@@ -16,6 +16,7 @@ class SelectiveCandidate extends Model
     {
         return $this->belongsTo(Artist::class, 'artist_id');
     }
+
     protected function selective()
     {
         return $this->belongsTo(Selective::class, 'selective_id');

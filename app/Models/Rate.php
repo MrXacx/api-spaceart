@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use App\Models\Traits\HasHiddenTimestamps;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Rate extends Model
 {
@@ -26,6 +26,7 @@ class Rate extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
     protected function agreement()
     {
         return $this->belongsTo(Agreement::class, 'agreement_id');

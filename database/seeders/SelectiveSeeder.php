@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Enterprise;
 use App\Models\Selective;
 use Illuminate\Database\Seeder;
 

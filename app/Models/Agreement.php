@@ -37,10 +37,12 @@ class Agreement extends Model
     {
         return $this->belongsTo(Enterprise::class, 'enterprise_id');
     }
+
     protected function artist()
     {
         return $this->belongsTo(Artist::class, 'artist_id');
     }
+
     protected function art()
     {
         return $this->belongsTo(Art::class, 'art_id');

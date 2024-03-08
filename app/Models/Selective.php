@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use Enumerate\Art;
 use App\Models\Traits\HasHiddenTimestamps;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Enumerate\Art;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Selective extends Model
 {
@@ -22,7 +21,6 @@ class Selective extends Model
         'price',
     ];
 
-
     protected $cast = [
         'start_moment' => 'datetime:d/m/Y H:i:s',
         'end_moment' => 'datetime:d/m/Y H:i:s',
@@ -32,6 +30,7 @@ class Selective extends Model
     {
         return $this->belongsTo(Art::class, 'enterprise_id');
     }
+
     protected function art()
     {
         return $this->belongsTo(Art::class, 'art_id');

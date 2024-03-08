@@ -5,15 +5,11 @@ declare(strict_types=1);
 namespace App\Exceptions;
 
 use App\Services\ResponseService;
-use Illuminate\Contracts\Container\Container;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Log\Logger;
-use Psr\Log\LoggerInterface;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
-
     /**
      * The list of the inputs that are never flashed to the session on validation exceptions.
      *
@@ -25,19 +21,18 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
-
     public function render($request, Throwable $e)
     {
         $serviceResponse = ResponseService::make();
         if ($e instanceof DBQueryException || $e instanceof HttpRequestException) {
             return $serviceResponse->sendError($e->getMessage());
         }
+
         return $serviceResponse
             ->sendError(
-                "Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/",
+                'Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/',
                 [$e->getMessage()],
                 500
             );
     }
-
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 use Enumerate\Account;
 use Enumerate\State;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
@@ -25,14 +24,14 @@ return new class extends Migration
             $table->text('password');
             $table->enum('type', Account::values());
             $table->boolean('active')->default(true);
-            
+
             $table->text('postal_code');
             $table->enum('state', State::values());
             $table->string('city');
             $table->text('neighborhood')->nullable();
             $table->text('street')->nullable();
             $table->text('address_complement')->nullable();
-            
+
             $table->longText('image')->nullable();
             $table->float('rate', 3, 2, true)->default(0.00);
             $table->string('slug')->nullable();

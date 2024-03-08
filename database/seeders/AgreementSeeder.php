@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Agreement;
-use App\Models\Artist;
-use App\Models\Enterprise;
 use Illuminate\Database\Seeder;
 
 class AgreementSeeder extends Seeder

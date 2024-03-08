@@ -16,7 +16,7 @@ class AgreementRequest extends FormRequest
 
     public function rules(): array
     {
-        return match($this->getMethod()) {
+        return match ($this->getMethod()) {
             'GET','DELETE' => ['id' => ['required', 'numeric']],
             'POST' => $this->store(),
             'PUT' => $this->update(),
@@ -35,6 +35,7 @@ class AgreementRequest extends FormRequest
             'end_time' => ['required', 'string'],
         ];
     }
+
     private function update(): array
     {
         return [

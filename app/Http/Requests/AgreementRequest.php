@@ -43,6 +43,7 @@ class AgreementRequest extends FormRequest
             'date' => ['string'],
             'start_time' => ['string'],
             'end_time' => ['string'],
+            'status' => ['required', 'string'],
         ];
     }
 }

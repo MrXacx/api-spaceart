@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasHiddenTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Agreement extends Model
 {
-    use HasFactory;
+    use HasFactory, HasHiddenTimestamps;
 
     protected $fillable = [
         'enterprise_id',

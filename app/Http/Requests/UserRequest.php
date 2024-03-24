@@ -19,10 +19,9 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return match ($this->method()) {
-            'GET' => ['id' => ['required', 'int']],
+            'GET','DELETE' => [],
             'POST' => $this->store(),
-            'PUT' => $this->update(),
-            default => []
+            'PUT' => $this->update()
         };
     }
 

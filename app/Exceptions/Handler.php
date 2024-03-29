@@ -31,7 +31,7 @@ class Handler extends ExceptionHandler
         return $serviceResponse
             ->sendError(
                 'Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/',
-                [$e->getMessage()],
+                [$e->getMessage(), $e->getFile(), $e->getLine()],
                 500
             );
     }

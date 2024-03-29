@@ -15,7 +15,14 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, HasHiddenTimestamps;
+    use HasApiTokens, HasFactory, HasHiddenTimestamps {
+        HasHiddenTimestamps::__construct as hideTimestamps;
+    }
+
+    public function __construct(array $data = []) {
+        parent::__construct($data);
+        $this->hideTimestamps();
+    }
 
     /**
      * The attributes that are mass assignable.

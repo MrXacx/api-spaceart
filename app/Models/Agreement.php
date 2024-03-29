@@ -2,13 +2,22 @@
 
 namespace App\Models;
 
-use App\Models\Traits\HasHiddenTimestamps;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Traits\HasDatetimeAccessorAndMutator;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\HasHiddenTimestamps;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Agreement extends Model
 {
-    use HasFactory, HasHiddenTimestamps;
+    use HasFactory, HasHiddenTimestamps, HasDatetimeAccessorAndMutator{
+        HasHiddenTimestamps::__construct as private hideTimestamps;
+    }
+
+    public function __construct(array $attributes = []) {
+        parent::__construct($attributes);
+        $this->hideTimestamps();
+    }
 
     protected $fillable = [
         'enterprise_id',
@@ -28,11 +37,18 @@ class Agreement extends Model
         'art_id',
     ];
 
-    protected $cast = [
-        'date' => 'date:d/m/Y',
-        'start_time' => 'time:H:i',
-        'end_time' => 'time:H:i',
-    ];
+    protected function date(): Attribute
+    {
+        return $this->toDate();
+    }
+    protected function startTime(): Attribute
+    {
+        return $this->toTime();
+    }
+    protected function endTime(): Attribute
+    {
+        return $this->toTime();
+    }
 
     protected function enterprise()
     {

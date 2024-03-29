@@ -2,11 +2,13 @@
 
 namespace App\Models\Traits;
 
+/**
+ * Esconde os atributos created_at e updated_at
+ */
 trait HasHiddenTimestamps
 {
-    public function __construct(array $data = [])
+    public function __construct()
     {
-        parent::__construct($data);
         $this->hidden = array_merge($this->hidden, ['created_at', 'updated_at']);
     }
 }

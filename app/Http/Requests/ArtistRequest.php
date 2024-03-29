@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Enumerate\Art;
+use Illuminate\Validation\Rule;
+
 class ArtistRequest extends UserRequest
 {
     protected function store(): array
@@ -10,9 +13,9 @@ class ArtistRequest extends UserRequest
             parent::store(),
             [
                 'cpf' => ['required', 'cpf'],
-                'birthday' => ['required', 'string'],
-                'art' => ['required', 'string'],
-                'wage' => ['required', 'numeric'],
+                'birthday' => ['required', 'date_format:d/m/Y'],
+                'art' => ['required', Rule::enum(Art::class)],
+                'wage' => ['required', 'decimal:0,2'],
             ]);
     }
 
@@ -21,8 +24,8 @@ class ArtistRequest extends UserRequest
         return array_merge(
             parent::update(),
             [
-                'art' => 'string',
-                'wage' => 'numeric',
+                'art' => [Rule::enum(Art::class)],
+                'wage' => 'decimal:0,2',
             ]);
     }
 }

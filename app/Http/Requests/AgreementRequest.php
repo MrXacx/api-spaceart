@@ -17,7 +17,7 @@ class AgreementRequest extends FormRequest
     public function rules(): array
     {
         return match ($this->getMethod()) {
-            'GET','DELETE' => [],
+            'GET', 'DELETE' => [],
             'POST' => $this->store(),
             'PUT' => $this->update(),
         };
@@ -26,13 +26,13 @@ class AgreementRequest extends FormRequest
     private function store(): array
     {
         return [
-            'enterprise_id' => ['required', 'numeric'],
-            'artist_id' => ['required', 'numeric'],
-            'price' => ['required', 'numeric'],
+            'enterprise_id' => ['required', 'exists:enterprises,id'],
+            'artist_id' => ['required', 'exists:artists,id'],
+            'price' => ['required', 'decimal:0,2'],
             'note' => ['required', 'string'],
-            'date' => ['required', 'string'],
-            'start_time' => ['required', 'string'],
-            'end_time' => ['required', 'string'],
+            'date' => ['required', 'date_format:d/m/Y', 'after_or_equal:today'],
+            'start_time' => ['required', 'date_format:H:i'],
+            'end_time' => ['required', 'date_format:H:i', 'after:start_time'],
         ];
     }
 
@@ -40,9 +40,9 @@ class AgreementRequest extends FormRequest
     {
         return [
             'note' => ['string'],
-            'date' => ['string'],
-            'start_time' => ['string'],
-            'end_time' => ['string'],
+            'date' => ['date_format:d/m/Y', 'after_or_equal:today'],
+            'start_time' => ['required_with:date', 'date_format:H:i'],
+            'end_time' => ['required_with:date', 'date_format:H:i', 'after:start_time'],
             'status' => ['required', 'string'],
         ];
     }

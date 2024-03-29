@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Enumerate\Account;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserRequest extends FormRequest
@@ -34,14 +36,14 @@ class UserRequest extends FormRequest
             'phone' => ['required', 'phone'],
             'image' => ['required', 'string'],
             'postal_code' => ['required', 'postal_code'],
-            'type' => ['required', 'string'],
+            'type' => ['required',  Rule::enum(Account::class)],
         ];
     }
 
     protected function update(): array
     {
         return [
-            'type' => ['required', 'string'],
+            'type' => ['required', Rule::enum(Account::class)],
             'name' => ['string', 'min:3', 'max:30'],
             'password' => ['string', 'min:8'],
             'phone' => ['phone'],

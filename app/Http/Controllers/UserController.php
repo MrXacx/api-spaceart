@@ -41,7 +41,7 @@ class UserController extends IController
     public function index(): JsonResponse|RedirectResponse
     {
         return $this->responseService->sendMessage(
-            'Lista de usuário encontrada',
+            'Users found',
             User::where('active', true)->get()->toArray()
         );
     }

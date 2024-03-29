@@ -17,7 +17,7 @@ class AgreementController extends IController
     public function index(): JsonResponse|RedirectResponse
     {
         return $this->responseService->sendMessage(
-            'Lista de usuário encontrada',
+            'Agreements found',
             Agreement::with('art', 'artist', 'enterprise')
                 ->get()
                 ->toArray()

@@ -67,8 +67,7 @@ class UserController extends IController
 
     public function show(Request $request): JsonResponse|RedirectResponse
     {
-        $user = $this->fetch($request->user, ['type' => $request->type]);
-
+        $user = $this->fetch($request->id, ['type' => $request->type]);
         $message = Session::get('message', 'Search finished without errors');
 
         return $this->responseService->sendMessage($message, $user);

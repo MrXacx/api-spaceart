@@ -8,7 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Rate extends Model
 {
-    use HasFactory, HasHiddenTimestamps;
+    use HasFactory, HasHiddenTimestamps {
+        HasHiddenTimestamps::__construct as hideTimestamps;
+    }
+
+    public function __construct(array $data = [])
+    {
+        parent::__construct($data);
+        $this->hideTimestamps();
+    }
 
     protected $fillable = [
         'user_id',

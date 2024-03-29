@@ -11,7 +11,15 @@ use Illuminate\Support\Facades\Crypt;
 
 class Artist extends Model
 {
-    use HasFactory, HasHiddenTimestamps;
+    use HasFactory, HasHiddenTimestamps {
+        HasHiddenTimestamps::__construct as hideTimestamps;
+    }
+
+    public function __construct(array $data = [])
+    {
+        parent::__construct($data);
+        $this->hideTimestamps();
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -39,11 +47,16 @@ class Artist extends Model
         'birthday' => 'date:d/m/Y',
     ];
 
+    public function agreements()
+    {
+        return $this->hasMany(Agreement::class);
+    }
+
     protected function cpf(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => Crypt::decryptString($value),
-            set: fn (string $value) => Crypt::encryptString($value)
+            get: fn(string $value) => Crypt::decryptString($value),
+            set: fn(string $value) => Crypt::encryptString($value)
         );
     }
 

@@ -9,7 +9,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Selective extends Model
 {
-    use HasFactory, HasHiddenTimestamps;
+    use HasFactory, HasHiddenTimestamps {
+        HasHiddenTimestamps::__construct as hideTimestamps;
+    }
+
+    public function __construct(array $data = [])
+    {
+        parent::__construct($data);
+        $this->hideTimestamps();
+    }
 
     protected $fillable = [
         'title',

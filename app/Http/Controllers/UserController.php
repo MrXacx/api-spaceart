@@ -4,27 +4,34 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\NotFoundRecordException;
-use App\Exceptions\UnprocessableEntityException;
-use App\Http\Requests\ArtistRequest;
-use App\Http\Requests\EnterpriseRequest;
-use App\Models\Artist;
-use App\Models\Enterprise;
 use App\Models\User;
-use App\Services\Clients\PostalCodeClientService;
+use App\Models\Artist;
 use Enumerate\Account;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
+use App\Models\Enterprise;
 use Illuminate\Http\Request;
+use App\Services\ResponseService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\ArtistRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
+use App\Http\Requests\EnterpriseRequest;
+use App\Exceptions\NotFoundRecordException;
+use Illuminate\Foundation\Http\FormRequest;
+use App\Exceptions\UnprocessableEntityException;
+use App\Services\Clients\PostalCodeClientService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Routing\ControllerMiddlewareOptions;
 
 class UserController extends IController
 {
     use AuthorizesRequests;
+
+    protected function setSanctumMiddleware()
+    {
+        $this->middleware('auth:sanctum')->except('index', 'show', 'store');
+    }
 
     private function suitRequest(Request $request): FormRequest
     {
@@ -46,9 +53,9 @@ class UserController extends IController
         );
     }
 
-    protected function fetch(string $id, array $options = []): Model
+    protected function fetch(string $id, array $options = ['type' => 0]): Model
     {
-        $user = match (Account::tryFrom((string) $options['type'])) {
+        $user = match ($options['type']) {
             Account::ARTIST => new Artist,
             Account::ENTERPRISE => new Enterprise,
             default => new User
@@ -56,7 +63,7 @@ class UserController extends IController
 
         $user = $user::find($id); // Fetch by PK
 
-        if (! ($user?->active xor $user?->user?->active)) { // If $user is null or account is deactivate
+        if (!($user?->active xor $user?->user?->active)) { // If $user is null or account is deactivate
             NotFoundRecordException::throw("User $id not found");
         }
 
@@ -111,7 +118,7 @@ class UserController extends IController
         }
 
         $account = $this->fetch( // Fetch user
-            (string) auth()->user()->id,
+            $request->id,
             [
                 'type' => auth()->user()->type,
             ]
@@ -130,7 +137,7 @@ class UserController extends IController
 
     public function destroy(Request $request): JsonResponse|RedirectResponse
     {
-        $user = User::find(auth()->user()->id);
+        $user = User::find($request->id);
         $user->fill([
             'image' => null,
             'slug' => null,

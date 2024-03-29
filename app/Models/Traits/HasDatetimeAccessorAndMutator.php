@@ -15,7 +15,7 @@ trait HasDatetimeAccessorAndMutator
   {
     return Attribute::make(
       get: fn(string $datetime) => Carbon::parse($datetime)->format($accessorFormat),
-      set: fn(string $datetime) => Carbon::parse($datetime)->format($mutatorFormat),
+      set: fn(string $datetime) => Carbon::createFromFormat($accessorFormat, $datetime)->format($mutatorFormat),
     );
   }
 

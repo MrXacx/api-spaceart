@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\NotFoundRecordException;
-use App\Http\Requests\AgreementRequest;
+use App\Models\Art;
+use App\Models\User;
+use App\Models\Artist;
 use App\Models\Agreement;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\AgreementRequest;
+use Illuminate\Database\Eloquent\Model;
+use App\Exceptions\NotFoundRecordException;
 
 class AgreementController extends IController
 {
@@ -15,8 +18,8 @@ class AgreementController extends IController
     {
         return $this->responseService->sendMessage(
             'Lista de usuário encontrada',
-            Agreement::all()
-                //->filter(fn($a) => $a)
+            Agreement::with('art', 'artist', 'enterprise')
+                ->get()
                 ->toArray()
         );
     }
@@ -27,15 +30,15 @@ class AgreementController extends IController
         $agreement->art_id = $agreement->artist->art_id;
         $agreement->save();
 
-        return $this->responseService->sendMessage('Agreement', $agreement->toArray());
+        return $this->responseService->sendMessage('Agreement created', $agreement->toArray());
     }
 
     protected function fetch(string $id, array $options = []): Model
     {
-        return Agreement::findOr($id, fn () => NotFoundRecordException::throw("Agreement $id was not found"));
+        return Agreement::findOr($id, fn() => NotFoundRecordException::throw("Agreement $id was not found"));
     }
 
-    public function show(AgreementRequest $request): JsonResponse|RedirectResponse
+    public function show(AgreementRequest $request)//: JsonResponse|RedirectResponse
     {
         return $this->responseService->sendMessage(
             'Agreement found',

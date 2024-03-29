@@ -50,17 +50,17 @@ class Agreement extends Model
         return $this->toTime();
     }
 
-    protected function enterprise()
+    public function enterprise()
     {
         return $this->belongsTo(Enterprise::class, 'enterprise_id');
     }
 
-    protected function artist()
+    public function artist()
     {
         return $this->belongsTo(Artist::class, 'artist_id');
     }
 
-    protected function art()
+    public function art()
     {
         return $this->belongsTo(Art::class, 'art_id');
     }

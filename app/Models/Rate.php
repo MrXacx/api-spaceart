@@ -13,7 +13,7 @@ class Rate extends Model
         HasHiddenTimestamps::__construct as hideTimestamps;
     }
 
-    protected $primaryKey = ['agreement_id', 'user_id'];
+    protected $primaryKey = ['author_id', 'agreement_id'];
     public $incrementing = false;
 
 
@@ -32,7 +32,8 @@ class Rate extends Model
     ];
 
     protected $hidden = [
-        'user_id',
+        'author_id',
+        'rated_id',
         'agreement_id',
     ];
 

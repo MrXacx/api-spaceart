@@ -53,12 +53,11 @@ class UserController extends IController
         );
     }
 
-    protected function fetch(string $id, array $options = ['type' => 0]): Model
+    protected function fetch(string $id, Account $typeAccount): Model
     {
-        $user = match ($options['type']) {
+        $user = match ($typeAccount) {
             Account::ARTIST => new Artist,
-            Account::ENTERPRISE => new Enterprise,
-            default => new User
+            Account::ENTERPRISE => new Enterprise
         };
 
         $user = $user::find($id); // Fetch by PK
@@ -68,13 +67,12 @@ class UserController extends IController
         }
 
         $user->makeVisibleIf(auth()->user()?->id === $id, ['phone', 'cnpj', 'cpf']);
-
         return $user;
     }
 
     public function show(Request $request): JsonResponse|RedirectResponse
     {
-        $user = $this->fetch($request->id, ['type' => $request->type]);
+        $user = $this->fetch($request->id, Account::tryFrom($request->type));
         $message = Session::get('message', 'Search finished without errors');
 
         return $this->responseService->sendMessage($message, $user);
@@ -85,27 +83,20 @@ class UserController extends IController
         $request = $this->suitRequest($request);
 
         $addressData = PostalCodeClientService::make()->get($request->postal_code); // Fetch city and state
-
-        $requestParameters = array_merge( // Merge request data and zip code API response
-            $request->all(),
-            (array) $addressData->getData()
-        );
-
+        $requestParameters = $request->all() + (array) $addressData->getData(); // Merge request data and zip code API response
         $user = new User($requestParameters); // Build user
 
         DB::transaction(function () use ($requestParameters, $user) {
             $user->save(); // Insert on table
-
             $account = $user->type == Account::ARTIST ? new Artist : new Enterprise;
             $account->fill($requestParameters); // Fill artist or enterprise
             $account->id = $user->id;
             $account->save();
         });
 
-        return redirect()->route(
-            'user.show',
-            $user->id
-        )->with('message', "User $user->id was created");
+        return redirect()
+            ->route('user.show', $user->id)
+            ->with('message', "User $user->id was created");
     }
 
     public function update(Request $request): JsonResponse|RedirectResponse
@@ -114,16 +105,10 @@ class UserController extends IController
         $userData = $request->validated(); // Get all validated data
 
         if ($request->exists('postal_code')) { // Fetch information derived from the zip code
-            $userData = $userData + (array) PostalCodeClientService::make()->get($request->postal_code)->getData();
+            $userData += (array) PostalCodeClientService::make()->get($request->postal_code)->getData();
         }
-
-        $account = $this->fetch( // Fetch user
-            $request->id,
-            [
-                'type' => auth()->user()->type,
-            ]
-        );
-
+        $account = $this->fetch($request->id, Account::tryFrom($userData['type'])); // Fetch user
+        
         $account->fill($userData); // Fill artist/enterprise
         $account->user->fill($userData); // Fill general user
 
@@ -132,7 +117,9 @@ class UserController extends IController
             $account->user->save();
         });
 
-        return redirect()->route('user.show', $account->user->only('id', 'type'))->with('message', "User $account->id was updated");
+        return redirect()
+            ->route('user.show', $account->user->only('id', 'type'))
+            ->with('message', "User $account->id was updated");
     }
 
     public function destroy(Request $request): JsonResponse|RedirectResponse

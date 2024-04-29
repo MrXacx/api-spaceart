@@ -32,6 +32,4 @@ abstract class IController extends \Illuminate\Routing\Controller
      * @return Collection<Model>
      */
     abstract public function index(): JsonResponse|RedirectResponse;
-
-    abstract protected function fetch(string $id, array $options = []): Model;
 }

@@ -28,12 +28,13 @@ class AgreementController extends IController
     {
         $agreement = new Agreement($request->validated());
         $agreement->art_id = $agreement->artist->art_id;
-        $agreement->save();
 
-        return $this->responseService->sendMessage('Agreement created', $agreement->toArray());
+        return $agreement->save() ?
+            $this->responseService->sendMessage('Agreement created', $agreement->toArray()) :
+            $this->responseService->sendError('Agreement not created');
     }
 
-    protected function fetch(string $id, array $options = []): Model
+    protected function fetch(string $id): Model
     {
         return Agreement::findOr($id, fn() => NotFoundRecordException::throw("Agreement $id was not found"));
     }
@@ -42,7 +43,7 @@ class AgreementController extends IController
     {
         return $this->responseService->sendMessage(
             'Agreement found',
-            $this->fetch($request->id)
+            $this->fetch($request->id)->toArray()
         );
     }
 
@@ -52,7 +53,7 @@ class AgreementController extends IController
         $agreement->fill($request->validated());
 
         return $agreement->save() ?
-            $this->responseService->sendMessage('Agreement updated', $agreement) :
+            $this->responseService->sendMessage('Agreement updated', $agreement->toArray()) :
             $this->responseService->sendError('Agreement not updated');
     }
 

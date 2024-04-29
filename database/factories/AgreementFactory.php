@@ -29,9 +29,9 @@ class AgreementFactory extends Factory
             'price' => $artist->wage,
 
             'note' => $this->faker->text,
-            'date' => $maxTime->format('Y-m-d'),
-            'start_time' => $this->faker->time(max: $maxTime->format('H:i:s')),
-            'end_time' => $maxTime->format('H:i:s'),
+            'date' => $maxTime->format('d/m/Y'),
+            'start_time' => $this->faker->time('H:i', $maxTime->format('H:i')),
+            'end_time' => $maxTime->format('H:i'),
         ];
     }
 }

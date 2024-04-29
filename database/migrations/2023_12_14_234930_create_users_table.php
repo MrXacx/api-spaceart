@@ -33,7 +33,7 @@ return new class extends Migration
             $table->text('address_complement')->nullable();
 
             $table->longText('image')->nullable();
-            $table->float('rate', 3, 2, true)->default(0.00);
+            $table->float('avg_rate', 3, 2, true)->default(0.00);
             $table->string('slug')->nullable();
             $table->text('biography')->nullable();
 

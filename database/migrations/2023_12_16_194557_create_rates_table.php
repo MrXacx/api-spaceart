@@ -14,7 +14,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('rates', function (Blueprint $table) {
-            $table->foreignIdFor(User::class)->cascadeOnUpdate();
+            $table->foreignIdFor(User::class, 'author_id')->cascadeOnUpdate();
+            $table->foreignIdFor(User::class, 'rated_id')->cascadeOnUpdate();
             $table->foreignIdFor(Agreement::class)->cascadeOnUpdate();
 
             $table->float('score', 3, 2, true);
@@ -22,7 +23,8 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->primary(['user_id', 'agreement_id']);
+            $table->primary(['author_id', 'agreement_id'], 'agreement_rate_pk');
+            $table->unique(['rated_id', 'agreement_id']);
         });
     }
 

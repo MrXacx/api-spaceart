@@ -17,7 +17,6 @@ class RateFactory extends Factory
     public function definition(): array
     {
         return [
-
             'score' => $this->faker->randomFloat(2, 0, 5),
             'note' => $this->faker->text,
         ];

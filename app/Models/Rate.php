@@ -5,12 +5,17 @@ namespace App\Models;
 use App\Models\Traits\HasHiddenTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Thiagoprz\CompositeKey\HasCompositeKey;
 
 class Rate extends Model
 {
-    use HasFactory, HasHiddenTimestamps {
+    use HasFactory, HasHiddenTimestamps, HasCompositeKey {
         HasHiddenTimestamps::__construct as hideTimestamps;
     }
+
+    protected $primaryKey = ['agreement_id', 'user_id'];
+    public $incrementing = false;
+
 
     public function __construct(array $data = [])
     {
@@ -19,23 +24,29 @@ class Rate extends Model
     }
 
     protected $fillable = [
-        'user_id',
+        'author_id',
+        'rated_id',
         'agreement_id',
         'score',
         'note',
     ];
 
     protected $hidden = [
-        'created_at',
-        'updated_at',
+        'user_id',
+        'agreement_id',
     ];
 
-    protected function user()
+    public function author()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'author_id');
     }
 
-    protected function agreement()
+    public function rated()
+    {
+        return $this->belongsTo(User::class, 'rated_id');
+    }
+
+    public function agreement()
     {
         return $this->belongsTo(Agreement::class, 'agreement_id');
     }

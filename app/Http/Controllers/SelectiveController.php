@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Selective;
-use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\IController;
-use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\SelectiveRequest;
-use Illuminate\Database\Eloquent\Model;
 use App\Exceptions\NotFoundRecordException;
+use App\Http\Requests\SelectiveRequest;
 use App\Models\Art as ModelsArt;
-use DateTime;
+use App\Models\Selective;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Date;
 
 class SelectiveController extends IController
@@ -36,7 +34,7 @@ class SelectiveController extends IController
 
     protected function fetch(string $id): Model
     {
-        return Selective::findOr($id, fn() => NotFoundRecordException::throw("Selective $id was not found"));
+        return Selective::findOr($id, fn () => NotFoundRecordException::throw("Selective $id was not found"));
     }
 
     public function show(SelectiveRequest $request): JsonResponse|RedirectResponse

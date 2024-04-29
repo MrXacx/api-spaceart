@@ -3,18 +3,19 @@
 namespace App\Models;
 
 use App\Models\Traits\HasDatetimeAccessorAndMutator;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\HasHiddenTimestamps;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Agreement extends Model
 {
-    use HasFactory, HasHiddenTimestamps, HasDatetimeAccessorAndMutator{
+    use HasDatetimeAccessorAndMutator, HasFactory, HasHiddenTimestamps{
         HasHiddenTimestamps::__construct as private hideTimestamps;
     }
 
-    public function __construct(array $attributes = []) {
+    public function __construct(array $attributes = [])
+    {
         parent::__construct($attributes);
         $this->hideTimestamps();
     }
@@ -41,10 +42,12 @@ class Agreement extends Model
     {
         return $this->toDate();
     }
+
     protected function startTime(): Attribute
     {
         return $this->toTime();
     }
+
     protected function endTime(): Attribute
     {
         return $this->toTime();

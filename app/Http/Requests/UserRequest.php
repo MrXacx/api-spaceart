@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use Enumerate\Account;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
 {

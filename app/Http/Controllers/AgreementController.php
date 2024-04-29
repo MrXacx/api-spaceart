@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Art;
-use App\Models\User;
-use App\Models\Artist;
+use App\Exceptions\NotFoundRecordException;
+use App\Http\Requests\AgreementRequest;
 use App\Models\Agreement;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\AgreementRequest;
-use Illuminate\Database\Eloquent\Model;
-use App\Exceptions\NotFoundRecordException;
 
 class AgreementController extends IController
 {
@@ -36,7 +33,7 @@ class AgreementController extends IController
 
     protected function fetch(string $id): Model
     {
-        return Agreement::findOr($id, fn() => NotFoundRecordException::throw("Agreement $id was not found"));
+        return Agreement::findOr($id, fn () => NotFoundRecordException::throw("Agreement $id was not found"));
     }
 
     public function show(AgreementRequest $request)//: JsonResponse|RedirectResponse

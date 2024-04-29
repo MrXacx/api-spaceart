@@ -42,6 +42,7 @@ class SelectiveRequest extends FormRequest
             'price' => ['required', 'decimal:0,2'],
         ];
     }
+
     private function update()
     {
         return [

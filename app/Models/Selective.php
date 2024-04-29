@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
-use App\Models\Art;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\HasDatetimeAccessorAndMutator;
 use App\Models\Traits\HasHiddenTimestamps;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use App\Models\Traits\HasDatetimeAccessorAndMutator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Selective extends Model
 {
-    use HasFactory, HasHiddenTimestamps, HasDatetimeAccessorAndMutator {
+    use HasDatetimeAccessorAndMutator, HasFactory, HasHiddenTimestamps {
         HasHiddenTimestamps::__construct as hideTimestamps;
     }
 
@@ -35,7 +34,7 @@ class Selective extends Model
         'enterprise_id',
         'art_id',
     ];
-    
+
     public function enterprise()
     {
         return $this->belongsTo(Enterprise::class, 'enterprise_id');
@@ -45,10 +44,12 @@ class Selective extends Model
     {
         return $this->belongsTo(Art::class, 'art_id');
     }
+
     protected function startMoment(): Attribute
     {
         return $this->toDatetime();
     }
+
     protected function endMoment(): Attribute
     {
         return $this->toDatetime();

@@ -19,7 +19,8 @@ class User extends Authenticatable
         HasHiddenTimestamps::__construct as hideTimestamps;
     }
 
-    public function __construct(array $data = []) {
+    public function __construct(array $data = [])
+    {
         parent::__construct($data);
         $this->hideTimestamps();
     }
@@ -109,6 +110,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Rate::class, 'author_id');
     }
+
     public function receivedRates()
     {
         return $this->hasMany(Rate::class, 'rated_id');

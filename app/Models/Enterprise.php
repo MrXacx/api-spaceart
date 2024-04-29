@@ -38,8 +38,8 @@ class Enterprise extends Model
     protected function cnpj(): Attribute
     {
         return Attribute::make(
-            get: fn(string $value) => Crypt::decryptString($value),
-            set: fn(string $value) => Crypt::encryptString($value)
+            get: fn (string $value) => Crypt::decryptString($value),
+            set: fn (string $value) => Crypt::encryptString($value)
         );
     }
 

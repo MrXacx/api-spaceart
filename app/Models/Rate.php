@@ -9,13 +9,13 @@ use Thiagoprz\CompositeKey\HasCompositeKey;
 
 class Rate extends Model
 {
-    use HasFactory, HasHiddenTimestamps, HasCompositeKey {
+    use HasCompositeKey, HasFactory, HasHiddenTimestamps {
         HasHiddenTimestamps::__construct as hideTimestamps;
     }
 
     protected $primaryKey = ['author_id', 'agreement_id'];
-    public $incrementing = false;
 
+    public $incrementing = false;
 
     public function __construct(array $data = [])
     {

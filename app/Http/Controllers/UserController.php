@@ -4,25 +4,23 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Artist;
-use Enumerate\Account;
-use App\Models\Enterprise;
-use Illuminate\Http\Request;
-use App\Services\ResponseService;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
-use App\Http\Requests\ArtistRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Session;
-use App\Http\Requests\EnterpriseRequest;
 use App\Exceptions\NotFoundRecordException;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Exceptions\UnprocessableEntityException;
+use App\Http\Requests\ArtistRequest;
+use App\Http\Requests\EnterpriseRequest;
+use App\Models\Artist;
+use App\Models\Enterprise;
+use App\Models\User;
 use App\Services\Clients\PostalCodeClientService;
+use Enumerate\Account;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Routing\ControllerMiddlewareOptions;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class UserController extends IController
 {
@@ -62,11 +60,12 @@ class UserController extends IController
 
         $user = $user::find($id); // Fetch by PK
 
-        if (!($user?->active xor $user?->user?->active)) { // If $user is null or account is deactivate
+        if (! ($user?->active xor $user?->user?->active)) { // If $user is null or account is deactivate
             NotFoundRecordException::throw("User $id not found");
         }
 
         $user->makeVisibleIf(auth()->user()?->id === $id, ['phone', 'cnpj', 'cpf']);
+
         return $user;
     }
 
@@ -108,7 +107,7 @@ class UserController extends IController
             $userData += (array) PostalCodeClientService::make()->get($request->postal_code)->getData();
         }
         $account = $this->fetch($request->id, Account::tryFrom($userData['type'])); // Fetch user
-        
+
         $account->fill($userData); // Fill artist/enterprise
         $account->user->fill($userData); // Fill general user
 

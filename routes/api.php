@@ -20,9 +20,9 @@ $apiControllers = [
 
 foreach ($apiControllers as $route => $class) {
     Route::apiResource("/$route", $class, ['parameters' => [$route => 'id']]);
-    Route::prefix("/$route")->name('user.alt.')->group(function () {
-        Route::get('/update/{id}', fn (Request $request) => redirect()->route($route.'.update', $request->all()))->name('update');
-        Route::get('/delete/{id}', fn (Request $request) => redirect()->route($route.'.destroy', $request->all()))->name('destroy');
+    Route::prefix("/$route")->name('user.alt.')->group(function () use ($route) {
+        Route::get('/update/{id}', fn (Request $request) => redirect()->route("$route.update", $request->all()))->name('update');
+        Route::get('/delete/{id}', fn (Request $request) => redirect()->route("$route.'.destroy", $request->all()))->name('destroy');
     });
 }
 

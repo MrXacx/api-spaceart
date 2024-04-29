@@ -29,4 +29,4 @@ foreach ($apiControllers as $route => $class) {
 
 }
 
-Route::apiResource('/agreement/{agreement}/rate', RateController::class, ['parameters' => ['rate' => 'user']]);
+Route::apiResource('/agreement/{agreement}/rate', RateController::class, ['parameters' => ['rate' => 'author']]);

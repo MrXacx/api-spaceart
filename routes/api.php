@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AgreementController;
+use App\Http\Controllers\RateController;
 use App\Http\Controllers\SelectiveController;
 
 Route::get('/auth', [AuthController::class, 'authenticate'])->name('auth');
@@ -28,3 +29,4 @@ foreach ($apiControllers as $route => $class) {
 
 }
 
+Route::apiResource('/agreement/{agreement}/rate', RateController::class, ['parameters' => ['rate' => 'user']]);

@@ -42,4 +42,9 @@ class Enterprise extends Model
             set: fn(string $value) => Crypt::encryptString($value)
         );
     }
+
+    public function agreements()
+    {
+        return $this->hasMany(Agreement::class, 'enterprise_id');
+    }
 }

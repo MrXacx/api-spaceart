@@ -104,4 +104,13 @@ class User extends Authenticatable
             set: fn (string $value) => Crypt::encryptString($value),
         );
     }
+
+    public function sendRates()
+    {
+        return $this->hasMany(Rate::class, 'author_id');
+    }
+    public function receivedRates()
+    {
+        return $this->hasMany(Rate::class, 'rated_id');
+    }
 }

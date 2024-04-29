@@ -64,4 +64,9 @@ class Agreement extends Model
     {
         return $this->belongsTo(Art::class, 'art_id');
     }
+
+    public function rates()
+    {
+        return $this->hasMany(Rate::class, 'agreement_id');
+    }
 }

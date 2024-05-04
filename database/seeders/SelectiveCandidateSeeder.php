@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Artist;
 use App\Models\SelectiveCandidate;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +13,11 @@ class SelectiveCandidateSeeder extends Seeder
      */
     public function run(): void
     {
-        SelectiveCandidate::factory(10)->create();
+        Artist::all()
+            ->random()
+            ->each(
+                fn(Artist $a) => SelectiveCandidate::factory(1)
+                    ->create(['artist_id' => $a->id])
+            );
     }
 }

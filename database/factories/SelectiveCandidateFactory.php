@@ -19,7 +19,6 @@ class SelectiveCandidateFactory extends Factory
     public function definition(): array
     {
         return [
-            'artist_id' => Artist::pluck('id')->random(),
             'selective_id' => Selective::pluck('id')->random(),
         ];
     }

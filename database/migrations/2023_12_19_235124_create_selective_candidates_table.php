@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignIdFor(Artist::class);
             $table->foreignIdFor(Selective::class);
             $table->timestamps();
+
+            $table->primary(['artist_id', 'selective_id']);
         });
     }
 

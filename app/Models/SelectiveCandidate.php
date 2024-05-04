@@ -14,7 +14,7 @@ class SelectiveCandidate extends Model
         HasHiddenTimestamps::__construct as hideTimestamps;
     }
 
-    protected $primary = ['artist_id', 'selective_id'];
+    protected $primaryKey = ['artist_id', 'selective_id'];
 
     public function __construct(array $data = [])
     {

@@ -47,15 +47,22 @@ class UserController extends IController
     {
         return $this->responseService->sendMessage(
             'Users found',
-            User::where('active', true)->get()->toArray()
+            User::with('sendRates', 'receivedRates')
+                ->where('active', true)
+                ->get()
+                ->toArray()
         );
     }
 
-    protected function fetch(string $id, Account $typeAccount): Model
+    /**
+     * @throws NotFoundRecordException
+     */
+    protected function fetch(string $id, ?Account $typeAccount): Model
     {
         $user = match ($typeAccount) {
             Account::ARTIST => new Artist,
-            Account::ENTERPRISE => new Enterprise
+            Account::ENTERPRISE => new Enterprise,
+            default => new User,
         };
 
         $user = $user::find($id); // Fetch by PK
@@ -66,15 +73,15 @@ class UserController extends IController
 
         $user->makeVisibleIf(auth()->user()?->id === $id, ['phone', 'cnpj', 'cpf']);
 
-        return $user;
+        return $user->withAllRelations();
     }
 
     public function show(Request $request): JsonResponse|RedirectResponse
     {
-        $user = $this->fetch($request->id, Account::tryFrom($request->type));
+        $user = $this->fetch($request->id, Account::tryFrom($request->type ?? ''));
         $message = Session::get('message', 'Search finished without errors');
 
-        return $this->responseService->sendMessage($message, $user);
+        return $this->responseService->sendMessage($message, $user->toArray());
     }
 
     public function store(Request $request): JsonResponse|RedirectResponse

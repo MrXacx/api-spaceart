@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\NotFoundRecordException;
 use App\Services\ResponseService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -29,10 +30,14 @@ abstract class ISubController extends \Illuminate\Routing\Controller
 
     /**
      * Display the all resources.
-     *
-     * @return Collection<Model>
      */
     abstract public function index(Request $request): JsonResponse|RedirectResponse;
 
+    /**
+     * @param string $serviceId
+     * @param string $userId
+     * @return Model
+     * @throws NotFoundRecordException
+     */
     abstract protected function fetch(string $serviceId, string $userId): Model;
 }

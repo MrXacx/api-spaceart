@@ -32,9 +32,12 @@ class SelectiveController extends IController
         return $this->responseService->sendMessage('Selective created', $selective->load('art')->toArray());
     }
 
+    /**
+     * @throws NotFoundRecordException
+     */
     protected function fetch(string $id): Model
     {
-        return Selective::findOr($id, fn () => NotFoundRecordException::throw("Selective $id was not found"));
+        return Selective::findOr($id, fn () => NotFoundRecordException::throw("Selective $id was not found"))->withAllRelations();
     }
 
     public function show(SelectiveRequest $request): JsonResponse|RedirectResponse

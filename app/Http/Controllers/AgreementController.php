@@ -31,9 +31,12 @@ class AgreementController extends IController
             $this->responseService->sendError('Agreement not created');
     }
 
+    /**
+     * @throws NotFoundRecordException
+     */
     protected function fetch(string $id): Model
     {
-        return Agreement::findOr($id, fn () => NotFoundRecordException::throw("Agreement $id was not found"));
+        return Agreement::findOr($id, fn () => NotFoundRecordException::throw("Agreement $id was not found"))->withAllRelations();
     }
 
     public function show(AgreementRequest $request)//: JsonResponse|RedirectResponse

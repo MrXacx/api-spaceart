@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\NotFoundRecordException;
 use App\Http\Requests\RateRequest;
 use App\Models\Rate;
 use Enumerate\Account;
@@ -17,7 +18,7 @@ class RateController extends ISubController
     {
         return $this->responseService->sendMessage(
             'Rates found',
-            Rate::with('user', 'agreement')
+            Rate::with('author', 'rated', 'agreement')
                 ->where('agreement_id', '=', $request->agreement)
                 ->get()
                 ->toArray()
@@ -46,16 +47,20 @@ class RateController extends ISubController
         return $this->responseService->sendError('Rate not created');
     }
 
+    /**
+     * @throws NotFoundRecordException
+     */
     protected function fetch(string $serviceId, string $userId): Model
     {
-        return Rate::find([$userId, $serviceId]);
+        $rate = Rate::find([$userId, $serviceId]);
+        return $rate ? $rate->withAllRelations() : NotFoundRecordException::throw("user $userId's rate was not found on agreement $serviceId");
     }
 
     public function show(RateRequest $request): JsonResponse|RedirectResponse
     {
         return $this->responseService->sendMessage(
             'Rate found',
-            $this->fetch($request->agreement, $request->user)->toArray()
+            $this->fetch($request->agreement, $request->author)->toArray()
         );
     }
 
@@ -72,7 +77,7 @@ class RateController extends ISubController
             if ($ratedUser->save()) {
                 DB::commit();
 
-                return $this->responseService->sendMessage('Rate updated', $rate->load('author', 'rated', 'agreement')->toArray());
+                return $this->responseService->sendMessage('Rate updated', $rate->toArray());
             }
         }
         DB::rollBack();

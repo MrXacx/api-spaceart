@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             AgreementSeeder::class,
             RateSeeder::class,
             SelectiveSeeder::class,
-            //SelectiveCandidateSeeder::class,
+            SelectiveCandidateSeeder::class,
         ]);
     }
 }

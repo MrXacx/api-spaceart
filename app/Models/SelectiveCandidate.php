@@ -2,15 +2,19 @@
 
 namespace App\Models;
 
-use App\Models\Traits\HasHiddenTimestamps;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\HasHiddenTimestamps;
+use Thiagoprz\CompositeKey\HasCompositeKey;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class SelectiveCandidate extends Model
 {
-    use HasFactory, HasHiddenTimestamps {
+    use HasFactory, HasHiddenTimestamps, HasCompositeKey {
         HasHiddenTimestamps::__construct as hideTimestamps;
     }
+
+    protected $primary = ['artist_id', 'selective_id'];
 
     public function __construct(array $data = [])
     {
@@ -19,6 +23,7 @@ class SelectiveCandidate extends Model
     }
 
     protected $fillable = ['artist_id', 'selective_id'];
+    protected $hidden = ['artist_id', 'selective_id'];
 
     protected function artist()
     {
@@ -28,5 +33,10 @@ class SelectiveCandidate extends Model
     protected function selective()
     {
         return $this->belongsTo(Selective::class, 'selective_id');
+    }
+
+    public function withAllRelations()
+    {
+        return $this->load('artist', 'selective');
     }
 }

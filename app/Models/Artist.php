@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Traits\HasHiddenTimestamps;
-use Enumerate\Art;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Art;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\HasHiddenTimestamps;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Artist extends Model
 {
@@ -36,6 +37,7 @@ class Artist extends Model
 
     protected $hidden = [
         'cpf',
+        'art_id'
     ];
 
     /**
@@ -47,26 +49,46 @@ class Artist extends Model
         'birthday' => 'date:d/m/Y',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id');
+    }
+
+    public function art()
+    {
+        return $this->belongsTo(Art::class);
+    }
+
     public function agreements()
     {
         return $this->hasMany(Agreement::class);
+    }
+    public function candidatures()
+    {
+        return $this->hasManyThrough(Selective::class, SelectiveCandidate::class, 'artist_id', 'id', 'id', 'artist_id');
     }
 
     protected function cpf(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => Crypt::decryptString($value),
-            set: fn (string $value) => Crypt::encryptString($value)
+            get: fn(string $value) => Crypt::decryptString($value),
+            set: fn(string $value) => Crypt::encryptString($value)
         );
     }
 
-    protected function user()
+    public function withAllRelations()
     {
-        return $this->belongsTo(User::class, 'id');
+        return $this->load('art', 'user', 'agreements', 'candidatures');
     }
 
-    protected function art()
+    public function toArray()
     {
-        return $this->belongsTo(Art::class, 'art_id');
+        $this->load('user', 'art');
+        
+        $artistArray = parent::toArray();
+        $userArray = $artistArray['user'];
+        unset($artistArray['user']);
+        
+        return  $artistArray + $userArray;
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\Traits\HasHiddenTimestamps;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\HasHiddenTimestamps;
 use Thiagoprz\CompositeKey\HasCompositeKey;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Rate extends Model
 {
@@ -50,5 +50,10 @@ class Rate extends Model
     public function agreement()
     {
         return $this->belongsTo(Agreement::class, 'agreement_id');
+    }
+
+    public function withAllRelations()
+    {
+        return $this->load('author', 'rated', 'agreement');
     }
 }

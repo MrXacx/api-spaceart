@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use App\Models\Traits\HasDatetimeAccessorAndMutator;
+use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\HasHiddenTimestamps;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Models\Traits\HasDatetimeAccessorAndMutator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 class Agreement extends Model
 {
-    use HasDatetimeAccessorAndMutator, HasFactory, HasHiddenTimestamps{
+    use HasDatetimeAccessorAndMutator, HasFactory, HasHiddenTimestamps {
         HasHiddenTimestamps::__construct as private hideTimestamps;
     }
 
@@ -38,21 +39,6 @@ class Agreement extends Model
         'art_id',
     ];
 
-    protected function date(): Attribute
-    {
-        return $this->toDate();
-    }
-
-    protected function startTime(): Attribute
-    {
-        return $this->toTime();
-    }
-
-    protected function endTime(): Attribute
-    {
-        return $this->toTime();
-    }
-
     public function enterprise()
     {
         return $this->belongsTo(Enterprise::class, 'enterprise_id');
@@ -71,5 +57,25 @@ class Agreement extends Model
     public function rates()
     {
         return $this->hasMany(Rate::class, 'agreement_id');
+    }
+
+    protected function date(): Attribute
+    {
+        return $this->toDate();
+    }
+
+    protected function startTime(): Attribute
+    {
+        return $this->toTime();
+    }
+
+    protected function endTime(): Attribute
+    {
+        return $this->toTime();
+    }
+
+    public function withAllRelations()
+    {
+        return $this->load('art', 'artist', 'enterprise', 'rates');
     }
 }

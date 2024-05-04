@@ -115,4 +115,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Rate::class, 'rated_id');
     }
+
+    public function withAllRelations()
+    {
+        return $this->load('sendRates', 'receivedRates');
+    }
 }

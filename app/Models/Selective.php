@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Traits\HasDatetimeAccessorAndMutator;
+use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\HasHiddenTimestamps;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Models\Traits\HasDatetimeAccessorAndMutator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 class Selective extends Model
 {
@@ -45,6 +46,11 @@ class Selective extends Model
         return $this->belongsTo(Art::class, 'art_id');
     }
 
+    public function candidates()
+    {
+        return $this->hasManyThrough(Artist::class, SelectiveCandidate::class, 'selective_id', 'id', 'id', 'artist_id');
+    }
+
     protected function startMoment(): Attribute
     {
         return $this->toDatetime();
@@ -53,5 +59,10 @@ class Selective extends Model
     protected function endMoment(): Attribute
     {
         return $this->toDatetime();
+    }
+
+    public function withAllRelations()
+    {
+        return $this->load('art', 'enterprise', 'candidates');
     }
 }

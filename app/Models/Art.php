@@ -9,6 +9,5 @@ use Illuminate\Database\Eloquent\Model;
 class Art extends Model
 {
     use HasFactory, HasHiddenTimestamps;
-
     protected $table = 'arts';
 }

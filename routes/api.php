@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\AgreementController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RateController;
+use App\Http\Controllers\SelectiveCandidateController;
 use App\Http\Controllers\SelectiveController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Client\Request;
@@ -27,3 +28,4 @@ foreach ($apiControllers as $route => $class) {
 }
 
 Route::apiResource('/agreement/{agreement}/rate', RateController::class, ['parameters' => ['rate' => 'author']]);
+Route::apiResource('/selective/{selective}/candidate', SelectiveCandidateController::class, ['except' => ['show', 'update', 'destroy']]);

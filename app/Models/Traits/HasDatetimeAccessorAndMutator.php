@@ -3,6 +3,7 @@
 namespace App\Models\Traits;
 
 use Carbon\Carbon;
+use Enumerate\TimeStringFormat;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 /**
@@ -10,8 +11,11 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
  */
 trait HasDatetimeAccessorAndMutator
 {
-    private function getDatetimeAccessorAndMutator(string $accessorFormat, string $mutatorFormat)
+    private function getDatetimeAccessorAndMutator(TimeStringFormat $accessorFormat, TimeStringFormat $mutatorFormat): Attribute
     {
+        $mutatorFormat = $mutatorFormat->value;
+        $accessorFormat = $accessorFormat->value;
+
         return Attribute::make(
             get: fn (string $datetime) => Carbon::parse($datetime)->format($accessorFormat),
             set: fn (string $datetime) => Carbon::createFromFormat($accessorFormat, $datetime)->format($mutatorFormat),
@@ -20,16 +24,21 @@ trait HasDatetimeAccessorAndMutator
 
     private function toDatetime(): Attribute
     {
-        return $this->getDatetimeAccessorAndMutator('d/m/Y H:i', 'Y-m-d H:i:s');
+        return $this->getDatetimeAccessorAndMutator(TimeStringFormat::DATE_TIME_FORMAT, TimeStringFormat::INTERNAL_DATE_TIME_FORMAT);
     }
 
     private function toDate(): Attribute
     {
-        return $this->getDatetimeAccessorAndMutator('d/m/Y', 'Y-m-d');
+        return $this->getDatetimeAccessorAndMutator(TimeStringFormat::DATE_FORMAT, TimeStringFormat::INTERNAL_DATE_FORMAT);
     }
 
     private function toTime(): Attribute
     {
-        return $this->getDatetimeAccessorAndMutator('H:i', 'H:i:s');
+        return $this->getDatetimeAccessorAndMutator(TimeStringFormat::TIME_FORMAT, TimeStringFormat::INTERNAL_TIME_FORMAT);
+    }
+
+    private function getCarbon(string $timeString, TimeStringFormat $format): Carbon
+    {
+        return Carbon::createFromFormat($format->value, $timeString);
     }
 }

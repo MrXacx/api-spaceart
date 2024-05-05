@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Enumerate\TimeStringFormat;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\HasHiddenTimestamps;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -54,6 +56,14 @@ class Selective extends Model
     protected function startMoment(): Attribute
     {
         return $this->toDatetime();
+    }
+
+    public function getActiveInterval(): array
+    {
+        return [
+            'start_moment' => $this->getCarbon($this->start_moment, TimeStringFormat::DATE_TIME_FORMAT),
+            'end_moment' => $this->getCarbon($this->end_moment, TimeStringFormat::DATE_TIME_FORMAT),
+        ];
     }
 
     protected function endMoment(): Attribute

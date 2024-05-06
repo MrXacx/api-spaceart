@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
-use Enumerate\TimeStringFormat;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Traits\HasHiddenTimestamps;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use App\Models\Traits\HasDatetimeAccessorAndMutator;
+use App\Models\Traits\HasHiddenTimestamps;
+use Enumerate\TimeStringFormat;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Selective extends Model
 {
@@ -38,22 +38,26 @@ class Selective extends Model
         'art_id',
     ];
 
-    public function enterprise()
+    public function enterprise(): BelongsTo
     {
         return $this->belongsTo(Enterprise::class, 'enterprise_id');
     }
 
-    public function art()
+    public function art(): BelongsTo
     {
         return $this->belongsTo(Art::class, 'art_id');
     }
-
-    public function candidates()
+    public function candidates(): HasManyThrough
     {
         return $this->hasManyThrough(Artist::class, SelectiveCandidate::class, 'selective_id', 'id', 'id', 'artist_id');
     }
 
     protected function startMoment(): Attribute
+    {
+        return $this->toDatetime();
+    }
+
+    protected function endMoment(): Attribute
     {
         return $this->toDatetime();
     }
@@ -66,12 +70,7 @@ class Selective extends Model
         ];
     }
 
-    protected function endMoment(): Attribute
-    {
-        return $this->toDatetime();
-    }
-
-    public function withAllRelations()
+    public function withAllRelations(): Selective
     {
         return $this->load('art', 'enterprise', 'candidates');
     }

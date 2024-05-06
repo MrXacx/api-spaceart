@@ -37,7 +37,7 @@ class RateController extends ISubController
         $ratedUser->avg_rate = $ratedUser->receivedRates->average(fn ($r) => $r->score);
 
         DB::beginTransaction();
-        if ($rate->save() & $ratedUser->save()) { // Executa se as queries forem funcionarem
+        if ($rate->save() && $ratedUser->save()) { // Executa se as queries forem funcionarem
             DB::commit(); // Confirma a persistência dos dados
 
             return $this->responseService->sendMessage('Rate created', $rate->load('author', 'rated', 'agreement')->toArray());

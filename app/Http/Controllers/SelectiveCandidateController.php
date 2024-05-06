@@ -39,13 +39,11 @@ class SelectiveCandidateController extends ISubController
 
         $activeInterval = $candidature->selective->getActiveInterval();
 
-        if (
-            Carbon::today()->isBetween($activeInterval['start_moment'], $activeInterval['end_moment']) &&
-            $candidature->save()
-        ) {
-            return $this->responseService->sendMessage('Candidature created', $candidature->toArray());
-        }
-
-        return $this->responseService->sendError('Candidature not created', ["selective $request->selective is closed"]);
+        return
+            Carbon::now('America/Sao_Paulo')
+                ->isBetween($activeInterval['start_moment'], $activeInterval['end_moment']) &&
+            $candidature->save() ?
+                $this->responseService->sendMessage('Candidature created', $candidature->toArray()) :
+                $this->responseService->sendError('Candidature not created', ["selective $request->selective is closed"]);
     }
 }

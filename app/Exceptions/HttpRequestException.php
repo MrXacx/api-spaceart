@@ -6,5 +6,7 @@ use Exception;
 
 abstract class HttpRequestException extends Exception
 {
-    abstract public static function throw($message);
+    public static function throw(string $message){
+        throw new static($message);
+    }
 }

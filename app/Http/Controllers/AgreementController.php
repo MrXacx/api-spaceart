@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\NotFoundRecordException;
+use App\Exceptions\NotSavedModelException;
 use App\Http\Requests\AgreementRequest;
 use App\Models\Agreement;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -26,9 +28,12 @@ class AgreementController extends IController
         $agreement = new Agreement($request->validated());
         $agreement->art_id = $agreement->artist->art_id;
 
-        return $agreement->save() ?
-            $this->responseService->sendMessage('Agreement created', $agreement->toArray()) :
-            $this->responseService->sendError('Agreement not created');
+        try {
+            throw_unless($agreement->save(), NotSavedModelException::class);
+            return $this->responseService->sendMessage('Agreement created', $agreement->toArray());
+        } catch (Exception $e) {
+            return $this->responseService->sendError('Agreement not created', [$e->getMessage()]);
+        }
     }
 
     /**
@@ -39,7 +44,7 @@ class AgreementController extends IController
         return Agreement::findOr($id, fn () => NotFoundRecordException::throw("Agreement $id was not found"))->withAllRelations();
     }
 
-    public function show(AgreementRequest $request)//: JsonResponse|RedirectResponse
+    public function show(AgreementRequest $request): JsonResponse//: JsonResponse|RedirectResponse
     {
         return $this->responseService->sendMessage(
             'Agreement found',
@@ -49,12 +54,15 @@ class AgreementController extends IController
 
     public function update(AgreementRequest $request): JsonResponse|RedirectResponse
     {
-        $agreement = $this->fetch($request->id);
-        $agreement->fill($request->validated());
+        $agreement = $this->fetch($request->id)->fill($request->validated());
 
-        return $agreement->save() ?
-            $this->responseService->sendMessage('Agreement updated', $agreement->toArray()) :
-            $this->responseService->sendError('Agreement not updated');
+        try {
+            throw_unless($agreement->save(), NotSavedModelException::class);
+
+            return $this->responseService->sendMessage('Agreement updated', $agreement->toArray());
+        } catch (Exception $e) {
+            return $this->responseService->sendError('Agreement not updated', [$e->getMessage()]);
+        }
     }
 
     public function destroy(AgreementRequest $request): JsonResponse|RedirectResponse

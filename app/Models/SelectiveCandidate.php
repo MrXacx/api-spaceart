@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Exceptions\CheckDBOperationException;
 use App\Models\Traits\HasHiddenTimestamps;
-use Thiagoprz\CompositeKey\HasCompositeKey;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Thiagoprz\CompositeKey\HasCompositeKey;
 
 class SelectiveCandidate extends Model
 {
-    use HasFactory, HasHiddenTimestamps, HasCompositeKey {
+    use HasCompositeKey, HasFactory, HasHiddenTimestamps {
         HasHiddenTimestamps::__construct as hideTimestamps;
     }
 
@@ -23,20 +25,43 @@ class SelectiveCandidate extends Model
     }
 
     protected $fillable = ['artist_id', 'selective_id'];
+
     protected $hidden = ['artist_id', 'selective_id'];
 
-    protected function artist()
+    protected function artist(): BelongsTo
     {
         return $this->belongsTo(Artist::class, 'artist_id');
     }
 
-    protected function selective()
+    protected function selective(): BelongsTo
     {
         return $this->belongsTo(Selective::class, 'selective_id');
     }
 
-    public function withAllRelations()
+    public function withAllRelations(): SelectiveCandidate
     {
         return $this->load('artist', 'selective');
+    }
+
+    /**
+     * @param array $options
+     * @return bool
+     * @throws CheckDBOperationException
+     */
+    public function save(array $options = []): bool
+    {
+        throw_unless(
+            $this->artist->user->active,
+            new CheckDBOperationException("The artist's account $this->artist_id is disabled")
+        );
+
+        $activeInterval = $this->selective->getActiveInterval();
+
+        throw_unless(
+            Carbon::now()->isBetween($activeInterval['start_moment'], $activeInterval['end_moment']),
+            new CheckDBOperationException("The selective $this->selective_id is closed")
+        );
+
+        return parent::save($options);
     }
 }

@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Traits\HasHiddenTimestamps;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Exceptions\CheckDBOperationException;
 use App\Models\Traits\HasDatetimeAccessorAndMutator;
+use App\Models\Traits\HasHiddenTimestamps;
+use Enumerate\TimeStringFormat;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Agreement extends Model
 {
@@ -39,22 +42,22 @@ class Agreement extends Model
         'art_id',
     ];
 
-    public function enterprise()
+    public function enterprise(): BelongsTo
     {
         return $this->belongsTo(Enterprise::class, 'enterprise_id');
     }
 
-    public function artist()
+    public function artist(): BelongsTo
     {
         return $this->belongsTo(Artist::class, 'artist_id');
     }
 
-    public function art()
+    public function art(): BelongsTo
     {
         return $this->belongsTo(Art::class, 'art_id');
     }
 
-    public function rates()
+    public function rates(): HasMany
     {
         return $this->hasMany(Rate::class, 'agreement_id');
     }
@@ -74,8 +77,29 @@ class Agreement extends Model
         return $this->toTime();
     }
 
+    public function getActiveInterval(): array
+    {
+        return [
+            'start_moment' => $this->getCarbon("$this->date $this->start_time", TimeStringFormat::DATE_TIME_FORMAT),
+            'end_moment' => $this->getCarbon("$this->date $this->end_time", TimeStringFormat::DATE_TIME_FORMAT),
+        ];
+    }
+
     public function withAllRelations()
     {
         return $this->load('art', 'artist', 'enterprise', 'rates');
+    }
+
+    /**
+     * @param array $options
+     * @return bool
+     * @throws CheckDBOperationException
+     */
+    public function save(array $options = []): bool
+    {
+        throw_unless($this->artist->user->active, new CheckDBOperationException("The artist's account $this->artist_id is disabled"));
+        throw_unless($this->enterprise->user->active, new CheckDBOperationException("The enterprise's account $this->enterprise_id is disabled"));
+
+        return parent::save($options);
     }
 }

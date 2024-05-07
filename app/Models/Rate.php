@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Exceptions\CheckDBOperationException;
 use App\Models\Traits\HasHiddenTimestamps;
-use Thiagoprz\CompositeKey\HasCompositeKey;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Validation\ValidationException;
+use Thiagoprz\CompositeKey\HasCompositeKey;
 
 class Rate extends Model
 {
@@ -37,23 +41,39 @@ class Rate extends Model
         'agreement_id',
     ];
 
-    public function author()
+    public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');
     }
 
-    public function rated()
+    public function rated(): BelongsTo
     {
         return $this->belongsTo(User::class, 'rated_id');
     }
 
-    public function agreement()
+    public function agreement(): BelongsTo
     {
         return $this->belongsTo(Agreement::class, 'agreement_id');
     }
 
-    public function withAllRelations()
+    public function withAllRelations(): Rate
     {
         return $this->load('author', 'rated', 'agreement');
+    }
+
+    /**
+     * @throws ValidationException
+     * @throws CheckDBOperationException
+     */
+    public function save(array $options = []): bool
+    {
+        throw_unless($this->author->active, new CheckDBOperationException("The author's account $this->author_id is disabled"));
+
+        throw_unless(
+            Carbon::now()
+                ->isAfter($this->agreement->getActiveInterval()['end_moment']),
+            new CheckDBOperationException("The agreement $this->agreement_id is not finished"));
+
+        return parent::save($options);
     }
 }

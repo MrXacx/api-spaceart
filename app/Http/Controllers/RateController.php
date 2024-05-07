@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\NotFoundRecordException;
+use App\Exceptions\NotSavedModelException;
 use App\Http\Requests\RateRequest;
 use App\Models\Rate;
 use Enumerate\Account;
@@ -34,17 +35,18 @@ class RateController extends ISubController
         $rate->rated_id = $ratedUser->id;
 
         $ratedUser->receivedRates->add($rate);
-        $ratedUser->avg_rate = $ratedUser->receivedRates->average(fn ($r) => $r->score);
+        $ratedUser->avg_rate = $ratedUser->receivedRates->average(fn($r) => $r->score);
 
-        DB::beginTransaction();
-        if ($rate->save() && $ratedUser->save()) { // Executa se as queries forem funcionarem
+        try {
+            DB::beginTransaction();
+            throw_unless($rate->save() && $ratedUser->save(), NotSavedModelException::class);
             DB::commit(); // Confirma a persistência dos dados
 
             return $this->responseService->sendMessage('Rate created', $rate->load('author', 'rated', 'agreement')->toArray());
+        } catch (\Exception $e) {
+            DB::rollBack(); // Reverte as inserções em caso de erro falha numa das queries
+            return $this->responseService->sendError('Rate not created', [$e->getMessage()]);
         }
-        DB::rollBack(); // Reverte as inserções em caso de erro falha numa das queries
-
-        return $this->responseService->sendError('Rate not created');
     }
 
     /**
@@ -53,6 +55,7 @@ class RateController extends ISubController
     protected function fetch(string $serviceId, string $userId): Model
     {
         $rate = Rate::find([$userId, $serviceId]);
+
         return $rate ? $rate->withAllRelations() : NotFoundRecordException::throw("user $userId's rate was not found on agreement $serviceId");
     }
 
@@ -71,21 +74,23 @@ class RateController extends ISubController
 
         $rate->fill($request->validated());
 
-        DB::beginTransaction();
-        if ($rate->save()) {
+        try {
+            DB::beginTransaction();
+            throw_unless($rate->save(), NotSavedModelException::class);
+
             $ratedUser->avg_rate = $ratedUser->receivedRates->average('score');
-            if ($ratedUser->save()) {
-                DB::commit();
+            throw_unless($ratedUser->save(), NotSavedModelException::class);
 
-                return $this->responseService->sendMessage('Rate updated', $rate->toArray());
-            }
+            DB::commit();
+            return $this->responseService->sendMessage('Rate updated', $rate->toArray());
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->responseService->sendError('Rate not updated', [$e->getMessage()]);
         }
-        DB::rollBack();
-
-        return $this->responseService->sendError('Rate not updated');
     }
 
-    public function destroy(RateRequest $request): JsonResponse|RedirectResponse
+    public
+    function destroy(RateRequest $request): JsonResponse|RedirectResponse
     {
         $rate = $this->fetch($request->agreement, $request->author);
 

@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\NotFoundRecordException;
+use App\Exceptions\NotSavedModelException;
 use App\Http\Requests\SelectiveRequest;
 use App\Models\Art as ModelsArt;
 use App\Models\Selective;
+use Carbon\Carbon;
+use Enumerate\TimeStringFormat;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Date;
+use UnexpectedValueException;
 
 class SelectiveController extends IController
 {
@@ -26,10 +30,13 @@ class SelectiveController extends IController
     public function store(SelectiveRequest $request): JsonResponse|RedirectResponse
     {
         $selective = new Selective($request->validated());
-        $selective->art_id = ModelsArt::where('name', $request->art)->first()->id;
-        $selective->save();
-
-        return $this->responseService->sendMessage('Selective created', $selective->load('art')->toArray());
+        $selective->art_id = ModelsArt::where('name', $request->art)->firstOrFail()->id;
+        try {
+            throw_unless($selective->save(), NotSavedModelException::class);
+            return $this->responseService->sendMessage('Selective created', $selective->load('art')->toArray());
+        } catch (Exception $e) {
+            return $this->responseService->sendError('Selective not created', [$e->getMessage()]);
+        }
     }
 
     /**
@@ -37,7 +44,10 @@ class SelectiveController extends IController
      */
     protected function fetch(string $id): Model
     {
-        return Selective::findOr($id, fn () => NotFoundRecordException::throw("Selective $id was not found"))->withAllRelations();
+        return Selective::findOr(
+            $id,
+            fn () => NotFoundRecordException::throw("Selective $id was not found")
+        )->withAllRelations();
     }
 
     public function show(SelectiveRequest $request): JsonResponse|RedirectResponse
@@ -50,20 +60,20 @@ class SelectiveController extends IController
 
     public function update(SelectiveRequest $request): JsonResponse|RedirectResponse
     {
-        $selective = $this->fetch($request->id);
-
-        if (Date::createFromFormat('d/m/Y H:i', $selective->start_moment)->isAfter('now')) { // If the selective did not start
+        try {
+            $selective = $this->fetch($request->id);
+            throw_unless(
+                Carbon::createFromFormat(TimeStringFormat::DATE_TIME_FORMAT->value, $selective->start_moment)
+                    ->isFuture(),
+                new UnexpectedValueException('The start_moment must be a future moment')
+            );
             $selective->fill($request->validated());
 
-            return $selective->save() ?
-                $this->responseService->sendMessage('Selective updated', $selective) :
-                $this->responseService->sendError('Selective not updated');
+            throw_unless($selective->save(), NotSavedModelException::class);
+            return $this->responseService->sendMessage('Selective updated', $selective);
+        } catch (Exception $e) {
+            return $this->responseService->sendError('Selective not updated', [$e->getMessage()]);
         }
-
-        return $this->responseService
-            ->sendError(
-                "It is not possible to update the selective $selective->id, as it started on $selective->start_moment"
-            );
     }
 
     public function destroy(SelectiveRequest $request): JsonResponse|RedirectResponse

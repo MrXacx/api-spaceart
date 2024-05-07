@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\CheckDBOperationException;
 use App\Models\Traits\HasDatetimeAccessorAndMutator;
 use App\Models\Traits\HasHiddenTimestamps;
 use Enumerate\TimeStringFormat;
@@ -47,6 +48,7 @@ class Selective extends Model
     {
         return $this->belongsTo(Art::class, 'art_id');
     }
+
     public function candidates(): HasManyThrough
     {
         return $this->hasManyThrough(Artist::class, SelectiveCandidate::class, 'selective_id', 'id', 'id', 'artist_id');
@@ -73,5 +75,15 @@ class Selective extends Model
     public function withAllRelations(): Selective
     {
         return $this->load('art', 'enterprise', 'candidates');
+    }
+
+    public function save(array $options = []): bool
+    {
+        throw_unless(
+            $this->enterprise->user->active,
+            new CheckDBOperationException("The enterprise's account $this->enterprise_id is disabled")
+        );
+
+        return parent::save($options);
     }
 }

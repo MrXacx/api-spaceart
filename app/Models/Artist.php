@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use App\Models\Art;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\HasHiddenTimestamps;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Facades\Crypt;
 
 class Artist extends Model
 {
@@ -37,7 +38,7 @@ class Artist extends Model
 
     protected $hidden = [
         'cpf',
-        'art_id'
+        'art_id',
     ];
 
     /**
@@ -49,21 +50,22 @@ class Artist extends Model
         'birthday' => 'date:d/m/Y',
     ];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'id');
     }
 
-    public function art()
+    public function art(): BelongsTo
     {
         return $this->belongsTo(Art::class);
     }
 
-    public function agreements()
+    public function agreements(): HasMany
     {
         return $this->hasMany(Agreement::class);
     }
-    public function candidatures()
+
+    public function candidatures(): HasManyThrough
     {
         return $this->hasManyThrough(Selective::class, SelectiveCandidate::class, 'artist_id', 'id', 'id', 'artist_id');
     }
@@ -71,12 +73,12 @@ class Artist extends Model
     protected function cpf(): Attribute
     {
         return Attribute::make(
-            get: fn(string $value) => Crypt::decryptString($value),
-            set: fn(string $value) => Crypt::encryptString($value)
+            get: fn (string $value) => Crypt::decryptString($value),
+            set: fn (string $value) => Crypt::encryptString($value)
         );
     }
 
-    public function withAllRelations()
+    public function withAllRelations(): Artist
     {
         return $this->load('art', 'user', 'agreements', 'candidatures');
     }
@@ -84,11 +86,11 @@ class Artist extends Model
     public function toArray()
     {
         $this->load('user', 'art');
-        
+
         $artistArray = parent::toArray();
         $userArray = $artistArray['user'];
         unset($artistArray['user']);
-        
-        return  $artistArray + $userArray;
+
+        return $artistArray + $userArray;
     }
 }

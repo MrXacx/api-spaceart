@@ -35,7 +35,7 @@ class SelectiveRequest extends FormRequest
         return [
             'enterprise_id' => ['required', 'exists:enterprises,id'],
             'title' => ['required', 'string', 'min:5', 'max:30'],
-            'start_moment' => ['required', 'date_format:d/m/Y H:i', 'after:today'],
+            'start_moment' => ['required', 'date_format:d/m/Y H:i', 'after:now'],
             'end_moment' => ['required', 'date_format:d/m/Y H:i', 'after:start_moment'],
             'art' => ['required', Rule::enum(Art::class)],
             'note' => ['required', 'string'],
@@ -47,7 +47,7 @@ class SelectiveRequest extends FormRequest
     {
         return [
             'title' => ['string', 'min:5', 'max:30'],
-            'start_moment' => ['date_format:d/m/Y H:i', 'after:today'],
+            'start_moment' => ['date_format:d/m/Y H:i', 'after:now'],
             'end_moment' => ['required_with:start_moment', 'date_format:d/m/Y H:i', 'after:start_moment'],
             'note' => ['string'],
             'price' => ['decimal:0,2'],

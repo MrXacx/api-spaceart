@@ -29,13 +29,9 @@ class Enterprise extends Model
     ];
 
     protected $hidden = [
+        'id',
         'cnpj',
     ];
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'id');
-    }
 
     public function agreements(): HasMany
     {
@@ -57,17 +53,6 @@ class Enterprise extends Model
 
     public function withAllRelations(): Enterprise
     {
-        return $this->load('user', 'agreements', 'selectives');
-    }
-
-    public function toArray()
-    {
-        $this->load('user');
-
-        $enterpriseArray = parent::toArray();
-        $userArray = $enterpriseArray['user'];
-        unset($enterpriseArray['user']);
-
-        return $enterpriseArray + $userArray;
+        return $this->load('agreements', 'selectives');
     }
 }

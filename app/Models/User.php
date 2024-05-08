@@ -9,6 +9,8 @@ use Enumerate\Account;
 use Enumerate\State;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Crypt;
 use Laravel\Sanctum\HasApiTokens;
@@ -106,18 +108,34 @@ class User extends Authenticatable
         );
     }
 
-    public function sendRates()
+    public function sendRates(): HasMany
     {
         return $this->hasMany(Rate::class, 'author_id');
     }
 
-    public function receivedRates()
+    public function receivedRates(): HasMany
     {
         return $this->hasMany(Rate::class, 'rated_id');
     }
 
+    public function artistAccountData(): BelongsTo
+    {
+        return $this->belongsTo(
+            Artist::class,
+            'id',
+        );
+    }
+
+    public function enterpriseAccountData(): BelongsTo
+    {
+        return $this->belongsTo(
+            Enterprise::class,
+            'id',
+        );
+    }
+
     public function withAllRelations()
     {
-        return $this->load('sendRates', 'receivedRates');
+        return $this->load('artistAccountData', 'enterpriseAccountData', 'sendRates', 'receivedRates');
     }
 }

@@ -37,6 +37,7 @@ class Artist extends Model
     ];
 
     protected $hidden = [
+        'id',
         'cpf',
         'art_id',
     ];
@@ -49,11 +50,6 @@ class Artist extends Model
     protected $casts = [
         'birthday' => 'date:d/m/Y',
     ];
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'id');
-    }
 
     public function art(): BelongsTo
     {
@@ -81,16 +77,5 @@ class Artist extends Model
     public function withAllRelations(): Artist
     {
         return $this->load('art', 'user', 'agreements', 'candidatures');
-    }
-
-    public function toArray()
-    {
-        $this->load('user', 'art');
-
-        $artistArray = parent::toArray();
-        $userArray = $artistArray['user'];
-        unset($artistArray['user']);
-
-        return $artistArray + $userArray;
     }
 }

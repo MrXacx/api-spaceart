@@ -55,4 +55,9 @@ class Enterprise extends Model
     {
         return $this->load('agreements', 'selectives');
     }
+
+    public function hideConfidentialData()
+    {
+        $this->makeHidden('cnpj');
+    }
 }

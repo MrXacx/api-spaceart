@@ -33,7 +33,7 @@ class UserController extends IController
 
     private function suitRequest(Request $request): FormRequest
     {
-        return match (Account::tryFrom((string) $request->type)) { // Find correct request for account type
+        return match (Account::tryFrom((string)$request->type)) { // Find correct request for account type
             Account::ARTIST => app()->make(ArtistRequest::class, $request->all()),
             Account::ENTERPRISE => app()->make(EnterpriseRequest::class, $request->all()),
             default => UnprocessableEntityException::throw('Account type not found'),
@@ -57,21 +57,18 @@ class UserController extends IController
     /**
      * @throws NotFoundRecordException
      */
-    protected function fetch(string $id, ?Account $typeAccount): Model
+    protected function fetch(string $id): Model
     {
-        $user = match ($typeAccount) {
-            Account::ARTIST => new Artist,
-            Account::ENTERPRISE => new Enterprise,
-            default => new User,
-        };
+        $user = User::find($id); // Fetch by PK
 
-        $user = $user::find($id); // Fetch by PK
+        throw_unless(
+            $user->active, // Unless account is active
+            new NotFoundRecordException("User $id not found")
+        );
 
-        if (! ($user?->active xor $user?->user?->active)) { // If $user is null or account is deactivate
-            NotFoundRecordException::throw("User $id not found");
+        if (auth()->user()?->id === $id) {
+            $this->hideConfidentialData();
         }
-
-        $user->makeVisibleIf(auth()->user()?->id === $id, ['phone', 'cnpj', 'cpf']);
 
         return $user->withAllRelations();
     }
@@ -89,7 +86,7 @@ class UserController extends IController
         $request = $this->suitRequest($request);
 
         $addressData = PostalCodeClientService::make()->get($request->postal_code); // Fetch city and state
-        $requestParameters = $request->all() + (array) $addressData->getData(); // Merge request data and zip code API response
+        $requestParameters = $request->all() + (array)$addressData->getData(); // Merge request data and zip code API response
         $user = new User($requestParameters); // Build user
 
         DB::transaction(function () use ($requestParameters, $user) {
@@ -111,7 +108,7 @@ class UserController extends IController
         $userData = $request->validated(); // Get all validated data
 
         if ($request->exists('postal_code')) { // Fetch information derived from the zip code
-            $userData += (array) PostalCodeClientService::make()->get($request->postal_code)->getData();
+            $userData += (array)PostalCodeClientService::make()->get($request->postal_code)->getData();
         }
         $account = $this->fetch($request->id, Account::tryFrom($userData['type'])); // Fetch user
 

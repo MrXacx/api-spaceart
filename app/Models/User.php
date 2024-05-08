@@ -138,4 +138,11 @@ class User extends Authenticatable
     {
         return $this->load('artistAccountData', 'enterpriseAccountData', 'sendRates', 'receivedRates');
     }
+
+    public function hideConfidentialData()
+    {
+        $this->makeHidden('phone', 'cnpj', 'cpf');
+        $this->artist_account_data?->hideConfidentialData();
+        $this->enterprise_account_data?->hideConfidentialData();
+    }
 }

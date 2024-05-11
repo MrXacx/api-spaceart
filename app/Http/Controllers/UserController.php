@@ -21,6 +21,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class UserController extends IController
 {
@@ -59,7 +60,10 @@ class UserController extends IController
      */
     protected function fetch(string $id): User
     {
-        $user = User::findOr($id, fn () => NotFoundRecordException::throw("User $id was not found"))// Fetch by PK
+        $user = User::findOr(
+            $id,
+            fn () => NotFoundRecordException::throw("User $id was not found")
+        )// Fetch by PK
             ->withAllRelations();
 
         throw_unless(
@@ -67,7 +71,7 @@ class UserController extends IController
             new NotFoundRecordException("User $id's account is disabled")
         );
 
-        if (auth()->user()?->id !== $id) {
+        if (auth()->user()?->id == $id) {
             $user->showConfidentialData();
         }
 
@@ -76,6 +80,10 @@ class UserController extends IController
 
     public function show(Request $request): JsonResponse|RedirectResponse
     {
+        if ($request->bearerToken()) { // If bearer token exists
+            $token = PersonalAccessToken::findToken($request->bearerToken());
+            auth()->setUser($token->tokenable()->first()); // set token owner to auth
+        }
         $user = $this->fetch($request->id);
 
         return $this->responseService->sendMessage("User $request->id found", $user->toArray());
@@ -98,9 +106,11 @@ class UserController extends IController
             $typedAccountData->id = $user->id;
             throw_unless($typedAccountData->save(), NotSavedModelException::class);
             DB::commit();
+
             return $this->responseService->sendMessage('User was created', $user->withAllRelations()->toArray());
         } catch (Exception $e) {
             DB::rollBack();
+
             return $this->responseService->sendError('User not created', [$e->getMessage()]);
         }
     }
@@ -115,6 +125,8 @@ class UserController extends IController
         }
 
         $user = $this->fetch($request->id); // Fetch user
+
+        $this->authorize('isAdmin', $user);
         $user->fill($userData);
 
         $accountData = $user->artistAccountData ?? $user->enterpriseAccountData;
@@ -136,12 +148,12 @@ class UserController extends IController
     public function destroy(Request $request): JsonResponse|RedirectResponse
     {
         $user = User::find($request->id);
+        $this->authorize('isAdmin', $user);
         $user->fill([
             'image' => null,
             'slug' => null,
             'active' => false,
         ]);
-        $user->active = false;
 
         return $user->save() ?
             $this->responseService->sendMessage("Account $request->id was disabled") :

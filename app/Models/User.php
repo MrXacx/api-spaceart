@@ -66,6 +66,7 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
+        'active' => 'bool',
         'password' => 'hashed',
         'type' => Account::class,
         'state' => State::class,
@@ -139,10 +140,10 @@ class User extends Authenticatable
         return $this->load('artistAccountData', 'enterpriseAccountData', 'sendRates', 'receivedRates');
     }
 
-    public function hideConfidentialData()
+    public function showConfidentialData(): void
     {
-        $this->makeHidden('phone', 'cnpj', 'cpf');
-        $this->artist_account_data?->hideConfidentialData();
-        $this->enterprise_account_data?->hideConfidentialData();
+        $this->makeVisible('phone');
+        $this->artistAccountData?->showConfidentialData();
+        $this->enterpriseAccountData?->showConfidentialData();
     }
 }

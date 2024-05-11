@@ -79,8 +79,8 @@ class Artist extends Model
         return $this->load('art', 'user', 'agreements', 'candidatures');
     }
 
-    public function hideConfidentialData()
+    public function showConfidentialData()
     {
-        $this->makeHidden('cpf');
+        $this->makeVisible('cpf');
     }
 }

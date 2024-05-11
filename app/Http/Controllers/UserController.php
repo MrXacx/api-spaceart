@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Exceptions\NotFoundRecordException;
+use App\Exceptions\NotSavedModelException;
 use App\Exceptions\UnprocessableEntityException;
 use App\Http\Requests\ArtistRequest;
 use App\Http\Requests\EnterpriseRequest;
@@ -13,27 +14,26 @@ use App\Models\Enterprise;
 use App\Models\User;
 use App\Services\Clients\PostalCodeClientService;
 use Enumerate\Account;
-use Illuminate\Database\Eloquent\Model;
+use Exception;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
 
 class UserController extends IController
 {
     use AuthorizesRequests;
 
-    protected function setSanctumMiddleware()
+    protected function setSanctumMiddleware(): void
     {
         $this->middleware('auth:sanctum')->except('index', 'show', 'store');
     }
 
     private function suitRequest(Request $request): FormRequest
     {
-        return match (Account::tryFrom((string)$request->type)) { // Find correct request for account type
+        return match (Account::tryFrom((string) $request->type)) { // Find correct request for account type
             Account::ARTIST => app()->make(ArtistRequest::class, $request->all()),
             Account::ENTERPRISE => app()->make(EnterpriseRequest::class, $request->all()),
             default => UnprocessableEntityException::throw('Account type not found'),
@@ -57,28 +57,28 @@ class UserController extends IController
     /**
      * @throws NotFoundRecordException
      */
-    protected function fetch(string $id): Model
+    protected function fetch(string $id): User
     {
-        $user = User::find($id); // Fetch by PK
+        $user = User::findOr($id, fn () => NotFoundRecordException::throw("User $id was not found"))// Fetch by PK
+            ->withAllRelations();
 
         throw_unless(
             $user->active, // Unless account is active
-            new NotFoundRecordException("User $id not found")
+            new NotFoundRecordException("User $id's account is disabled")
         );
 
-        if (auth()->user()?->id === $id) {
-            $this->hideConfidentialData();
+        if (auth()->user()?->id !== $id) {
+            $user->showConfidentialData();
         }
 
-        return $user->withAllRelations();
+        return $user;
     }
 
     public function show(Request $request): JsonResponse|RedirectResponse
     {
-        $user = $this->fetch($request->id, Account::tryFrom($request->type ?? ''));
-        $message = Session::get('message', 'Search finished without errors');
+        $user = $this->fetch($request->id);
 
-        return $this->responseService->sendMessage($message, $user->toArray());
+        return $this->responseService->sendMessage("User $request->id found", $user->toArray());
     }
 
     public function store(Request $request): JsonResponse|RedirectResponse
@@ -86,20 +86,23 @@ class UserController extends IController
         $request = $this->suitRequest($request);
 
         $addressData = PostalCodeClientService::make()->get($request->postal_code); // Fetch city and state
-        $requestParameters = $request->all() + (array)$addressData->getData(); // Merge request data and zip code API response
+        $requestParameters = $request->all() + (array) $addressData->getData(); // Merge request data and zip code API response
+
         $user = new User($requestParameters); // Build user
+        $typedAccountData = $request->type == Account::ARTIST ? new Artist : new Enterprise;
+        $typedAccountData->fill($requestParameters);
 
-        DB::transaction(function () use ($requestParameters, $user) {
-            $user->save(); // Insert on table
-            $account = $user->type == Account::ARTIST ? new Artist : new Enterprise;
-            $account->fill($requestParameters); // Fill artist or enterprise
-            $account->id = $user->id;
-            $account->save();
-        });
-
-        return redirect()
-            ->route('user.show', $user->id)
-            ->with('message', "User $user->id was created");
+        DB::beginTransaction();
+        try {
+            throw_unless($user->save(), NotSavedModelException::class);
+            $typedAccountData->id = $user->id;
+            throw_unless($typedAccountData->save(), NotSavedModelException::class);
+            DB::commit();
+            return $this->responseService->sendMessage('User was created', $user->withAllRelations()->toArray());
+        } catch (Exception $e) {
+            DB::rollBack();
+            return $this->responseService->sendError('User not created', [$e->getMessage()]);
+        }
     }
 
     public function update(Request $request): JsonResponse|RedirectResponse
@@ -108,21 +111,26 @@ class UserController extends IController
         $userData = $request->validated(); // Get all validated data
 
         if ($request->exists('postal_code')) { // Fetch information derived from the zip code
-            $userData += (array)PostalCodeClientService::make()->get($request->postal_code)->getData();
+            $userData += (array) PostalCodeClientService::make()->get($request->postal_code)->getData();
         }
-        $account = $this->fetch($request->id, Account::tryFrom($userData['type'])); // Fetch user
 
-        $account->fill($userData); // Fill artist/enterprise
-        $account->user->fill($userData); // Fill general user
+        $user = $this->fetch($request->id); // Fetch user
+        $user->fill($userData);
 
-        DB::transaction(function () use ($account) {
-            $account->save();
-            $account->user->save();
-        });
+        $accountData = $user->artistAccountData ?? $user->enterpriseAccountData;
+        $accountData->fill($userData);
 
-        return redirect()
-            ->route('user.show', $account->user->only('id', 'type'))
-            ->with('message', "User $account->id was updated");
+        DB::beginTransaction();
+        try {
+            throw_unless($user->save() && $accountData->save(), NotSavedModelException::class);
+            DB::commit();
+
+            return $this->responseService->sendMessage("User $user->id was updated", $user->toArray());
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return $this->responseService->sendError("User $user->id was not updated", [$e->getMessage()]);
+        }
     }
 
     public function destroy(Request $request): JsonResponse|RedirectResponse
@@ -136,7 +144,7 @@ class UserController extends IController
         $user->active = false;
 
         return $user->save() ?
-            $this->responseService->sendMessage("Account $request->id disabled") :
-            $this->responseService->sendError("User $request->id not disabled");
+            $this->responseService->sendMessage("Account $request->id was disabled") :
+            $this->responseService->sendError("User $request->id was not disabled");
     }
 }

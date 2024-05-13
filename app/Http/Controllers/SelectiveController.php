@@ -17,6 +17,10 @@ use UnexpectedValueException;
 
 class SelectiveController extends IController
 {
+    protected function setSanctumMiddleware(): \Illuminate\Routing\ControllerMiddlewareOptions
+    {
+        return parent::setSanctumMiddleware()->except('index');
+    }
     public function index(): JsonResponse|RedirectResponse
     {
         return $this->responseService->sendMessage(

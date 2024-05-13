@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\ControllerMiddlewareOptions;
 
 abstract class IController extends \Illuminate\Routing\Controller
 {
@@ -21,9 +22,9 @@ abstract class IController extends \Illuminate\Routing\Controller
         $this->setSanctumMiddleware();
     }
 
-    protected function setSanctumMiddleware()
+    protected function setSanctumMiddleware(): ControllerMiddlewareOptions
     {
-        $this->middleware('auth:sanctum')->except('index', 'show');
+        return $this->middleware('auth:sanctum');
     }
 
     /**

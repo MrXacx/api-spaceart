@@ -27,9 +27,9 @@ class UserController extends IController
 {
     use AuthorizesRequests;
 
-    protected function setSanctumMiddleware(): void
+    protected function setSanctumMiddleware(): \Illuminate\Routing\ControllerMiddlewareOptions
     {
-        $this->middleware('auth:sanctum')->except('index', 'show', 'store');
+        return parent::setSanctumMiddleware()->except('index', 'show', 'store');
     }
 
     private function suitRequest(Request $request): FormRequest

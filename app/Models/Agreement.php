@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class Agreement extends Model
 {
@@ -40,16 +41,17 @@ class Agreement extends Model
         'enterprise_id',
         'artist_id',
         'art_id',
+        'laravel_through_key',
     ];
 
-    public function enterprise(): BelongsTo
+    public function enterprise(): HasOneThrough
     {
-        return $this->belongsTo(Enterprise::class, 'enterprise_id');
+        return $this->hasOneThrough(User::class, Enterprise::class, 'id', 'id', 'enterprise_id');
     }
 
-    public function artist(): BelongsTo
+    public function artist(): HasOneThrough
     {
-        return $this->belongsTo(Artist::class, 'artist_id');
+        return $this->hasOneThrough(User::class, Artist::class, 'id', 'id', 'artist_id');
     }
 
     public function art(): BelongsTo
@@ -97,8 +99,8 @@ class Agreement extends Model
      */
     public function save(array $options = []): bool
     {
-        throw_unless($this->artist->user->active, new CheckDBOperationException("The artist's account $this->artist_id is disabled"));
-        throw_unless($this->enterprise->user->active, new CheckDBOperationException("The enterprise's account $this->enterprise_id is disabled"));
+        throw_unless($this->artist->active, new CheckDBOperationException("The artist's account $this->artist_id is disabled"));
+        throw_unless($this->enterprise->active, new CheckDBOperationException("The enterprise's account $this->enterprise_id is disabled"));
 
         return parent::save($options);
     }

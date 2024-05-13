@@ -58,6 +58,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'phone',
+        'laravel_through_key'
     ];
 
     /**

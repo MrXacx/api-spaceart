@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Thiagoprz\CompositeKey\HasCompositeKey;
 
 class SelectiveCandidate extends Model
@@ -28,9 +29,9 @@ class SelectiveCandidate extends Model
 
     protected $hidden = ['artist_id', 'selective_id'];
 
-    protected function artist(): BelongsTo
+    protected function artist(): HasOneThrough
     {
-        return $this->belongsTo(Artist::class, 'artist_id');
+        return $this->hasOneThrough(User::class, Artist::class, 'id', 'id', 'artist_id');
     }
 
     protected function selective(): BelongsTo

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class Selective extends Model
 {
@@ -37,11 +38,12 @@ class Selective extends Model
     protected $hidden = [
         'enterprise_id',
         'art_id',
+        'laravel_through_key',
     ];
 
-    public function enterprise(): BelongsTo
+    public function enterprise(): HasOneThrough
     {
-        return $this->belongsTo(Enterprise::class, 'enterprise_id');
+        return $this->hasOneThrough(User::class, Enterprise::class, 'id', 'id', 'enterprise_id');
     }
 
     public function art(): BelongsTo

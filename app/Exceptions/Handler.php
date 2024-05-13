@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Exceptions;
 
 use App\Services\ResponseService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -24,7 +25,11 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $e)
     {
         $serviceResponse = ResponseService::make();
-        if ($e instanceof DBQueryException || $e instanceof HttpRequestException) {
+        if (
+            $e instanceof DBQueryException ||
+            $e instanceof HttpRequestException ||
+            $e instanceof AuthorizationException
+        ) {
             return $serviceResponse->sendError($e->getMessage());
         }
 

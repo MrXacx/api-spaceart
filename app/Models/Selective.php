@@ -82,7 +82,7 @@ class Selective extends Model
     public function save(array $options = []): bool
     {
         throw_unless(
-            $this->enterprise->user->active,
+            $this->enterprise->active,
             new CheckDBOperationException("The enterprise's account $this->enterprise_id is disabled")
         );
 

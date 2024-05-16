@@ -45,23 +45,23 @@ class SelectiveCandidate extends Model
     }
 
     /**
-     * @param array $options
-     * @return bool
      * @throws CheckDBOperationException
      */
     public function save(array $options = []): bool
     {
         throw_unless(
-            $this->artist->user->active,
+            $this->artist->active,
             new CheckDBOperationException("The artist's account $this->artist_id is disabled")
         );
 
         $activeInterval = $this->selective->getActiveInterval();
 
-        throw_unless(
-            Carbon::now()->isBetween($activeInterval['start_moment'], $activeInterval['end_moment']),
-            new CheckDBOperationException("The selective $this->selective_id is closed")
-        );
+        if (! app()->isLocal()) {
+            throw_unless(
+                Carbon::now()->isBetween($activeInterval['start_moment'], $activeInterval['end_moment']),
+                new CheckDBOperationException("The selective $this->selective_id is closed")
+            );
+        }
 
         return parent::save($options);
     }

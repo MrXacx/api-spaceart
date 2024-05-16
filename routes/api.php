@@ -27,5 +27,12 @@ foreach ($apiControllers as $route => $class) {
     });
 }
 
-Route::apiResource('/agreement/{agreement}/rate', RateController::class, ['parameters' => ['rate' => 'author']]);
+Route::apiResource(
+    '/agreement/{agreement}/rate',
+    RateController::class,
+    [
+        'parameters' => ['rate' => 'author'],
+        'except' => ['index'],
+    ]
+);
 Route::apiResource('/selective/{selective}/candidate', SelectiveCandidateController::class, ['except' => ['show', 'update', 'destroy']]);

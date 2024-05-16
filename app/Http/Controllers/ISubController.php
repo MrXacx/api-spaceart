@@ -29,11 +29,6 @@ abstract class ISubController extends \Illuminate\Routing\Controller
     }
 
     /**
-     * Display the all resources.
-     */
-    abstract public function index(Request $request): JsonResponse|RedirectResponse;
-
-    /**
      * @param string $serviceId
      * @param string $userId
      * @return Model

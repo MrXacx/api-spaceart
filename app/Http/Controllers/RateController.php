@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Exceptions\NotFoundRecordException;
 use App\Exceptions\NotSavedModelException;
 use App\Http\Requests\RateRequest;
+use App\Models\Agreement;
 use App\Models\Rate;
 use Enumerate\Account;
+use Enumerate\AgreementStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -15,36 +17,19 @@ use Illuminate\Support\Facades\DB;
 
 class RateController extends ISubController
 {
-    public function index(Request $request): JsonResponse|RedirectResponse
-    {
-        return $this->responseService->sendMessage(
-            'Rates found',
-            Rate::with('author', 'rated', 'agreement')
-                ->where('agreement_id', '=', $request->agreement)
-                ->get()
-                ->toArray()
-        );
-    }
-
     public function store(RateRequest $request): JsonResponse|RedirectResponse
     {
         $rate = new Rate($request->validated() + ['agreement_id' => $request->agreement]);
-        $agreement = $rate->agreement;
+        $this->authorize('isStakeholder', $rate->agreement);
 
-        $ratedUser = ($rate->author->type == Account::ARTIST ? $agreement->enterprise : $agreement->artist)->user;
-        $rate->rated_id = $ratedUser->id;
-
-        $ratedUser->receivedRates->add($rate);
-        $ratedUser->avg_rate = $ratedUser->receivedRates->average(fn($r) => $r->score);
+        $rate->rated_id = ($rate->author->type == Account::ARTIST ?
+            $rate->agreement->enterprise :
+            $rate->agreement->artist)->id;
 
         try {
-            DB::beginTransaction();
-            throw_unless($rate->save() && $ratedUser->save(), NotSavedModelException::class);
-            DB::commit(); // Confirma a persistência dos dados
-
-            return $this->responseService->sendMessage('Rate created', $rate->load('author', 'rated', 'agreement')->toArray());
+            throw_unless($rate->save(), NotSavedModelException::class);
+            return $this->responseService->sendMessage('Rate created', $rate->agreement->withAllRelations()->toArray());
         } catch (\Exception $e) {
-            DB::rollBack(); // Reverte as inserções em caso de erro falha numa das queries
             return $this->responseService->sendError('Rate not created', [$e->getMessage()]);
         }
     }
@@ -55,36 +40,29 @@ class RateController extends ISubController
     protected function fetch(string $serviceId, string $userId): Model
     {
         $rate = Rate::find([$userId, $serviceId]);
-
         return $rate ? $rate->withAllRelations() : NotFoundRecordException::throw("user $userId's rate was not found on agreement $serviceId");
     }
 
     public function show(RateRequest $request): JsonResponse|RedirectResponse
     {
+        $rate = $this->fetch($request->agreement, $request->author);
         return $this->responseService->sendMessage(
             'Rate found',
-            $this->fetch($request->agreement, $request->author)->toArray()
+            $rate->withAllRelations()->toArray()
         );
     }
 
     public function update(RateRequest $request): JsonResponse|RedirectResponse
     {
         $rate = $this->fetch($request->agreement, $request->author);
-        $ratedUser = $rate->rated;
+        $this->authorize('isAuthor', $rate);
 
         $rate->fill($request->validated());
 
         try {
-            DB::beginTransaction();
             throw_unless($rate->save(), NotSavedModelException::class);
-
-            $ratedUser->avg_rate = $ratedUser->receivedRates->average('score');
-            throw_unless($ratedUser->save(), NotSavedModelException::class);
-
-            DB::commit();
             return $this->responseService->sendMessage('Rate updated', $rate->toArray());
         } catch (\Exception $e) {
-            DB::rollBack();
             return $this->responseService->sendError('Rate not updated', [$e->getMessage()]);
         }
     }
@@ -93,6 +71,7 @@ class RateController extends ISubController
     function destroy(RateRequest $request): JsonResponse|RedirectResponse
     {
         $rate = $this->fetch($request->agreement, $request->author);
+        $this->authorize('isAuthor', $rate);
 
         return $rate->delete() ?
             $this->responseService->sendMessage("$request->author's rate has been deleted from the $request->agreement") :

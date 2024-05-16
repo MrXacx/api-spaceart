@@ -71,7 +71,7 @@ class Rate extends Model
 
         throw_unless(
             Carbon::now()
-                ->isAfter($this->agreement->getActiveInterval()['end_moment']),
+                ->isBefore($this->agreement->getActiveInterval()['end_moment']),
             new CheckDBOperationException("The agreement $this->agreement_id is not finished"));
 
         return parent::save($options);

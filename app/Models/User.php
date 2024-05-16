@@ -13,7 +13,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Number;
 use Laravel\Sanctum\HasApiTokens;
+use Psy\Util\Str;
 
 class User extends Authenticatable
 {
@@ -135,10 +137,11 @@ class User extends Authenticatable
             'id',
         );
     }
-
     public function withAllRelations()
     {
-        return $this->load('artistAccountData', 'enterpriseAccountData', 'sendRates', 'receivedRates');
+        return $this
+            ->load('artistAccountData', 'enterpriseAccountData', 'sendRates', 'receivedRates')
+            ->loadAvg('receivedRates', 'score');
     }
 
     public function showConfidentialData(): void
@@ -147,4 +150,14 @@ class User extends Authenticatable
         $this->artistAccountData?->showConfidentialData();
         $this->enterpriseAccountData?->showConfidentialData();
     }
+
+    public function toArray()
+    {
+        $this->received_rates_avg_score = number_format(
+            (float) $this->received_rates_avg_score,
+            2
+        );
+        return parent::toArray();
+    }
+
 }

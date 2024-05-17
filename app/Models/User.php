@@ -58,6 +58,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
+        'email',
         'password',
         'phone',
         'laravel_through_key'
@@ -137,27 +138,20 @@ class User extends Authenticatable
             'id',
         );
     }
-    public function withAllRelations()
+    public function withAllRelations(): User
     {
         return $this
             ->load('artistAccountData', 'enterpriseAccountData', 'sendRates', 'receivedRates')
             ->loadAvg('receivedRates', 'score');
     }
 
-    public function showConfidentialData(): void
+    public function showConfidentialData(): User
     {
-        $this->makeVisible('phone');
+        $this->makeVisible('phone', 'email');
         $this->artistAccountData?->showConfidentialData();
         $this->enterpriseAccountData?->showConfidentialData();
-    }
 
-    public function toArray()
-    {
-        $this->received_rates_avg_score = number_format(
-            (float) $this->received_rates_avg_score,
-            2
-        );
-        return parent::toArray();
+        return $this;
     }
 
 }

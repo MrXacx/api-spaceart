@@ -64,7 +64,7 @@ class AgreementController extends IController
         $agreementData = $request->validated();
         $agreement = $this->fetch($request->id);
         if (count($agreementData) > 1) { // If exists some key different of status
-            $this->authorize('isEnterprise', $agreement);
+            $this->authorize('isHirer', $agreement);
             $agreementData['status'] = AgreementStatus::SEND->value; // Change agreement status to 'send' if agreement conditions have changed
         } else {
             $this->authorize('isStakeholder', $agreement);

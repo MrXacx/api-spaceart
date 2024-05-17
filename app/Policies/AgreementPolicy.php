@@ -17,10 +17,10 @@ class AgreementPolicy
 
     public function isStakeholder(User $auth, Agreement $agreement): bool
     {
-        return ($auth->id == $agreement->artist_id) || $this->isEnterprise($auth, $agreement);
+        return ($auth->id == $agreement->artist_id) || $this->isHirer($auth, $agreement);
     }
 
-    public function isEnterprise(User $auth, Agreement $agreement): bool
+    public function isHirer(User $auth, Agreement $agreement): bool
     {
         return $auth->id == $agreement->enterprise_id;
     }

@@ -12,12 +12,12 @@ use Enumerate\TimeStringFormat;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\ControllerMiddlewareOptions;
 use UnexpectedValueException;
 
 class SelectiveController extends IMainRouteController
 {
-    protected function setSanctumMiddleware(): \Illuminate\Routing\ControllerMiddlewareOptions
+    protected function setSanctumMiddleware(): ControllerMiddlewareOptions
     {
         return parent::setSanctumMiddleware()->except('index');
     }
@@ -36,6 +36,7 @@ class SelectiveController extends IMainRouteController
     public function store(SelectiveRequest $request): JsonResponse
     {
         $selective = new Selective($request->validated());
+        $this->authorize('isOwner', $selective);
         $selective->art_id = ModelsArt::where('name', $request->art)->firstOrFail()->id;
         try {
             throw_unless($selective->save(), NotSavedModelException::class);
@@ -53,7 +54,7 @@ class SelectiveController extends IMainRouteController
     {
         return Selective::findOr(
             $id,
-            fn() => NotFoundRecordException::throw("Selective $id was not found")
+            fn () => NotFoundRecordException::throw("Selective $id was not found")
         )->withAllRelations();
     }
 
@@ -89,6 +90,7 @@ class SelectiveController extends IMainRouteController
     {
         $selective = $this->fetch($request->id);
         $this->authorize('isOwner', $selective);
+
         return $selective->delete() ?
             $this->responseService->sendMessage('Selective deleted') :
             $this->responseService->sendError('Selective not deleted');

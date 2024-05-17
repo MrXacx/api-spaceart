@@ -10,7 +10,6 @@ use Enumerate\AgreementStatus;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 
 class AgreementController extends IMainRouteController
 {
@@ -20,7 +19,7 @@ class AgreementController extends IMainRouteController
             'Agreements found',
             Agreement::with('art', 'artist', 'enterprise')
                 ->where('artist_id', '=', auth()->id())
-                //->orWhere('enterprise_id', '=', auth()->id(), 'or')
+                ->orWhere('enterprise_id', '=', auth()->id())
                 ->get()
                 ->toArray()
         );
@@ -29,6 +28,7 @@ class AgreementController extends IMainRouteController
     public function store(AgreementRequest $request): JsonResponse
     {
         $agreement = new Agreement($request->validated());
+        $this->authorize('isStakeholder', $agreement);
         $agreement->art_id = $agreement->artist->artistAccountData->art_id;
 
         try {
@@ -45,7 +45,7 @@ class AgreementController extends IMainRouteController
      */
     protected function fetch(string $id): Model
     {
-        return Agreement::findOr($id, fn() => NotFoundRecordException::throw("Agreement $id was not found"))->withAllRelations();
+        return Agreement::findOr($id, fn () => NotFoundRecordException::throw("Agreement $id was not found"))->withAllRelations();
     }
 
     public function show(AgreementRequest $request): JsonResponse//: JsonResponse

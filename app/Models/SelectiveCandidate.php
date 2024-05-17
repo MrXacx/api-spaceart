@@ -54,14 +54,17 @@ class SelectiveCandidate extends Model
             new CheckDBOperationException("The artist's account $this->artist_id is disabled")
         );
 
+        throw_unless(
+            $this->artist->artistAccountData->art === $this->selective->art,
+            new CheckDBOperationException("The {$this->artist->artistAccountData->art->name} account is not able to {$this->selective->art->name} selective")
+        );
+
         $activeInterval = $this->selective->getActiveInterval();
 
-        if (! app()->isLocal()) {
-            throw_unless(
-                Carbon::now()->isBetween($activeInterval['start_moment'], $activeInterval['end_moment']),
-                new CheckDBOperationException("The selective $this->selective_id is closed")
-            );
-        }
+        throw_unless(
+            Carbon::now()->isBetween($activeInterval['start_moment'], $activeInterval['end_moment']),
+            new CheckDBOperationException("The selective $this->selective_id is closed")
+        );
 
         return parent::save($options);
     }

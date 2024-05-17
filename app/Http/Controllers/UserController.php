@@ -23,7 +23,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\PersonalAccessToken;
 
-class UserController extends IController
+class UserController extends IMainRouteController
 {
     use AuthorizesRequests;
 
@@ -44,7 +44,7 @@ class UserController extends IController
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse|RedirectResponse
+    public function index(): JsonResponse
     {
         return $this->responseService->sendMessage(
             'Users found',
@@ -62,7 +62,7 @@ class UserController extends IController
     {
         $user = User::findOr(
             $id,
-            fn () => NotFoundRecordException::throw("User $id was not found")
+            fn() => NotFoundRecordException::throw("User $id was not found")
         )// Fetch by PK
             ->withAllRelations();
 
@@ -78,7 +78,7 @@ class UserController extends IController
         return $user;
     }
 
-    public function show(Request $request): JsonResponse|RedirectResponse
+    public function show(Request $request): JsonResponse
     {
         if ($request->bearerToken()) { // If bearer token exists
             $token = PersonalAccessToken::findToken($request->bearerToken());
@@ -89,7 +89,7 @@ class UserController extends IController
         return $this->responseService->sendMessage("User $request->id found", $user->toArray());
     }
 
-    public function store(Request $request): JsonResponse|RedirectResponse
+    public function store(Request $request): JsonResponse
     {
         $request = $this->suitRequest($request);
 
@@ -115,7 +115,7 @@ class UserController extends IController
         }
     }
 
-    public function update(Request $request): JsonResponse|RedirectResponse
+    public function update(Request $request): JsonResponse
     {
         $request = $this->suitRequest($request);
         $userData = $request->validated(); // Get all validated data
@@ -145,7 +145,7 @@ class UserController extends IController
         }
     }
 
-    public function destroy(Request $request): JsonResponse|RedirectResponse
+    public function destroy(Request $request): JsonResponse
     {
         $user = User::find($request->id);
         $this->authorize('isAdmin', $user);

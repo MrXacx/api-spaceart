@@ -15,14 +15,14 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use UnexpectedValueException;
 
-class SelectiveController extends IController
+class SelectiveController extends IMainRouteController
 {
     protected function setSanctumMiddleware(): \Illuminate\Routing\ControllerMiddlewareOptions
     {
         return parent::setSanctumMiddleware()->except('index');
     }
 
-    public function index(): JsonResponse|RedirectResponse
+    public function index(): JsonResponse
     {
         return $this->responseService->sendMessage(
             'Selectives found',
@@ -33,7 +33,7 @@ class SelectiveController extends IController
         );
     }
 
-    public function store(SelectiveRequest $request): JsonResponse|RedirectResponse
+    public function store(SelectiveRequest $request): JsonResponse
     {
         $selective = new Selective($request->validated());
         $selective->art_id = ModelsArt::where('name', $request->art)->firstOrFail()->id;
@@ -53,11 +53,11 @@ class SelectiveController extends IController
     {
         return Selective::findOr(
             $id,
-            fn () => NotFoundRecordException::throw("Selective $id was not found")
+            fn() => NotFoundRecordException::throw("Selective $id was not found")
         )->withAllRelations();
     }
 
-    public function show(SelectiveRequest $request): JsonResponse|RedirectResponse
+    public function show(SelectiveRequest $request): JsonResponse
     {
         return $this->responseService->sendMessage(
             'Selective found',
@@ -65,7 +65,7 @@ class SelectiveController extends IController
         );
     }
 
-    public function update(SelectiveRequest $request): JsonResponse|RedirectResponse
+    public function update(SelectiveRequest $request): JsonResponse
     {
         try {
             $selective = $this->fetch($request->id);
@@ -85,7 +85,7 @@ class SelectiveController extends IController
         }
     }
 
-    public function destroy(SelectiveRequest $request): JsonResponse|RedirectResponse
+    public function destroy(SelectiveRequest $request): JsonResponse
     {
         $selective = $this->fetch($request->id);
         $this->authorize('isOwner', $selective);

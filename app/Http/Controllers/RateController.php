@@ -15,9 +15,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class RateController extends ISubController
+class RateController extends IRouteController
 {
-    public function store(RateRequest $request): JsonResponse|RedirectResponse
+    public function store(RateRequest $request): JsonResponse
     {
         $rate = new Rate($request->validated() + ['agreement_id' => $request->agreement]);
         $this->authorize('isStakeholder', $rate->agreement);
@@ -43,7 +43,7 @@ class RateController extends ISubController
         return $rate ? $rate->withAllRelations() : NotFoundRecordException::throw("user $userId's rate was not found on agreement $serviceId");
     }
 
-    public function show(RateRequest $request): JsonResponse|RedirectResponse
+    public function show(RateRequest $request): JsonResponse
     {
         $rate = $this->fetch($request->agreement, $request->author);
         return $this->responseService->sendMessage(
@@ -52,7 +52,7 @@ class RateController extends ISubController
         );
     }
 
-    public function update(RateRequest $request): JsonResponse|RedirectResponse
+    public function update(RateRequest $request): JsonResponse
     {
         $rate = $this->fetch($request->agreement, $request->author);
         $this->authorize('isAuthor', $rate);
@@ -68,8 +68,9 @@ class RateController extends ISubController
     }
 
     public
-    function destroy(RateRequest $request): JsonResponse|RedirectResponse
-    {
+        function destroy(
+        RateRequest $request
+    ): JsonResponse {
         $rate = $this->fetch($request->agreement, $request->author);
         $this->authorize('isAuthor', $rate);
 

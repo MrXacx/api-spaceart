@@ -13,9 +13,9 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 
-class SelectiveCandidateController extends ISubController
+class SelectiveCandidateController extends IRouteController
 {
-    protected function store(SelectiveCandidateRequest $request): JsonResponse|RedirectResponse
+    protected function store(SelectiveCandidateRequest $request): JsonResponse
     {
         $candidature = new SelectiveCandidate($request->validated() + ['selective_id' => $request->selective]);
 

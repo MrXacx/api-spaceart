@@ -12,9 +12,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 
-class AgreementController extends IController
+class AgreementController extends IMainRouteController
 {
-    public function index(): JsonResponse|RedirectResponse
+    public function index(): JsonResponse
     {
         return $this->responseService->sendMessage(
             'Agreements found',
@@ -26,7 +26,7 @@ class AgreementController extends IController
         );
     }
 
-    public function store(AgreementRequest $request): JsonResponse|RedirectResponse
+    public function store(AgreementRequest $request): JsonResponse
     {
         $agreement = new Agreement($request->validated());
         $agreement->art_id = $agreement->artist->artistAccountData->art_id;
@@ -45,10 +45,10 @@ class AgreementController extends IController
      */
     protected function fetch(string $id): Model
     {
-        return Agreement::findOr($id, fn () => NotFoundRecordException::throw("Agreement $id was not found"))->withAllRelations();
+        return Agreement::findOr($id, fn() => NotFoundRecordException::throw("Agreement $id was not found"))->withAllRelations();
     }
 
-    public function show(AgreementRequest $request): JsonResponse//: JsonResponse|RedirectResponse
+    public function show(AgreementRequest $request): JsonResponse//: JsonResponse
     {
         $agreement = $this->fetch($request->id);
         $this->authorize('isStakeholder', $agreement);
@@ -59,7 +59,7 @@ class AgreementController extends IController
         );
     }
 
-    public function update(AgreementRequest $request): JsonResponse|RedirectResponse
+    public function update(AgreementRequest $request): JsonResponse
     {
         $agreementData = $request->validated();
         $agreement = $this->fetch($request->id);
@@ -81,7 +81,7 @@ class AgreementController extends IController
         }
     }
 
-    public function destroy(AgreementRequest $request): JsonResponse|RedirectResponse
+    public function destroy(AgreementRequest $request): JsonResponse
     {
         $agreement = $this->fetch($request->id);
         $this->authorize('isStakeholder', $agreement);

@@ -8,7 +8,7 @@ use App\Services\ResponseService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 
-abstract class ISubController extends \Illuminate\Routing\Controller
+abstract class IRouteController extends \Illuminate\Routing\Controller
 {
     use AuthorizesRequests, ValidatesRequests;
 
@@ -17,7 +17,7 @@ abstract class ISubController extends \Illuminate\Routing\Controller
         $this->setSanctumMiddleware();
     }
 
-    protected function setSanctumMiddleware()
+    protected function setSanctumMiddleware(): void
     {
         $this->middleware('auth:sanctum');
     }

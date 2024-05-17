@@ -21,11 +21,13 @@ class SelectiveController extends IController
     {
         return parent::setSanctumMiddleware()->except('index');
     }
+
     public function index(): JsonResponse|RedirectResponse
     {
         return $this->responseService->sendMessage(
             'Selectives found',
             Selective::with('enterprise', 'art')
+                ->where('end_moment', '>', Carbon::now())
                 ->get()
                 ->toArray()
         );
@@ -37,6 +39,7 @@ class SelectiveController extends IController
         $selective->art_id = ModelsArt::where('name', $request->art)->firstOrFail()->id;
         try {
             throw_unless($selective->save(), NotSavedModelException::class);
+
             return $this->responseService->sendMessage('Selective created', $selective->load('art')->toArray());
         } catch (Exception $e) {
             return $this->responseService->sendError('Selective not created', [$e->getMessage()]);
@@ -66,6 +69,7 @@ class SelectiveController extends IController
     {
         try {
             $selective = $this->fetch($request->id);
+            $this->authorize('isOwner', $selective);
             throw_unless(
                 Carbon::createFromFormat(TimeStringFormat::DATE_TIME_FORMAT->value, $selective->start_moment)
                     ->isFuture(),
@@ -74,6 +78,7 @@ class SelectiveController extends IController
             $selective->fill($request->validated());
 
             throw_unless($selective->save(), NotSavedModelException::class);
+
             return $this->responseService->sendMessage('Selective updated', $selective);
         } catch (Exception $e) {
             return $this->responseService->sendError('Selective not updated', [$e->getMessage()]);
@@ -83,7 +88,7 @@ class SelectiveController extends IController
     public function destroy(SelectiveRequest $request): JsonResponse|RedirectResponse
     {
         $selective = $this->fetch($request->id);
-
+        $this->authorize('isOwner', $selective);
         return $selective->delete() ?
             $this->responseService->sendMessage('Selective deleted') :
             $this->responseService->sendError('Selective not deleted');

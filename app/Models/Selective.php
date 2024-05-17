@@ -53,7 +53,7 @@ class Selective extends Model
 
     public function candidates(): HasManyThrough
     {
-        return $this->hasManyThrough(Artist::class, SelectiveCandidate::class, 'selective_id', 'id', 'id', 'artist_id');
+        return $this->hasManyThrough(User::class, SelectiveCandidate::class, 'selective_id', 'id', 'id', 'artist_id');
     }
 
     protected function startMoment(): Attribute

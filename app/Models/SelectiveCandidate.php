@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Exceptions\CheckDBOperationException;
 use App\Models\Traits\HasHiddenTimestamps;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -39,9 +40,13 @@ class SelectiveCandidate extends Model
         return $this->belongsTo(Selective::class, 'selective_id');
     }
 
-    public function withAllRelations(): SelectiveCandidate
+    public function loadAllRelations(): SelectiveCandidate
     {
         return $this->load('artist', 'selective');
+    }
+    public static function withAllRelations(): Builder
+    {
+        return static::with('artist', 'selective');
     }
 
     /**

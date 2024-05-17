@@ -6,6 +6,7 @@ use App\Exceptions\CheckDBOperationException;
 use App\Models\Traits\HasDatetimeAccessorAndMutator;
 use App\Models\Traits\HasHiddenTimestamps;
 use Enumerate\TimeStringFormat;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -74,9 +75,13 @@ class Selective extends Model
         ];
     }
 
-    public function withAllRelations(): Selective
+    public function loadAllRelations(): Selective
     {
         return $this->load('art', 'enterprise', 'candidates');
+    }
+    public static function withAllRelations(): Builder
+    {
+        return static::with('art', 'enterprise', 'candidates');
     }
 
     public function save(array $options = []): bool

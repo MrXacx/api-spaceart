@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Models\Traits\HasHiddenTimestamps;
 use Enumerate\Account;
 use Enumerate\State;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -137,11 +138,17 @@ class User extends Authenticatable
         );
     }
 
-    public function withAllRelations(): User
+    public function loadAllRelations(): User
     {
         return $this
             ->load('artistAccountData', 'enterpriseAccountData', 'sendRates', 'receivedRates')
             ->loadAvg('receivedRates', 'score');
+    }
+
+    public static function withAllRelations(): Builder
+    {
+        return static::with('artistAccountData', 'enterpriseAccountData', 'sendRates', 'receivedRates')
+            ->withAvg('receivedRates', 'score');
     }
 
     public function showConfidentialData(): User

@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use App\Models\Traits\HasHiddenTimestamps;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Crypt;
 
@@ -51,13 +51,18 @@ class Enterprise extends Model
         );
     }
 
-    public function withAllRelations(): Enterprise
+    public function loadAllRelations(): Enterprise
     {
         return $this->load('agreements', 'selectives');
     }
 
-    public function showConfidentialData()
+    public static function withAllRelations(): Builder
     {
-        $this->makeVisible('cnpj');
+        return static::with('agreements', 'selectives');
+    }
+
+    public function showConfidentialData(): Enterprise
+    {
+        return $this->makeVisible('cnpj');
     }
 }

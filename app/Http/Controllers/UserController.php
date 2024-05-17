@@ -18,7 +18,6 @@ use Exception;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -48,7 +47,7 @@ class UserController extends IMainRouteController
     {
         return $this->responseService->sendMessage(
             'Users found',
-            User::with('sendRates', 'receivedRates')
+            User::withAllRelations()
                 ->where('active', true)
                 ->get()
                 ->toArray()
@@ -62,9 +61,9 @@ class UserController extends IMainRouteController
     {
         $user = User::findOr(
             $id,
-            fn() => NotFoundRecordException::throw("User $id was not found")
+            fn () => NotFoundRecordException::throw("User $id was not found")
         )// Fetch by PK
-            ->withAllRelations();
+            ->loadAllRelations();
 
         throw_unless(
             $user->active, // Unless account is active
@@ -107,7 +106,7 @@ class UserController extends IMainRouteController
             throw_unless($typedAccountData->save(), NotSavedModelException::class);
             DB::commit();
 
-            return $this->responseService->sendMessage('User was created', $user->withAllRelations()->toArray());
+            return $this->responseService->sendMessage('User was created', $user->loadAllRelations()->toArray());
         } catch (Exception $e) {
             DB::rollBack();
 

@@ -17,7 +17,7 @@ class AgreementController extends IMainRouteController
     {
         return $this->responseService->sendMessage(
             'Agreements found',
-            Agreement::with('art', 'artist', 'enterprise')
+            Agreement::withAllRelations()
                 ->where('artist_id', '=', auth()->id())
                 ->orWhere('enterprise_id', '=', auth()->id())
                 ->get()
@@ -45,7 +45,7 @@ class AgreementController extends IMainRouteController
      */
     protected function fetch(string $id): Model
     {
-        return Agreement::findOr($id, fn () => NotFoundRecordException::throw("Agreement $id was not found"))->withAllRelations();
+        return Agreement::findOr($id, fn () => NotFoundRecordException::throw("Agreement $id was not found"))->loadAllRelations();
     }
 
     public function show(AgreementRequest $request): JsonResponse//: JsonResponse

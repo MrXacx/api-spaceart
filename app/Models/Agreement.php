@@ -87,9 +87,13 @@ class Agreement extends Model
         ];
     }
 
-    public function withAllRelations()
+    public function loadAllRelations()
     {
         return $this->load('art', 'artist', 'enterprise', 'rates');
+    }
+    public static function withAllRelations()
+    {
+        return static::with('art', 'artist', 'enterprise', 'rates');
     }
 
     /**

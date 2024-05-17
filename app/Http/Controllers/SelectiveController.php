@@ -26,7 +26,7 @@ class SelectiveController extends IMainRouteController
     {
         return $this->responseService->sendMessage(
             'Selectives found',
-            Selective::with('enterprise', 'art')
+            Selective::withAllRelations()
                 ->where('end_moment', '>', Carbon::now())
                 ->get()
                 ->toArray()
@@ -41,7 +41,7 @@ class SelectiveController extends IMainRouteController
         try {
             throw_unless($selective->save(), NotSavedModelException::class);
 
-            return $this->responseService->sendMessage('Selective created', $selective->load('art')->toArray());
+            return $this->responseService->sendMessage('Selective created', $selective->loadAllRelations()->toArray());
         } catch (Exception $e) {
             return $this->responseService->sendError('Selective not created', [$e->getMessage()]);
         }
@@ -55,7 +55,7 @@ class SelectiveController extends IMainRouteController
         return Selective::findOr(
             $id,
             fn () => NotFoundRecordException::throw("Selective $id was not found")
-        )->withAllRelations();
+        )->loadAllRelations();
     }
 
     public function show(SelectiveRequest $request): JsonResponse

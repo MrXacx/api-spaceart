@@ -28,7 +28,7 @@ class RateController extends IRouteController
 
         try {
             throw_unless($rate->save(), NotSavedModelException::class);
-            return $this->responseService->sendMessage('Rate created', $rate->withAllRelations()->toArray());
+            return $this->responseService->sendMessage('Rate created', $rate->loadAllRelations()->toArray());
         } catch (\Exception $e) {
             return $this->responseService->sendError('Rate not created', [$e->getMessage()]);
         }
@@ -40,7 +40,7 @@ class RateController extends IRouteController
     protected function fetch(string $serviceId, string $userId): Model
     {
         $rate = Rate::find([$userId, $serviceId]);
-        return $rate ? $rate->withAllRelations() : NotFoundRecordException::throw("user $userId's rate was not found on agreement $serviceId");
+        return $rate ? $rate->loadAllRelations() : NotFoundRecordException::throw("user $userId's rate was not found on agreement $serviceId");
     }
 
     public function show(RateRequest $request): JsonResponse
@@ -48,7 +48,7 @@ class RateController extends IRouteController
         $rate = $this->fetch($request->agreement, $request->author);
         return $this->responseService->sendMessage(
             'Rate found',
-            $rate->withAllRelations()->toArray()
+            $rate->loadAllRelations()->toArray()
         );
     }
 

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Exceptions\CheckDBOperationException;
 use App\Models\Traits\HasHiddenTimestamps;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -56,9 +57,13 @@ class Rate extends Model
         return $this->belongsTo(Agreement::class, 'agreement_id');
     }
 
-    public function withAllRelations(): Rate
+    public function loadAllRelations(): Rate
     {
         return $this->load('author', 'rated', 'agreement');
+    }
+    public static function withAllRelations(): Builder
+    {
+        return static::with('author', 'rated', 'agreement');
     }
 
     /**

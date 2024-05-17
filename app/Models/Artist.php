@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\HasHiddenTimestamps;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -74,13 +75,17 @@ class Artist extends Model
         );
     }
 
-    public function withAllRelations(): Artist
+    public function loadAllRelations(): Artist
     {
         return $this->load('art', 'user', 'agreements', 'candidatures');
     }
 
-    public function showConfidentialData()
+    public static function withAllRelations(): Builder
     {
-        $this->makeVisible('cpf');
+        return static::with('art', 'user', 'agreements', 'candidatures');
+    }
+    public function showConfidentialData(): Artist
+    {
+        return $this->makeVisible('cpf');
     }
 }

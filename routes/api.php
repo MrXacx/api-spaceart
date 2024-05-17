@@ -35,4 +35,5 @@ Route::apiResource(
         'except' => ['index'],
     ]
 );
-Route::apiResource('/selective/{selective}/candidate', SelectiveCandidateController::class, ['except' => ['show', 'update', 'destroy']]);
+
+Route::post('/selective/{selective}/candidate', [SelectiveCandidateController::class, 'store']);

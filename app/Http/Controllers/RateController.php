@@ -28,7 +28,7 @@ class RateController extends IRouteController
 
         try {
             throw_unless($rate->save(), NotSavedModelException::class);
-            return $this->responseService->sendMessage('Rate created', $rate->agreement->withAllRelations()->toArray());
+            return $this->responseService->sendMessage('Rate created', $rate->withAllRelations()->toArray());
         } catch (\Exception $e) {
             return $this->responseService->sendError('Rate not created', [$e->getMessage()]);
         }

@@ -44,6 +44,7 @@ class SelectiveCandidate extends Model
     {
         return $this->load('artist', 'selective');
     }
+
     public static function withAllRelations(): Builder
     {
         return static::with('artist', 'selective');
@@ -59,18 +60,19 @@ class SelectiveCandidate extends Model
             new CheckDBOperationException("The artist's account $this->artist_id is disabled")
         );
 
-        throw_unless(
-            $this->artist->artistAccountData->art === $this->selective->art,
-            new CheckDBOperationException("The {$this->artist->artistAccountData->art->name} account is not able to {$this->selective->art->name} selective")
-        );
+        if (app()->isProduction()) {
+            throw_unless(
+                $this->artist->artistAccountData->art === $this->selective->art,
+                new CheckDBOperationException("The {$this->artist->artistAccountData->art->name} account is not able to {$this->selective->art->name} selective")
+            );
 
-        $activeInterval = $this->selective->getActiveInterval();
+            $activeInterval = $this->selective->getActiveInterval();
 
-        throw_unless(
-            Carbon::now()->isBetween($activeInterval['start_moment'], $activeInterval['end_moment']),
-            new CheckDBOperationException("The selective $this->selective_id is closed")
-        );
-
+            throw_unless(
+                Carbon::now()->isBetween($activeInterval['start_moment'], $activeInterval['end_moment']),
+                new CheckDBOperationException("The selective $this->selective_id is closed")
+            );
+        }
         return parent::save($options);
     }
 }

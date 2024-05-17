@@ -13,9 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Number;
 use Laravel\Sanctum\HasApiTokens;
-use Psy\Util\Str;
 
 class User extends Authenticatable
 {
@@ -61,7 +59,7 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
-        'laravel_through_key'
+        'laravel_through_key',
     ];
 
     /**
@@ -138,6 +136,7 @@ class User extends Authenticatable
             'id',
         );
     }
+
     public function withAllRelations(): User
     {
         return $this
@@ -153,5 +152,4 @@ class User extends Authenticatable
 
         return $this;
     }
-
 }

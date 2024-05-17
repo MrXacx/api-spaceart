@@ -7,6 +7,7 @@ namespace App\Exceptions;
 use App\Services\ResponseService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -28,7 +29,8 @@ class Handler extends ExceptionHandler
         if (
             $e instanceof DBQueryException ||
             $e instanceof HttpRequestException ||
-            $e instanceof AuthorizationException
+            $e instanceof AuthorizationException ||
+            $e instanceof ValidationException
         ) {
             return $serviceResponse->sendError($e->getMessage());
         }
@@ -36,7 +38,7 @@ class Handler extends ExceptionHandler
         return $serviceResponse
             ->sendError(
                 'Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/',
-                [$e->getMessage(), $e->getFile(), $e->getLine()],
+                [$e::class, $e->getMessage(), $e->getFile(), $e->getLine()],
                 500
             );
     }

@@ -16,7 +16,7 @@ class SelectiveCandidateSeeder extends Seeder
         Artist::all()
             ->random()
             ->each(
-                fn(Artist $a) => SelectiveCandidate::factory(1)
+                fn (Artist $a) => SelectiveCandidate::factory(1)
                     ->create(['artist_id' => $a->id])
             );
     }

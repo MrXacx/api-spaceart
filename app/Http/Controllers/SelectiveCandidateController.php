@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\NotFoundRecordException;
 use App\Exceptions\NotSavedModelException;
 use App\Exceptions\UnprocessableEntityException;
 use App\Http\Requests\SelectiveCandidateRequest;
-use App\Models\Selective;
 use App\Models\SelectiveCandidate;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 
 class SelectiveCandidateController extends IRouteController
 {

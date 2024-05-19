@@ -1,6 +1,7 @@
 <?php
 
 namespace Enumerate;
+
 use Enumerate\Traits\BackedEnumTrait;
 
 enum TimeStringFormat: string

@@ -91,14 +91,13 @@ class Agreement extends Model
     {
         return $this->load('art', 'artist', 'enterprise', 'rates');
     }
+
     public static function withAllRelations()
     {
         return static::with('art', 'artist', 'enterprise', 'rates');
     }
 
     /**
-     * @param array $options
-     * @return bool
      * @throws CheckDBOperationException
      */
     public function save(array $options = []): bool

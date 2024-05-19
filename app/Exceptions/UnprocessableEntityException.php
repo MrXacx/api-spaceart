@@ -2,4 +2,6 @@
 
 namespace App\Exceptions;
 
-class UnprocessableEntityException extends HttpRequestException {}
+class UnprocessableEntityException extends HttpRequestException
+{
+}

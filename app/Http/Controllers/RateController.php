@@ -5,15 +5,10 @@ namespace App\Http\Controllers;
 use App\Exceptions\NotFoundRecordException;
 use App\Exceptions\NotSavedModelException;
 use App\Http\Requests\RateRequest;
-use App\Models\Agreement;
 use App\Models\Rate;
 use Enumerate\Account;
-use Enumerate\AgreementStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class RateController extends IRouteController
 {
@@ -28,6 +23,7 @@ class RateController extends IRouteController
 
         try {
             throw_unless($rate->save(), NotSavedModelException::class);
+
             return $this->responseService->sendMessage('Rate created', $rate->loadAllRelations()->toArray());
         } catch (\Exception $e) {
             return $this->responseService->sendError('Rate not created', [$e->getMessage()]);
@@ -40,12 +36,14 @@ class RateController extends IRouteController
     protected function fetch(string $serviceId, string $userId): Model
     {
         $rate = Rate::find([$userId, $serviceId]);
+
         return $rate ? $rate->loadAllRelations() : NotFoundRecordException::throw("user $userId's rate was not found on agreement $serviceId");
     }
 
     public function show(RateRequest $request): JsonResponse
     {
         $rate = $this->fetch($request->agreement, $request->author);
+
         return $this->responseService->sendMessage(
             'Rate found',
             $rate->loadAllRelations()->toArray()
@@ -61,14 +59,14 @@ class RateController extends IRouteController
 
         try {
             throw_unless($rate->save(), NotSavedModelException::class);
+
             return $this->responseService->sendMessage('Rate updated', $rate->toArray());
         } catch (\Exception $e) {
             return $this->responseService->sendError('Rate not updated', [$e->getMessage()]);
         }
     }
 
-    public
-        function destroy(
+    public function destroy(
         RateRequest $request
     ): JsonResponse {
         $rate = $this->fetch($request->agreement, $request->author);

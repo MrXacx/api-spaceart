@@ -19,10 +19,12 @@ class Art extends Model
     {
         return $this->hasMany(Artist::class);
     }
+
     public function agreements(): HasMany
     {
         return $this->hasMany(Agreement::class);
     }
+
     public function selectives(): HasMany
     {
         return $this->hasMany(Selective::class);
@@ -31,6 +33,7 @@ class Art extends Model
     public function toArray()
     {
         $this->loadCount('artists', 'agreements', 'selectives');
+
         return parent::toArray();
     }
 }

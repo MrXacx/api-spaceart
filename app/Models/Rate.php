@@ -61,6 +61,7 @@ class Rate extends Model
     {
         return $this->load('author', 'rated', 'agreement');
     }
+
     public static function withAllRelations(): Builder
     {
         return static::with('author', 'rated', 'agreement');

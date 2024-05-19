@@ -5,7 +5,6 @@ namespace App\Services;
 use Illuminate\Support\Facades\Log;
 use Psr\Log\LogLevel;
 
-
 class Logger
 {
     private function log(string $level, string $channel, string $message, array $options = []): void

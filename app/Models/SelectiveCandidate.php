@@ -73,6 +73,7 @@ class SelectiveCandidate extends Model
                 new CheckDBOperationException("The selective $this->selective_id is closed")
             );
         }
+
         return parent::save($options);
     }
 }

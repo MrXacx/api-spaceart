@@ -79,6 +79,7 @@ class Selective extends Model
     {
         return $this->load('art', 'enterprise', 'candidates');
     }
+
     public static function withAllRelations(): Builder
     {
         return static::with('art', 'enterprise', 'candidates');

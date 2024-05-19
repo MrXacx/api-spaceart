@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Artist;
 use App\Models\Selective;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

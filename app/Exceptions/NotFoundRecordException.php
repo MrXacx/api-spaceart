@@ -2,4 +2,6 @@
 
 namespace App\Exceptions;
 
-class NotFoundRecordException extends DBQueryException {}
+class NotFoundRecordException extends DBQueryException
+{
+}

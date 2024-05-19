@@ -84,6 +84,7 @@ class Artist extends Model
     {
         return static::with('art', 'user', 'agreements', 'candidatures');
     }
+
     public function showConfidentialData(): Artist
     {
         return $this->makeVisible('cpf');

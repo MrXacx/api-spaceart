@@ -2,4 +2,6 @@
 
 namespace App\Exceptions;
 
-class CheckDBOperationException extends DBQueryException {}
+class CheckDBOperationException extends DBQueryException
+{
+}

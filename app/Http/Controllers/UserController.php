@@ -82,7 +82,7 @@ class UserController extends IMainRouteController
     {
         if ($request->bearerToken()) { // If bearer token exists
             $token = PersonalAccessToken::findToken($request->bearerToken());
-            if($token) {
+            if ($token) {
                 auth()->setUser($token->tokenable()->first()); // set token owner to auth
             }
         }

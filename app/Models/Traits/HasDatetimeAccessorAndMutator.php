@@ -12,8 +12,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 trait HasDatetimeAccessorAndMutator
 {
     /**
-     * @param TimeStringFormat $accessorFormat
-     * @param TimeStringFormat $mutatorFormat
      * @return Attribute
      */
     private function getDatetimeAccessorAndMutator(TimeStringFormat $accessorFormat, TimeStringFormat $mutatorFormat)

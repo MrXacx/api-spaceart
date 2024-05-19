@@ -146,7 +146,7 @@ class User extends Authenticatable
     public function loadAllRelations(): User
     {
         return $this
-            ->load('artistAccountData', 'enterpriseAccountData', 'sendRates', 'receivedRates')
+            ->load('artistAccountData', 'enterpriseAccountData', 'sendRates', 'receivedRates', 'posts')
             ->loadAvg('receivedRates', 'score');
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\AgreementController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\RateController;
 use App\Http\Controllers\SelectiveCandidateController;
 use App\Http\Controllers\SelectiveController;
@@ -26,6 +27,8 @@ foreach ($apiControllers as $route => $class) {
         Route::get('/delete/{id}', fn (Request $request) => redirect()->route("$route.'.destroy", $request->all()))->name('destroy');
     });
 }
+
+Route::apiResource('/post', PostController::class, ['except' => ['update']]);
 
 Route::apiResource(
     '/agreement/{agreement}/rate',

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\RequestMapper;
 use App\Services\ResponseService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -16,6 +17,7 @@ abstract class IRouteController extends Controller
 
     public function __construct(protected ResponseService $responseService)
     {
+        $this->middleware(RequestMapper::class);
         $this->setSanctumMiddleware();
     }
 

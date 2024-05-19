@@ -12,6 +12,7 @@ use Enumerate\TimeStringFormat;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\ControllerMiddlewareOptions;
 use UnexpectedValueException;
 
@@ -22,13 +23,21 @@ class SelectiveController extends IMainRouteController
         return parent::setSanctumMiddleware()->except('index');
     }
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        $request->validate([
+            'limit' => ['numeric', 'min:1', 'max:100', 'nullable'],
+            'offset' => ['numeric', 'min:1', 'nullable'],
+        ]);
         return $this->responseService->sendMessage(
             'Selectives found',
             Selective::withAllRelations()
                 ->where('end_moment', '>', Carbon::now())
+                ->offset($request->offset ?? 0)
+                ->limit($request->limit ?? 20)
+                ->inRandomOrder()
                 ->get()
+                ->random()
                 ->toArray()
         );
     }
@@ -54,7 +63,7 @@ class SelectiveController extends IMainRouteController
     {
         return Selective::findOr(
             $id,
-            fn () => NotFoundRecordException::throw("Selective $id was not found")
+            fn() => NotFoundRecordException::throw("Selective $id was not found")
         )->loadAllRelations();
     }
 

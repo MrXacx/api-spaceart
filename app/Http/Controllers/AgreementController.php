@@ -10,16 +10,20 @@ use Enumerate\AgreementStatus;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class AgreementController extends IMainRouteController
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        $request->validate(['limit' => ['numeric', 'min:1', 'max:100', 'nullable']]);
+        $id = $request->user()->id;
         return $this->responseService->sendMessage(
             'Agreements found',
             Agreement::withAllRelations()
-                ->where('artist_id', '=', auth()->id())
-                ->orWhere('enterprise_id', '=', auth()->id())
+                ->where('artist_id', '=', $id)
+                ->orWhere('enterprise_id', '=', $id)
+                ->limit($request->limit ?? 20)
                 ->get()
                 ->toArray()
         );
@@ -45,7 +49,7 @@ class AgreementController extends IMainRouteController
      */
     protected function fetch(string $id): Model
     {
-        return Agreement::findOr($id, fn () => NotFoundRecordException::throw("Agreement $id was not found"))->loadAllRelations();
+        return Agreement::findOr($id, fn() => NotFoundRecordException::throw("Agreement $id was not found"))->loadAllRelations();
     }
 
     public function show(AgreementRequest $request): JsonResponse//: JsonResponse

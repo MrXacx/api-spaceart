@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 abstract class IMainRouteController extends IRouteController
 {
     /**
      * Display the all resources.
      *
-     * @return Collection<Model>
+     * @param Request $request
+     * @return JsonResponse
      */
-    abstract public function index(): JsonResponse;
+    abstract public function index(Request $request): JsonResponse;
 }

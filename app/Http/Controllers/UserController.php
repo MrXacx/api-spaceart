@@ -44,12 +44,18 @@ class UserController extends IMainRouteController
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        $request->validate([
+            'limit' => ['numeric', 'min:1', 'max:50', 'nullable'],
+            'offset' => ['numeric', 'min:1', 'nullable'],
+        ]);
         return $this->responseService->sendMessage(
             'Users found',
             User::withAllRelations()
                 ->where('active', true)
+                ->offset($request->offset ?? 0)
+                ->limit($request->limit ?? 15)
                 ->get()
                 ->toArray()
         );

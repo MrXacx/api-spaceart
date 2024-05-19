@@ -15,7 +15,7 @@ abstract class IRouteController extends Controller
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    public function __construct(protected ResponseService $responseService)
+    public function __construct(protected readonly ResponseService $responseService)
     {
         $this->middleware(RequestMapper::class);
         $this->setSanctumMiddleware();

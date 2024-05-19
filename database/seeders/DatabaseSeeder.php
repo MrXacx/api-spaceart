@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             RateSeeder::class,
             SelectiveSeeder::class,
             SelectiveCandidateSeeder::class,
+            PostSeeder::class,
         ]);
     }
 }

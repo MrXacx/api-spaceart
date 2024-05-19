@@ -130,6 +130,11 @@ class User extends Authenticatable
         );
     }
 
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
     public function enterpriseAccountData(): BelongsTo
     {
         return $this->belongsTo(
@@ -147,7 +152,7 @@ class User extends Authenticatable
 
     public static function withAllRelations(): Builder
     {
-        return static::with('artistAccountData', 'enterpriseAccountData', 'sendRates', 'receivedRates')
+        return static::with('artistAccountData', 'enterpriseAccountData', 'sendRates', 'receivedRates', 'posts')
             ->withAvg('receivedRates', 'score');
     }
 

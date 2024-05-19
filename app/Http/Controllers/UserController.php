@@ -19,6 +19,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\ControllerMiddlewareOptions;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\PersonalAccessToken;
 
@@ -26,7 +27,7 @@ class UserController extends IMainRouteController
 {
     use AuthorizesRequests;
 
-    protected function setSanctumMiddleware(): \Illuminate\Routing\ControllerMiddlewareOptions
+    protected function setSanctumMiddleware(): ControllerMiddlewareOptions
     {
         return parent::setSanctumMiddleware()->except('index', 'show', 'store');
     }
@@ -81,7 +82,9 @@ class UserController extends IMainRouteController
     {
         if ($request->bearerToken()) { // If bearer token exists
             $token = PersonalAccessToken::findToken($request->bearerToken());
-            auth()->setUser($token->tokenable()->first()); // set token owner to auth
+            if($token) {
+                auth()->setUser($token->tokenable()->first()); // set token owner to auth
+            }
         }
         $user = $this->fetch($request->id);
 

@@ -3,20 +3,16 @@
 namespace App\Http\Requests;
 
 use Enumerate\Account;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
 {
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule','array<mixed>','string]>
+     * @return array<string, ValidationRule,array<mixed>,string
      */
     public function rules(): array
     {
@@ -34,7 +30,7 @@ class UserRequest extends FormRequest
             'email' => ['required', 'email', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
             'phone' => ['required', 'phone'],
-            'image' => ['required', 'string'],
+            'image' => ['required', 'string', 'max:10000000'],
             'postal_code' => ['required', 'postal_code'],
             'type' => ['required',  Rule::enum(Account::class)],
         ];
@@ -47,9 +43,11 @@ class UserRequest extends FormRequest
             'name' => ['string', 'min:3', 'max:30'],
             'password' => ['string', 'min:8'],
             'phone' => ['phone'],
-            'image' => ['string'],
+            'image' => ['string', 'max:10000000'],
             'postal_code' => ['postal_code'],
             'address' => ['string'],
+            'slug' => ['url'],
+            'biography' => ['string', 'min:3', 'max:256'],
         ];
     }
 }

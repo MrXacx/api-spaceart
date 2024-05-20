@@ -20,17 +20,23 @@ class Handler extends ExceptionHandler
     public function report(Throwable $e): void
     {
         $logger = new Logger;
-        if ($e instanceof ValidationException) {
+
+        if (method_exists($e, 'report')) {
+            $e->report();
+        } elseif ($e instanceof ValidationException) {
             $logger->request($e->getMessage());
         } elseif (
             $e instanceof AuthenticationException or
             $e instanceof AuthorizationException
         ) {
             $logger->request($e->getMessage(), LogLevel::NOTICE);
-        } elseif ($e instanceof Exception) {
-            $logger->error($e->getMessage(), LogLevel::ALERT);
         } else {
-            $logger->error($e->getMessage(), LogLevel::CRITICAL);
+            $message = '['.$e::class.'] - '.$e->getMessage().' - '.$e->getFile().'::'.$e->getLine();
+            if ($e instanceof Exception) {
+                $logger->error($message, LogLevel::ALERT);
+            } else {
+                $logger->error($message, LogLevel::CRITICAL);
+            }
         }
         parent::report($e);
     }
@@ -52,7 +58,7 @@ class Handler extends ExceptionHandler
         return $serviceResponse
             ->sendError(
                 'Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/',
-                [$e->getMessage()],
+                [$e::class, $e->getMessage()],
                 500
             );
     }

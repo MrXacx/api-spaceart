@@ -1,0 +1,588 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "SpaceArt API",
+        "version": "2.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://api-spaceart.local/api/"
+        }
+    ],
+    "paths": {
+        "/user": {
+            "get": {
+                "tags": [
+                    "/user"
+                ],
+                "summary": "List active users",
+                "description": "Get users on database and paginate them",
+                "operationId": "23679253d16f34d2972249751e3631dd",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit per page",
+                        "style": "form",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "Offset for search",
+                        "style": "form",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Users found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "default": "Users found"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/User"
+                                            }
+                                        },
+                                        "fails": {
+                                            "type": "boolean",
+                                            "default": "false"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Unexpected error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "default": "Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/"
+                                        },
+                                        "fails": {
+                                            "type": "boolean",
+                                            "default": "true"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/{id}": {
+            "get": {
+                "tags": [
+                    "/user"
+                ],
+                "summary": "Show user",
+                "description": "Get an unique user on database",
+                "operationId": "1ec60d4ee968175164a94c21f897f8ea",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User id",
+                        "style": "form",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "default": "User {id} found"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        "fails": {
+                                            "type": "boolean",
+                                            "default": "false"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "default": "User {id} not found"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        },
+                                        "fails": {
+                                            "type": "boolean",
+                                            "default": "true"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Unexpected error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "default": "Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/"
+                                        },
+                                        "fails": {
+                                            "type": "boolean",
+                                            "default": "true"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "/user"
+                ],
+                "summary": "Disable user account",
+                "description": "Disable access to user account",
+                "operationId": "a56b12a3694a926699892056cdcf8a9e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User id",
+                        "style": "form",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User disabled",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "default": "User disabled"
+                                        },
+                                        "fails": {
+                                            "type": "boolean",
+                                            "default": "false"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "User not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "default": "User {id} not found"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        },
+                                        "fails": {
+                                            "type": "boolean",
+                                            "default": "true"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Unexpected error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "default": "Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/"
+                                        },
+                                        "fails": {
+                                            "type": "boolean",
+                                            "default": "true"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Agreement": {
+                "description": "Schema of Model Agreement",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "enterprise": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "artist": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "art": {
+                        "$ref": "#/components/schemas/Art"
+                    },
+                    "note": {
+                        "description": "Description of service",
+                        "type": "string",
+                        "example": "Rock musical show for 2 hours"
+                    },
+                    "date": {
+                        "description": "Day of service",
+                        "type": "string",
+                        "format": "date",
+                        "example": "01/01/2025"
+                    },
+                    "start_time": {
+                        "description": "Hour of service",
+                        "type": "string",
+                        "format": "date",
+                        "example": "18:30"
+                    },
+                    "end_time": {
+                        "description": "Hour of finish service",
+                        "type": "string",
+                        "format": "date",
+                        "example": "20:30"
+                    }
+                },
+                "type": "object"
+            },
+            "Art": {
+                "description": "Schema of Model Art",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "music"
+                    }
+                },
+                "type": "object"
+            },
+            "Artist": {
+                "description": "Schema of Model Artist User",
+                "properties": {
+                    "cpf": {
+                        "type": "string",
+                        "example": "40033796599"
+                    },
+                    "bithday": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "01/01/1970"
+                    },
+                    "wage": {
+                        "type": "number",
+                        "format": "float",
+                        "example": "100.0"
+                    },
+                    "art_id": {
+                        "$ref": "#/components/schemas/Art"
+                    }
+                },
+                "type": "object"
+            },
+            "Enterprise": {
+                "description": "Schema of Model Enterprise User",
+                "properties": {
+                    "cnpj": {
+                        "type": "string",
+                        "example": "01499146000196"
+                    },
+                    "company_name": {
+                        "type": "string",
+                        "example": "José e Gabriela Esportes ME"
+                    },
+                    "agreements": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Agreement"
+                        }
+                    },
+                    "selectives": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Selective"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "Post": {
+                "description": "Schema of Model Post",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "text": {
+                        "description": "Text",
+                        "type": "string",
+                        "example": "Today i show me in Atlantic Resort"
+                    },
+                    "image": {
+                        "description": "Image in base64 or url",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "Rate": {
+                "description": "Schema of Model Rate",
+                "properties": {
+                    "author": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "rated": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "agreement": {
+                        "$ref": "#/components/schemas/Agreement"
+                    },
+                    "score": {
+                        "type": "number",
+                        "format": "float",
+                        "maximum": 5,
+                        "minimum": 0,
+                        "example": "4.5"
+                    },
+                    "note": {
+                        "description": "Short review",
+                        "type": "string",
+                        "example": "The artist is very helpful"
+                    }
+                },
+                "type": "object"
+            },
+            "Selective": {
+                "description": "Schema of Model Selective",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "enterprise": {
+                        "$ref": "#/components/schemas/Enterprise"
+                    },
+                    "art": {
+                        "$ref": "#/components/schemas/Art"
+                    },
+                    "title": {
+                        "description": "Comercial name of selective",
+                        "type": "string",
+                        "example": "Summer 2024's selective"
+                    },
+                    "note": {
+                        "description": "Description of service",
+                        "type": "string",
+                        "example": "Rock musical show for 2 hours"
+                    },
+                    "start_moment": {
+                        "description": "Moment of open selective",
+                        "type": "string",
+                        "format": "date",
+                        "example": "01/01/2025 00:00"
+                    },
+                    "end_moment": {
+                        "description": "Moment of open selective",
+                        "type": "string",
+                        "format": "date",
+                        "example": "31/12/2025 23:59"
+                    },
+                    "price": {
+                        "description": "Value of fee",
+                        "type": "number",
+                        "format": "float",
+                        "example": "1000.00"
+                    },
+                    "candidates": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SelectiveCandidate"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "SelectiveCandidate": {
+                "description": "Schema of Selective Candidate",
+                "properties": {
+                    "artist": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "selective": {
+                        "$ref": "#/components/schemas/Selective"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "description": "Schema of Model User",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "name": {
+                        "description": "Username",
+                        "type": "string",
+                        "example": "José Carlos"
+                    },
+                    "active": {
+                        "description": "Access to account is enabled",
+                        "type": "boolean",
+                        "default": "true"
+                    },
+                    "email": {
+                        "description": "Access email address",
+                        "type": "string",
+                        "example": "example@org.net"
+                    },
+                    "phone": {
+                        "description": "User's mobile number",
+                        "type": "string",
+                        "example": "71988469787"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "<FO<k2&K83.;<RAeiC?@"
+                    },
+                    "type": {
+                        "description": "Account type"
+                    },
+                    "postal_code": {
+                        "description": "Brazilian zip code",
+                        "type": "string",
+                        "example": "41000000"
+                    },
+                    "state": {
+                        "description": "Brazilian state acronym",
+                        "type": "string",
+                        "example": "BA"
+                    },
+                    "city": {
+                        "type": "string",
+                        "example": "Salvador"
+                    },
+                    "neighborhood": {
+                        "type": "string",
+                        "example": "Piatã"
+                    },
+                    "street": {
+                        "type": "string",
+                        "example": "Av. Orlando Gomes"
+                    },
+                    "address_complement": {
+                        "description": "Additional  information of address",
+                        "type": "string",
+                        "example": "Beside of SESI Saúde"
+                    },
+                    "image": {
+                        "description": "Image in base64 or URL",
+                        "type": "string"
+                    },
+                    "slug": {
+                        "description": "User's website address",
+                        "type": "string",
+                        "example": "https://spaceart-lemon.vercel.app/user/2"
+                    },
+                    "biography": {
+                        "description": "Short presentation text",
+                        "type": "string"
+                    },
+                    "received_rates_avg_score": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "artist_account_data": {
+                        "$ref": "#/components/schemas/Artist"
+                    },
+                    "enterprise_account_data": {
+                        "$ref": "#/components/schemas/Enterprise"
+                    },
+                    "sent_rates": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Rate"
+                        }
+                    },
+                    "received_rates": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Rate"
+                        }
+                    },
+                    "posts": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Post"
+                        }
+                    }
+                },
+                "type": "object"
+            }
+        }
+    }
+}

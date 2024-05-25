@@ -11,6 +11,10 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller;
 use Illuminate\Routing\ControllerMiddlewareOptions;
 
+/**
+ * @OA\Server(url="https://localhost/api")
+ * @OA\Info(title="SpaceArt API", version="2.0.0")
+ */
 abstract class IRouteController extends Controller
 {
     use AuthorizesRequests, ValidatesRequests;

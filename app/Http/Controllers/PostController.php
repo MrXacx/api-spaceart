@@ -52,7 +52,7 @@ class PostController extends IMainRouteController
         }
     }
 
-    public function fetch(string|int $id): Post
+    protected function fetch(string|int $id): Post
     {
         return Post::findOr($id, fn () => NotFoundRecordException::throw("Post $id not found."))->loadAllRelations();
     }

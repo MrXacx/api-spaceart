@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Services\Clients\PostalCodeClientService;
 use Enumerate\Account;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
@@ -22,6 +23,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\ControllerMiddlewareOptions;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\PersonalAccessToken;
+use OpenApi\Annotations as OA;
 
 class UserController extends IMainRouteController
 {
@@ -42,7 +44,10 @@ class UserController extends IMainRouteController
     }
 
     /**
-     * Display a listing of the resource.
+     * Listing users.
+     *
+     * @param Request $request
+     * @return JsonResponse
      */
     public function index(Request $request): JsonResponse
     {
@@ -50,6 +55,7 @@ class UserController extends IMainRouteController
             'limit' => ['numeric', 'min:1', 'max:50', 'nullable'],
             'offset' => ['numeric', 'min:1', 'nullable'],
         ]);
+
         return $this->responseService->sendMessage(
             'Users found',
             User::withAllRelations()
@@ -64,7 +70,7 @@ class UserController extends IMainRouteController
     /**
      * @throws NotFoundRecordException
      */
-    protected function fetch(string $id): User
+    protected function fetch(string|int $id): Model
     {
         $user = User::findOr(
             $id,

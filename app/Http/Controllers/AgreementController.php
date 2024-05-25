@@ -47,7 +47,7 @@ class AgreementController extends IMainRouteController
     /**
      * @throws NotFoundRecordException
      */
-    protected function fetch(string $id): Model
+    protected function fetch(string|int $id): Model
     {
         return Agreement::findOr($id, fn() => NotFoundRecordException::throw("Agreement $id was not found"))->loadAllRelations();
     }

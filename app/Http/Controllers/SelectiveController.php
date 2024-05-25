@@ -29,6 +29,7 @@ class SelectiveController extends IMainRouteController
             'limit' => ['numeric', 'min:1', 'max:100', 'nullable'],
             'offset' => ['numeric', 'min:1', 'nullable'],
         ]);
+
         return $this->responseService->sendMessage(
             'Selectives found',
             Selective::withAllRelations()
@@ -59,11 +60,11 @@ class SelectiveController extends IMainRouteController
     /**
      * @throws NotFoundRecordException
      */
-    protected function fetch(string $id): Model
+    protected function fetch(string|int $id): Model
     {
         return Selective::findOr(
             $id,
-            fn() => NotFoundRecordException::throw("Selective $id was not found")
+            fn () => NotFoundRecordException::throw("Selective $id was not found")
         )->loadAllRelations();
     }
 

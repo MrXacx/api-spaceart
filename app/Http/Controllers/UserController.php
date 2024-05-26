@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\NotFoundRecordException;
+use App\Enumerate\Account;
+use App\Exceptions\DBQueryException;
+use App\Exceptions\HttpRequestException;
+
 use App\Exceptions\NotSavedModelException;
 use App\Exceptions\UnprocessableEntityException;
 use App\Http\Requests\ArtistRequest;
@@ -13,8 +16,8 @@ use App\Models\Artist;
 use App\Models\Enterprise;
 use App\Models\User;
 use App\Services\Clients\PostalCodeClientService;
-use App\Enumerate\Account;
 use Exception;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,6 +27,8 @@ use Illuminate\Routing\ControllerMiddlewareOptions;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\PersonalAccessToken;
 use OpenApi\Annotations as OA;
+use App\Exceptions\NotFoundException;
+use Throwable;
 
 class UserController extends IMainRouteController
 {
@@ -34,6 +39,10 @@ class UserController extends IMainRouteController
         return parent::setSanctumMiddleware()->except('index', 'show', 'store');
     }
 
+    /**
+     * @throws HttpRequestException
+     * @throws BindingResolutionException
+     */
     private function suitRequest(Request $request): FormRequest
     {
         return match (Account::tryFrom((string) $request->type)) { // Find correct request for account type
@@ -114,19 +123,20 @@ class UserController extends IMainRouteController
     }
 
     /**
-     * @throws NotFoundRecordException
+     * @throws DBQueryException
+     * @throws Throwable
      */
     protected function fetch(string|int $id): Model
     {
         $user = User::findOr(
             $id,
-            fn () => NotFoundRecordException::throw("User $id was not found")
+            fn() => NotFoundException::throw("User $id was not found")
         )// Fetch by PK
             ->loadAllRelations();
 
         throw_unless(
             $user->active, // Unless account is active
-            new NotFoundRecordException("User $id's account is disabled")
+            new UnprocessableEntityException("User $id's account is disabled")
         );
 
         if (auth()->user()?->id == $id) {
@@ -173,7 +183,7 @@ class UserController extends IMainRouteController
      *             type="object",
      *
      *             @OA\Property(property="message", type="string", default="User {id} not found"),
-     *             @OA\Property(property="errors", type="object"),
+     *             @OA\Property(property="errors", type="array", @OA\Items()),
      *             @OA\Property(property="fails", type="bool", default="true"),
      *         )
      *     ),
@@ -205,6 +215,42 @@ class UserController extends IMainRouteController
         return $this->responseService->sendMessage("User $request->id found", $user->toArray());
     }
 
+    /**
+     * @OA\Post(
+     *     path="/user",
+     *     tags={"/user"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *          description="User created",
+     *
+     *          @OA\JsonContent(
+     *              type="object",
+     *
+     *              @OA\Property(property="message", type="string", default="User created"),
+     *              @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/User")),
+     *              @OA\Property(property="fails", type="bool", default="false")
+     *          )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response="422",
+     *           description="User not created",
+     *
+     *           @OA\JsonContent(
+     *               type="object",
+     *
+     *               @OA\Property(property="message", type="string", default="User not created"),
+     *               @OA\Property(property="errors", type="array", @OA\Items()),
+     *               @OA\Property(property="fails", type="bool", default="trur")
+     *           )
+     *      )
+     * )
+     *
+     * @throws BindingResolutionException
+     * @throws HttpRequestException
+     * @throws Throwable
+     */
     public function store(Request $request): JsonResponse
     {
         $request = $this->suitRequest($request);

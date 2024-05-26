@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
+use Exception;
+use Throwable;
+use Psr\Log\LogLevel;
 use App\Services\Logger;
 use App\Services\ResponseService;
-use Exception;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
-use Psr\Log\LogLevel;
-use Throwable;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -25,13 +26,10 @@ class Handler extends ExceptionHandler
             $e->report();
         } elseif ($e instanceof ValidationException) {
             $logger->request($e->getMessage());
-        } elseif (
-            $e instanceof AuthenticationException or
-            $e instanceof AuthorizationException
-        ) {
+        } elseif ( $e instanceof AuthenticationException || $e instanceof AuthorizationException ) {
             $logger->request($e->getMessage(), LogLevel::NOTICE);
         } else {
-            $message = '['.$e::class.'] - '.$e->getMessage().' - '.$e->getFile().'::'.$e->getLine();
+            $message = '[' . $e::class . '] - ' . $e->getMessage() . ' - ' . $e->getFile() . '::' . $e->getLine();
             if ($e instanceof Exception) {
                 $logger->error($message, LogLevel::ALERT);
             } else {
@@ -44,20 +42,19 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $e): JsonResponse
     {
         $serviceResponse = ResponseService::make();
-        if (
-            $e instanceof DBQueryException ||
-            $e instanceof HttpRequestException ||
-            $e instanceof AuthorizationException ||
-            $e instanceof ValidationException ||
-            $e instanceof AuthenticationException
-
-        ) {
+        if ($e instanceof DBQueryException || $e instanceof ValidationException) {
             return $serviceResponse->sendError($e->getMessage());
+        } elseif ($e instanceof HttpRequestException) {
+            return $serviceResponse->sendError($e->getMessage(), status: $e->getCode());
+        } elseif ($e instanceof UnauthorizedHttpException) {
+            return $serviceResponse->sendError($e->getMessage(), status: 401);
+        } elseif ($e instanceof AuthenticationException) {
+            return $serviceResponse->sendError($e->getMessage(), status: 403);
         }
 
         return $serviceResponse
             ->sendError(
-                'Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/',
+                'Unexpected error',
                 [$e::class, $e->getMessage()],
                 500
             );

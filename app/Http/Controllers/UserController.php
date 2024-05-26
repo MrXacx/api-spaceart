@@ -97,7 +97,7 @@ class UserController extends IMainRouteController
      *          @OA\JsonContent(
      *              type="object",
      *
-     *              @OA\Property(property="message", type="string", default="Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/"),
+     *              @OA\Property(property="message", type="string", default="Unexpected error"),
      *              @OA\Property(property="fails", type="bool", default="true"),
      *          )
      *      ),
@@ -195,7 +195,7 @@ class UserController extends IMainRouteController
      *          @OA\JsonContent(
      *              type="object",
      *
-     *              @OA\Property(property="message", type="string", default="Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/"),
+     *              @OA\Property(property="message", type="string", default="Unexpected error"),
      *              @OA\Property(property="fails", type="bool", default="true"),
      *          )
      *      ),
@@ -269,7 +269,7 @@ class UserController extends IMainRouteController
             throw_unless($typedAccountData->save(), NotSavedModelException::class);
             DB::commit();
 
-            return $this->responseService->sendMessage('User was created', $user->loadAllRelations()->toArray());
+            return $this->responseService->sendMessage('User was created', $user->loadAllRelations()->toArray(), 201);
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -356,7 +356,7 @@ class UserController extends IMainRouteController
      *          @OA\JsonContent(
      *              type="object",
      *
-     *              @OA\Property(property="message", type="string", default="Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/"),
+     *              @OA\Property(property="message", type="string", default="Unexpected error"),
      *              @OA\Property(property="fails", type="bool", default="true"),
      *          )
      *      )

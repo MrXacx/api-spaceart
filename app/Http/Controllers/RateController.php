@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\NotFoundRecordException;
-use App\Exceptions\NotSavedModelException;
-use App\Http\Requests\RateRequest;
+
 use App\Models\Rate;
 use App\Enumerate\Account;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
+use App\Http\Requests\RateRequest;
+use Illuminate\Database\Eloquent\Model;
+use App\Exceptions\NotSavedModelException;
+
+use function PHPUnit\Framework\returnSelf;
+use App\Exceptions\NotFoundException;
 
 class RateController extends IRouteController
 {
@@ -24,20 +27,20 @@ class RateController extends IRouteController
         try {
             throw_unless($rate->save(), NotSavedModelException::class);
 
-            return $this->responseService->sendMessage('Rate created', $rate->loadAllRelations()->toArray());
+            return $this->responseService->sendMessage('Rate created', $rate->loadAllRelations()->toArray(), 201);
         } catch (\Exception $e) {
             return $this->responseService->sendError('Rate not created', [$e->getMessage()]);
         }
     }
 
     /**
-     * @throws NotFoundRecordException
+     * @throws NotFoundException
      */
     protected function fetch(string $serviceId, string $userId): Model
     {
         $rate = Rate::find([$userId, $serviceId]);
-
-        return $rate ? $rate->loadAllRelations() : NotFoundRecordException::throw("user $userId's rate was not found on agreement $serviceId");
+        throw_unless($rate, new NotFoundException("user $userId's rate was not found on agreement $serviceId"));
+        return $rate->loadAllRelations();
     }
 
     public function show(RateRequest $request): JsonResponse

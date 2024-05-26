@@ -24,7 +24,7 @@ class SelectiveCandidateController extends IRouteController
             );
             throw_unless($candidature->save(), NotSavedModelException::class);
 
-            return $this->responseService->sendMessage('Candidature created', $candidature->toArray());
+            return $this->responseService->sendMessage('Candidature created', $candidature->toArray(), 201);
         } catch (Exception $e) {
             return $this->responseService->sendError('Candidature not created', [$e->getMessage()]);
         }

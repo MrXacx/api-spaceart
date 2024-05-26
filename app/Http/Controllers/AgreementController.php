@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\NotFoundRecordException;
-use App\Exceptions\NotSavedModelException;
-use App\Http\Requests\AgreementRequest;
-use App\Models\Agreement;
-use App\Enumerate\AgreementStatus;
+
 use Exception;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\JsonResponse;
+use App\Models\Agreement;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Enumerate\AgreementStatus;
+use App\Http\Requests\AgreementRequest;
+use Illuminate\Database\Eloquent\Model;
+use App\Exceptions\NotSavedModelException;
+use App\Exceptions\NotFoundException;
 
 class AgreementController extends IMainRouteController
 {
@@ -38,18 +39,18 @@ class AgreementController extends IMainRouteController
         try {
             throw_unless($agreement->save(), NotSavedModelException::class);
 
-            return $this->responseService->sendMessage('Agreement created', $agreement->toArray());
+            return $this->responseService->sendMessage('Agreement created', $agreement->toArray(), 201);
         } catch (Exception $e) {
             return $this->responseService->sendError('Agreement not created', [$e->getMessage()]);
         }
     }
 
     /**
-     * @throws NotFoundRecordException
+     * @throws NotFoundException
      */
     protected function fetch(string|int $id): Model
     {
-        return Agreement::findOr($id, fn() => NotFoundRecordException::throw("Agreement $id was not found"))->loadAllRelations();
+        return Agreement::findOr($id, fn() => NotFoundException::throw("Agreement $id was not found"))->loadAllRelations();
     }
 
     public function show(AgreementRequest $request): JsonResponse//: JsonResponse

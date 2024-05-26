@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\NotFoundRecordException;
-use App\Exceptions\NotSavedModelException;
-use App\Http\Requests\PostRequest;
+
 use App\Models\Post;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\PostRequest;
+use App\Exceptions\NotSavedModelException;
+use App\Exceptions\NotFoundException;
 use Illuminate\Routing\ControllerMiddlewareOptions;
 
 class PostController extends IMainRouteController
@@ -30,7 +31,7 @@ class PostController extends IMainRouteController
                 ->limit($request->limit ?? 10)
                 ->inRandomOrder()
                 ->get()
-                ->filter(fn ($p) => $p->user->active)
+                ->filter(fn($p) => $p->user->active)
                 ->toArray()
         );
     }
@@ -46,7 +47,7 @@ class PostController extends IMainRouteController
         try {
             throw_unless($post->save(), NotSavedModelException::class);
 
-            return $this->responseService->sendMessage('Post created.', $post->toArray());
+            return $this->responseService->sendMessage('Post created.', $post->toArray(), 201);
         } catch (NotSavedModelException $e) {
             return $this->responseService->sendError('Post not created.', [$e->getMessage()]);
         }
@@ -54,7 +55,7 @@ class PostController extends IMainRouteController
 
     protected function fetch(string|int $id): Post
     {
-        return Post::findOr($id, fn () => NotFoundRecordException::throw("Post $id not found."))->loadAllRelations();
+        return Post::findOr($id, fn() => NotFoundException::throw("Post $id not found."))->loadAllRelations();
     }
 
     /**

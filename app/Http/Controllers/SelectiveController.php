@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\NotFoundRecordException;
-use App\Exceptions\NotSavedModelException;
-use App\Http\Requests\SelectiveRequest;
-use App\Models\Art as ModelsArt;
-use App\Models\Selective;
-use Carbon\Carbon;
-use App\Enumerate\TimeStringFormat;
+
 use Exception;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\JsonResponse;
+use Carbon\Carbon;
+use App\Models\Selective;
 use Illuminate\Http\Request;
-use Illuminate\Routing\ControllerMiddlewareOptions;
 use UnexpectedValueException;
+use App\Models\Art as ModelsArt;
+use Illuminate\Http\JsonResponse;
+use App\Enumerate\TimeStringFormat;
+use App\Http\Requests\SelectiveRequest;
+use Illuminate\Database\Eloquent\Model;
+use App\Exceptions\NotSavedModelException;
+use App\Exceptions\NotFoundException;
+use Illuminate\Routing\ControllerMiddlewareOptions;
 
 class SelectiveController extends IMainRouteController
 {
@@ -51,20 +52,20 @@ class SelectiveController extends IMainRouteController
         try {
             throw_unless($selective->save(), NotSavedModelException::class);
 
-            return $this->responseService->sendMessage('Selective created', $selective->loadAllRelations()->toArray());
+            return $this->responseService->sendMessage('Selective created', $selective->loadAllRelations()->toArray(), 201);
         } catch (Exception $e) {
             return $this->responseService->sendError('Selective not created', [$e->getMessage()]);
         }
     }
 
     /**
-     * @throws NotFoundRecordException
+     * @throws NotFoundException
      */
     protected function fetch(string|int $id): Model
     {
         return Selective::findOr(
             $id,
-            fn () => NotFoundRecordException::throw("Selective $id was not found")
+            fn() => NotFoundException::throw("Selective $id was not found")
         )->loadAllRelations();
     }
 

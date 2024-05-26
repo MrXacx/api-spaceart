@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Art;
-use Enumerate\Art as EnumerateArt;
+use App\Enumerate\Art as EnumerateArt;
 use Illuminate\Database\Seeder;
 
 class ArtSeeder extends Seeder

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Enumerate\Art;
+use App\Enumerate\Art;
 use Illuminate\Validation\Rule;
 
 class ArtistRequest extends UserRequest

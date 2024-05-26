@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Models\Traits;
+namespace App\Trait;
 
 use Carbon\Carbon;
-use Enumerate\TimeStringFormat;
+use App\Enumerate\TimeStringFormat;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 /**

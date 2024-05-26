@@ -6,7 +6,7 @@ use App\Exceptions\NotFoundRecordException;
 use App\Exceptions\NotSavedModelException;
 use App\Http\Requests\AgreementRequest;
 use App\Models\Agreement;
-use Enumerate\AgreementStatus;
+use App\Enumerate\AgreementStatus;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;

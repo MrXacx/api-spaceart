@@ -1,6 +1,6 @@
 <?php
 
-namespace Enumerate\Traits;
+namespace App\Trait;
 
 trait BackedEnumTrait
 {

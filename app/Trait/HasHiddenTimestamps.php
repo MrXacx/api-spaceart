@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Traits;
+namespace App\Trait;
 
 /**
  * Esconde os atributos created_at e updated_at

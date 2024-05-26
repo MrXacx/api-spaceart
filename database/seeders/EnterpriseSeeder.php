@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Enterprise;
 use App\Models\User;
-use Enumerate\Account;
+use App\Enumerate\Account;
 use Illuminate\Database\Seeder;
 
 class EnterpriseSeeder extends Seeder

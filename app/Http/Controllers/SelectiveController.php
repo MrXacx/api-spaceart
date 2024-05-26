@@ -8,7 +8,7 @@ use App\Http\Requests\SelectiveRequest;
 use App\Models\Art as ModelsArt;
 use App\Models\Selective;
 use Carbon\Carbon;
-use Enumerate\TimeStringFormat;
+use App\Enumerate\TimeStringFormat;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;

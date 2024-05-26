@@ -3,7 +3,7 @@
 use App\Models\Art;
 use App\Models\Artist;
 use App\Models\Enterprise;
-use Enumerate\AgreementStatus;
+use App\Enumerate\AgreementStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

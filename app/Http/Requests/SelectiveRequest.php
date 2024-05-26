@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Enumerate\Art;
+use App\Enumerate\Art;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

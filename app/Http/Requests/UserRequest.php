@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Enumerate\Account;
+use App\Enumerate\Account;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;

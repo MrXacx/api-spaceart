@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Exceptions\CheckDBOperationException;
-use App\Models\Traits\HasHiddenTimestamps;
+use App\Trait\HasHiddenTimestamps;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

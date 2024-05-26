@@ -1,8 +1,8 @@
 <?php
 
-namespace Enumerate;
+namespace App\Enumerate;
 
-use Enumerate\Traits\BackedEnumTrait;
+use App\Trait\BackedEnumTrait;
 
 enum Account: string
 {

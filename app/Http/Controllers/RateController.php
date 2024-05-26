@@ -6,7 +6,7 @@ use App\Exceptions\NotFoundRecordException;
 use App\Exceptions\NotSavedModelException;
 use App\Http\Requests\RateRequest;
 use App\Models\Rate;
-use Enumerate\Account;
+use App\Enumerate\Account;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 

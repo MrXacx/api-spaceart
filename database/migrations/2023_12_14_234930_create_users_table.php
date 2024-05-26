@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Enumerate\Account;
-use Enumerate\State;
+use App\Enumerate\Account;
+use App\Enumerate\State;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

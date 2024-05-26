@@ -13,7 +13,7 @@ use App\Models\Artist;
 use App\Models\Enterprise;
 use App\Models\User;
 use App\Services\Clients\PostalCodeClientService;
-use Enumerate\Account;
+use App\Enumerate\Account;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -44,10 +44,56 @@ class UserController extends IMainRouteController
     }
 
     /**
-     * Listing users.
+     * @OA\Get(
+     *     tags={"/user"},
+     *     path="/user",
+     *     summary="List active users",
+     *     description="Get users on database and paginate them",
      *
-     * @param Request $request
-     * @return JsonResponse
+     *     @OA\Parameter(
+     *      name="limit",
+     *      in="query",
+     *      description="Limit per page",
+     *
+     *      @OA\Schema(type="integer"),
+     *      style="form"
+     *     ),
+     *
+     *     @OA\Parameter(
+     *      name="offset",
+     *      in="query",
+     *      description="Offset for search",
+     *
+     *      @OA\Schema(type="integer"),
+     *      style="form"
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Users found",
+     *
+     *         @OA\JsonContent(
+     *             type="object",
+     *
+     *             @OA\Property(property="message", type="string", default="Users found"),
+     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/User")),
+     *             @OA\Property(property="fails", type="bool", default="false"),
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response="500",
+     *          description="Unexpected error",
+     *
+     *          @OA\JsonContent(
+     *              type="object",
+     *
+     *              @OA\Property(property="message", type="string", default="Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/"),
+     *              @OA\Property(property="fails", type="bool", default="true"),
+     *          )
+     *      ),
+     *
+     * )
      */
     public function index(Request $request): JsonResponse
     {
@@ -90,6 +136,62 @@ class UserController extends IMainRouteController
         return $user;
     }
 
+    /**
+     * @OA\Get(
+     *     tags={"/user"},
+     *     path="/user/{id}",
+     *     summary="Show user",
+     *     description="Get an unique user on database",
+     *
+     *     @OA\Parameter(
+     *      name="id",
+     *      in="path",
+     *      description="User id",
+     *
+     *      @OA\Schema(type="integer"),
+     *      style="form"
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="User found",
+     *
+     *         @OA\JsonContent(
+     *             type="object",
+     *
+     *             @OA\Property(property="message", type="string", default="User {id} found"),
+     *             @OA\Property(property="data", type="object", ref="#/components/schemas/User"),
+     *             @OA\Property(property="fails", type="bool", default="false"),
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="422",
+     *         description="User not found",
+     *
+     *         @OA\JsonContent(
+     *             type="object",
+     *
+     *             @OA\Property(property="message", type="string", default="User {id} not found"),
+     *             @OA\Property(property="errors", type="object"),
+     *             @OA\Property(property="fails", type="bool", default="true"),
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response="500",
+     *          description="Unexpected error",
+     *
+     *          @OA\JsonContent(
+     *              type="object",
+     *
+     *              @OA\Property(property="message", type="string", default="Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/"),
+     *              @OA\Property(property="fails", type="bool", default="true"),
+     *          )
+     *      ),
+     *
+     * )
+     */
     public function show(Request $request): JsonResponse
     {
         if ($request->bearerToken()) { // If bearer token exists
@@ -159,6 +261,61 @@ class UserController extends IMainRouteController
         }
     }
 
+    /**
+     * @OA\Delete(
+     *     tags={"/user"},
+     *     path="/user/{id}",
+     *     summary="Disable user account",
+     *     description="Disable access to user account",
+     *     security={{"bearerAuth": {}}},
+     *
+     *     @OA\Parameter(
+     *      name="id",
+     *      in="path",
+     *      description="User id",
+     *
+     *      @OA\Schema(type="integer"),
+     *      style="form"
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="User disabled",
+     *
+     *         @OA\JsonContent(
+     *             type="object",
+     *
+     *             @OA\Property(property="message", type="string", default="User disabled"),
+     *             @OA\Property(property="fails", type="bool", default="false"),
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="422",
+     *         description="User not found",
+     *
+     *         @OA\JsonContent(
+     *             type="object",
+     *
+     *             @OA\Property(property="message", type="string", default="User {id} not found"),
+     *             @OA\Property(property="errors", type="object"),
+     *             @OA\Property(property="fails", type="bool", default="true"),
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *          response="500",
+     *          description="Unexpected error",
+     *
+     *          @OA\JsonContent(
+     *              type="object",
+     *
+     *              @OA\Property(property="message", type="string", default="Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/"),
+     *              @OA\Property(property="fails", type="bool", default="true"),
+     *          )
+     *      )
+     * )
+     */
     public function destroy(Request $request): JsonResponse
     {
         $user = User::find($request->id);

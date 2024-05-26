@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Exceptions\CheckDBOperationException;
-use App\Models\Traits\HasDatetimeAccessorAndMutator;
-use App\Models\Traits\HasHiddenTimestamps;
-use Enumerate\TimeStringFormat;
+use App\Trait\HasDatetimeAccessorAndMutator;
+use App\Trait\HasHiddenTimestamps;
+use App\Enumerate\TimeStringFormat;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

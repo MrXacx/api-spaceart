@@ -13,7 +13,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Schema(
+ *     schema="Selective",
+ *     description="Schema of Model Selective",
+ *
+ *     @OA\Property(property="id", type="int"),
+ *     @OA\Property(property="enterprise", ref="#/components/schemas/Enterprise"),
+ *     @OA\Property(property="art", ref="#/components/schemas/Art"),
+ *     @OA\Property(property="title", type="string", description="Comercial name of selective", example="Summer 2024's selective"),
+ *     @OA\Property(property="note", type="string",  description="Description of service", example="Rock musical show for 2 hours"),
+ *     @OA\Property(property="start_moment", type="date", description="Moment of open selective", example="01/01/2025 00:00"),
+ *     @OA\Property(property="end_moment", type="date", description="Moment of open selective", example="31/12/2025 23:59"),
+ *     @OA\Property(property="price", type="float", description="Value of fee", example="1000.00"),
+ *     @OA\Property(property="candidates", type="array", @OA\Items(ref="#/components/schemas/SelectiveCandidate")),
+ * )
+ */
 class Selective extends Model
 {
     use HasDatetimeAccessorAndMutator, HasFactory, HasHiddenTimestamps {

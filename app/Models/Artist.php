@@ -11,7 +11,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\Crypt;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Schema(
+ *     schema="Artist",
+ *     description="Schema of Model Artist User",
+ *
+ *
+ *     @OA\Property(property="cpf", type="string", example="40033796599"),
+ *     @OA\Property(property="bithday", type="date", example="01/01/1970"),
+ *     @OA\Property(property="wage", type="float", example="100.0"),
+ *     @OA\Property(property="art_id", ref="#/components/schemas/Art"),
+ * )
+ */
 class Artist extends Model
 {
     use HasFactory, HasHiddenTimestamps {

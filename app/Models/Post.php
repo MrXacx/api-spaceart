@@ -9,7 +9,19 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Schema(
+ *     schema="Post",
+ *     description="Schema of Model Post",
+ *
+ *     @OA\Property(property="id", type="int"),
+ *     @OA\Property(property="user", ref="#/components/schemas/User"),
+ *     @OA\Property(property="text", type="string", description="Text", example="Today i show me in Atlantic Resort"),
+ *     @OA\Property(property="image", type="string", description="Image in base64 or url"),
+ * )
+ */
 class Post extends Model
 {
     use HasFactory;

@@ -10,8 +10,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Validation\ValidationException;
+use OpenApi\Annotations as OA;
 use Thiagoprz\CompositeKey\HasCompositeKey;
 
+/**
+ * @OA\Schema(
+ *     schema="Rate",
+ *     description="Schema of Model Rate",
+ *
+ *     @OA\Property(property="author", ref="#/components/schemas/User"),
+ *     @OA\Property(property="rated", ref="#/components/schemas/User"),
+ *     @OA\Property(property="agreement", ref="#/components/schemas/Agreement"),
+ *     @OA\Property(property="score", type="float", minimum=0, maximum=5, example="4.5"),
+ *     @OA\Property(property="note", type="string", description="Short review", example="The artist is very helpful"),
+ * )
+ */
 class Rate extends Model
 {
     use HasCompositeKey, HasFactory, HasHiddenTimestamps {

@@ -9,7 +9,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Crypt;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Schema(
+ *     schema="Enterprise",
+ *     description="Schema of Model Enterprise User",
+ *
+ *     @OA\Property(property="cnpj", type="string", example="01499146000196"),
+ *     @OA\Property(property="company_name", type="string", example="José e Gabriela Esportes ME"),
+ *     @OA\Property(property="agreements", type="array", @OA\Items(ref="#/components/schemas/Agreement")),
+ *     @OA\Property(property="selectives", type="array", @OA\Items(ref="#/components/schemas/Selective"))
+ * )
+ */
 class Enterprise extends Model
 {
     use HasFactory, HasHiddenTimestamps {

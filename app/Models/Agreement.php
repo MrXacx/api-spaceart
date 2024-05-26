@@ -12,7 +12,23 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Schema(
+ *     schema="Agreement",
+ *     description="Schema of Model Agreement",
+ *
+ *     @OA\Property(property="id", type="int"),
+ *     @OA\Property(property="enterprise", ref="#/components/schemas/User"),
+ *     @OA\Property(property="artist", ref="#/components/schemas/User"),
+ *     @OA\Property(property="art", ref="#/components/schemas/Art"),
+ *     @OA\Property(property="note", type="string",  description="Description of service", example="Rock musical show for 2 hours"),
+ *     @OA\Property(property="date", type="date", description="Day of service", example="01/01/2025"),
+ *     @OA\Property(property="start_time", type="date", description="Hour of service", example="18:30"),
+ *     @OA\Property(property="end_time", type="date", description="Hour of finish service", example="20:30"),
+ * )
+ */
 class Agreement extends Model
 {
     use HasDatetimeAccessorAndMutator, HasFactory, HasHiddenTimestamps {

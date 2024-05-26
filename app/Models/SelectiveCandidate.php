@@ -10,8 +10,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use OpenApi\Annotations as OA;
 use Thiagoprz\CompositeKey\HasCompositeKey;
 
+/**
+ * @OA\Schema(
+ *     schema="SelectiveCandidate",
+ *     description="Schema of Selective Candidate",
+ *
+ *     @OA\Property(property="artist", ref="#/components/schemas/User"),
+ *     @OA\Property(property="selective", ref="#/components/schemas/Selective"),
+ * )
+ */
 class SelectiveCandidate extends Model
 {
     use HasCompositeKey, HasFactory, HasHiddenTimestamps {

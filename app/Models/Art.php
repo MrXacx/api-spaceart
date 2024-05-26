@@ -6,7 +6,16 @@ use App\Models\Traits\HasHiddenTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Schema(
+ *     schema="Art",
+ *     description="Schema of Model Art",
+ *
+ *     @OA\Property(property="name", type="string", example="music")
+ * )
+ */
 class Art extends Model
 {
     use HasFactory, HasHiddenTimestamps;

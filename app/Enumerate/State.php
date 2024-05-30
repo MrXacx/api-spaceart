@@ -2,7 +2,7 @@
 
 namespace App\Enumerate;
 
-use App\Trait\BackedEnumTrait;
+use App\Traits\BackedEnumTrait;
 
 enum State: string
 {

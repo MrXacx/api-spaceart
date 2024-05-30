@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use App\Exceptions\CheckDBOperationException;
-use App\Trait\HasDatetimeAccessorAndMutator;
-use App\Trait\HasHiddenTimestamps;
+use App\Traits\HasDatetimeAccessorAndMutator;
+use App\Traits\HasHiddenTimestamps;
 use App\Enumerate\TimeStringFormat;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;

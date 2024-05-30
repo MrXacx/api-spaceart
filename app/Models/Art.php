@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Trait\HasHiddenTimestamps;
+use App\Traits\HasHiddenTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;

@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use App\Enumerate\TimeStringFormat;
-use App\Trait\HasDatetimeAccessorAndMutator;
-use App\Trait\HasHiddenTimestamps;
+use App\Traits\HasDatetimeAccessorAndMutator;
+use App\Traits\HasHiddenTimestamps;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

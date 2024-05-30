@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Trait\HasHiddenTimestamps;
+use App\Traits\HasHiddenTimestamps;
 use App\Enumerate\Account;
 use App\Enumerate\State;
 use Illuminate\Database\Eloquent\Builder;

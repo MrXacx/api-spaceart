@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exceptions;
+namespace App\Exceptions\Contracts;
 
 use App\Services\Logger;
 use Exception;

@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Enumerate\Account;
-use App\Exceptions\HttpRequestException;
+use App\Exceptions\Contracts\HttpRequestException;
 use App\Exceptions\NotSavedModelException;
 use App\Exceptions\UnprocessableEntityException;
+use App\Http\Controllers\Contracts\IMainRouteController;
 use App\Http\Requests\ArtistRequest;
 use App\Http\Requests\EnterpriseRequest;
 use App\Repositories\UserRepository;

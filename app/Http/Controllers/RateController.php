@@ -3,17 +3,12 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\Rate;
-use App\Enumerate\Account;
+use App\Exceptions\NotSavedModelException;
+use App\Http\Controllers\Contracts\IRouteController;
+use App\Http\Requests\RateRequest;
 use App\Repositories\RateRepository;
 use App\Services\ResponseService;
 use Illuminate\Http\JsonResponse;
-use App\Http\Requests\RateRequest;
-use Illuminate\Database\Eloquent\Model;
-use App\Exceptions\NotSavedModelException;
-
-use function PHPUnit\Framework\returnSelf;
-use App\Exceptions\NotFoundException;
 
 class RateController extends IRouteController
 {

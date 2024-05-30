@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Enumerate\Account;
-use App\Exceptions\HttpRequestException;
+use App\Exceptions\Contracts\HttpRequestException;
 use App\Exceptions\NotFoundException;
 use App\Exceptions\NotSavedModelException;
 use App\Exceptions\UnprocessableEntityException;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\NotSavedModelException;
+use App\Http\Controllers\Contracts\IMainRouteController;
 use App\Http\Requests\AgreementRequest;
 use App\Repositories\AgreementRepository;
 use App\Services\ResponseService;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\NotSavedModelException;
+use App\Http\Controllers\Contracts\IRouteController;
 use App\Http\Requests\SelectiveCandidateRequest;
 use App\Repositories\SelectiveCandidateRepository;
 use App\Services\ResponseService;

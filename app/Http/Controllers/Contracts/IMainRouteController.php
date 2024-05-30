@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Contracts;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

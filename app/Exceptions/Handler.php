@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
-use Exception;
-use Throwable;
-use Psr\Log\LogLevel;
+use App\Exceptions\Contracts\DBQueryException;
+use App\Exceptions\Contracts\HttpRequestException;
 use App\Services\Logger;
 use App\Services\ResponseService;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Validation\ValidationException;
+use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
+use Psr\Log\LogLevel;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {

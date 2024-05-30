@@ -11,6 +11,7 @@ use App\Services\ResponseService;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
@@ -20,22 +21,28 @@ use Throwable;
 
 class Handler extends ExceptionHandler
 {
+    public function __construct(
+        Container $container,
+        private readonly ResponseService $responseService,
+        private readonly Logger $logger
+    ) {
+        parent::__construct($container);
+    }
+
     public function report(Throwable $e): void
     {
-        $logger = new Logger;
-
         if (method_exists($e, 'report')) {
             $e->report();
         } elseif ($e instanceof ValidationException) {
-            $logger->request($e->getMessage());
-        } elseif ( $e instanceof AuthenticationException || $e instanceof AuthorizationException ) {
-            $logger->request($e->getMessage(), LogLevel::NOTICE);
+            $this->logger->request($e->getMessage());
+        } elseif ($e instanceof AuthenticationException || $e instanceof AuthorizationException) {
+            $this->logger->request($e->getMessage(), LogLevel::NOTICE);
         } else {
-            $message = '[' . $e::class . '] - ' . $e->getMessage() . ' - ' . $e->getFile() . '::' . $e->getLine();
+            $message = '['.$e::class.'] - '.$e->getMessage().' - '.$e->getFile().'::'.$e->getLine();
             if ($e instanceof Exception) {
-                $logger->error($message, LogLevel::ALERT);
+                $this->logger->error($message, LogLevel::ALERT);
             } else {
-                $logger->error($message, LogLevel::CRITICAL);
+                $this->logger->error($message, LogLevel::CRITICAL);
             }
         }
         parent::report($e);
@@ -43,18 +50,17 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e): JsonResponse
     {
-        $serviceResponse = ResponseService::make();
         if ($e instanceof DBQueryException || $e instanceof ValidationException) {
-            return $serviceResponse->sendError($e->getMessage());
+            return $this->responseService->sendError($e->getMessage());
         } elseif ($e instanceof HttpRequestException) {
-            return $serviceResponse->sendError($e->getMessage(), status: $e->getCode());
+            return $this->responseService->sendError($e->getMessage(), status: $e->getCode());
         } elseif ($e instanceof UnauthorizedHttpException) {
-            return $serviceResponse->sendError($e->getMessage(), status: 401);
+            return $this->responseService->sendError($e->getMessage(), status: 401);
         } elseif ($e instanceof AuthenticationException) {
-            return $serviceResponse->sendError($e->getMessage(), status: 403);
+            return $this->responseService->sendError($e->getMessage(), status: 403);
         }
 
-        return $serviceResponse
+        return $this->responseService
             ->sendError(
                 'Unexpected error',
                 [$e::class, $e->getMessage()],

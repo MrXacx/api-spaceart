@@ -2,97 +2,78 @@
 
 namespace App\Http\Controllers;
 
-
-use Exception;
-use App\Models\Agreement;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Enumerate\AgreementStatus;
-use App\Http\Requests\AgreementRequest;
-use Illuminate\Database\Eloquent\Model;
 use App\Exceptions\NotSavedModelException;
-use App\Exceptions\NotFoundException;
+use App\Http\Requests\AgreementRequest;
+use App\Repositories\AgreementRepository;
+use App\Services\ResponseService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class AgreementController extends IMainRouteController
 {
+    public function __construct(
+        ResponseService $responseService,
+        private readonly AgreementRepository $agreementRepository
+    ) {
+        parent::__construct($responseService);
+    }
+
     public function index(Request $request): JsonResponse
     {
         $request->validate(['limit' => ['numeric', 'min:1', 'max:100', 'nullable']]);
-        $id = $request->user()->id;
+
         return $this->responseService->sendMessage(
             'Agreements found',
-            Agreement::withAllRelations()
-                ->where('artist_id', '=', $id)
-                ->orWhere('enterprise_id', '=', $id)
-                ->limit($request->limit ?? 20)
-                ->get()
-                ->toArray()
+            $this->agreementRepository->list()->toArray()
         );
     }
 
     public function store(AgreementRequest $request): JsonResponse
     {
-        $agreement = new Agreement($request->validated());
-        $this->authorize('isStakeholder', $agreement);
-        $agreement->art_id = $agreement->artist->artistAccountData->art_id;
-
         try {
-            throw_unless($agreement->save(), NotSavedModelException::class);
+            $agreement = $this->agreementRepository->create(
+                $request->id,
+                fn ($a) => $this->authorize('isStakeholder', $a)
+            );
 
             return $this->responseService->sendMessage('Agreement created', $agreement->toArray(), 201);
-        } catch (Exception $e) {
-            return $this->responseService->sendError('Agreement not created', [$e->getMessage()]);
+        } catch (NotSavedModelException) {
+            return $this->responseService->sendError('Agreement not created');
         }
-    }
-
-    /**
-     * @throws NotFoundException
-     */
-    protected function fetch(string|int $id): Model
-    {
-        return Agreement::findOr($id, fn() => NotFoundException::throw("Agreement $id was not found"))->loadAllRelations();
     }
 
     public function show(AgreementRequest $request): JsonResponse//: JsonResponse
     {
-        $agreement = $this->fetch($request->id);
-        $this->authorize('isStakeholder', $agreement);
+        $agreement = $this->agreementRepository->fetch(
+            $request->id,
+            fn ($a) => $this->authorize('isStakeholder', $a)
+        );
 
         return $this->responseService->sendMessage(
-            'Agreement found',
+            "Agreement $request->id found",
             $agreement->toArray()
         );
     }
 
     public function update(AgreementRequest $request): JsonResponse
     {
-        $agreementData = $request->validated();
-        $agreement = $this->fetch($request->id);
-        if (count($agreementData) > 1) { // If exists some key different of status
-            $this->authorize('isHirer', $agreement);
-            $agreementData['status'] = AgreementStatus::SEND->value; // Change agreement status to 'send' if agreement conditions have changed
-        } else {
-            $this->authorize('isStakeholder', $agreement);
-        }
-
-        $agreement->fill($agreementData);
+        $validate = count($request->validated()) > 1 ?
+        fn ($a) => $this->authorize('isHirer', $a) :
+        fn ($a) => $this->authorize('isStakeholder', $a);
 
         try {
-            throw_unless($agreement->save(), NotSavedModelException::class);
+            $agreement = $this->agreementRepository->update($request->id, $request->validated(), $validate);
 
             return $this->responseService->sendMessage('Agreement updated', $agreement->toArray());
-        } catch (Exception $e) {
-            return $this->responseService->sendError('Agreement not updated', [$e->getMessage()]);
+        } catch (NotSavedModelException) {
+            return $this->responseService->sendError('Agreement not updated');
         }
     }
 
     public function destroy(AgreementRequest $request): JsonResponse
     {
-        $agreement = $this->fetch($request->id);
-        $this->authorize('isStakeholder', $agreement);
-
-        return $agreement->delete() ?
-            $this->responseService->sendMessage('Agreement deleted') :
+        return $this->agreementRepository->delete($request->id, fn ($a) => $this->authorize('isStakeholder', $a)) ?
+            $this->responseService->sendMessage('Agreement deleted', 204) :
             $this->responseService->sendError('Agreement not deleted');
     }
 }

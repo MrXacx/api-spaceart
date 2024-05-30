@@ -79,20 +79,4 @@ class Rate extends Model
     {
         return static::with('author', 'rated', 'agreement');
     }
-
-    /**
-     * @throws ValidationException
-     * @throws CheckDBOperationException
-     */
-    public function save(array $options = []): bool
-    {
-        throw_unless($this->author->active, new CheckDBOperationException("The author's account $this->author_id is disabled"));
-
-        throw_unless(
-            Carbon::now()
-                ->isBefore($this->agreement->getActiveInterval()['end_moment']),
-            new CheckDBOperationException("The agreement $this->agreement_id is not finished"));
-
-        return parent::save($options);
-    }
 }

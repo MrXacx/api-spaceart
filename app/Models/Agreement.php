@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-use App\Exceptions\CheckDBOperationException;
+use App\Enumerate\TimeStringFormat;
 use App\Trait\HasDatetimeAccessorAndMutator;
 use App\Trait\HasHiddenTimestamps;
-use App\Enumerate\TimeStringFormat;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use JetBrains\PhpStorm\ArrayShape;
 use OpenApi\Annotations as OA;
 
 /**
@@ -95,6 +95,7 @@ class Agreement extends Model
         return $this->toTime();
     }
 
+    #[ArrayShape(['start_moment' => "\Carbon\Carbon", 'end_moment' => "\Carbon\Carbon"])]
     public function getActiveInterval(): array
     {
         return [
@@ -111,16 +112,5 @@ class Agreement extends Model
     public static function withAllRelations()
     {
         return static::with('art', 'artist', 'enterprise', 'rates');
-    }
-
-    /**
-     * @throws CheckDBOperationException
-     */
-    public function save(array $options = []): bool
-    {
-        throw_unless($this->artist->active, new CheckDBOperationException("The artist's account $this->artist_id is disabled"));
-        throw_unless($this->enterprise->active, new CheckDBOperationException("The enterprise's account $this->enterprise_id is disabled"));
-
-        return parent::save($options);
     }
 }

@@ -3,30 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\NotSavedModelException;
-use App\Exceptions\UnprocessableEntityException;
 use App\Http\Requests\SelectiveCandidateRequest;
-use App\Models\SelectiveCandidate;
-use Carbon\Carbon;
-use Exception;
+use App\Repositories\SelectiveCandidateRepository;
+use App\Services\ResponseService;
 use Illuminate\Http\JsonResponse;
 
 class SelectiveCandidateController extends IRouteController
 {
+    public function __construct(ResponseService $responseService,
+        private readonly SelectiveCandidateRepository $selectiveCandidateRepository,
+    ) {
+        parent::__construct($responseService);
+    }
+
     protected function store(SelectiveCandidateRequest $request): JsonResponse
     {
-        $candidature = new SelectiveCandidate($request->validated() + ['selective_id' => $request->selective]);
-        $this->authorize('isCandidate', $candidature);
-        $activeInterval = $candidature->selective->getActiveInterval();
+        $data = $request->validated() + ['selective_id' => $request->selective];
+
         try {
-            throw_unless(
-                Carbon::now()->isBetween($activeInterval['start_moment'], $activeInterval['end_moment']),
-                new UnprocessableEntityException("selective $request->selective is closed")
-            );
-            throw_unless($candidature->save(), NotSavedModelException::class);
+            $candidature = $this->selectiveCandidateRepository
+                ->create(
+                    $data,
+                    fn ($c) => $this->authorize('isAdmin', $c->artist)
+                );
 
             return $this->responseService->sendMessage('Candidature created', $candidature->toArray(), 201);
-        } catch (Exception $e) {
-            return $this->responseService->sendError('Candidature not created', [$e->getMessage()]);
+        } catch (NotSavedModelException) {
+            return $this->responseService->sendError('Candidature not created');
         }
     }
 }

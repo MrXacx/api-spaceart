@@ -5,34 +5,32 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Enumerate\Account;
-use App\Exceptions\DBQueryException;
 use App\Exceptions\HttpRequestException;
-
 use App\Exceptions\NotSavedModelException;
 use App\Exceptions\UnprocessableEntityException;
 use App\Http\Requests\ArtistRequest;
 use App\Http\Requests\EnterpriseRequest;
-use App\Models\Artist;
-use App\Models\Enterprise;
-use App\Models\User;
-use App\Services\Clients\PostalCodeClientService;
-use Exception;
+use App\Repositories\UserRepository;
+use App\Services\ResponseService;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\ControllerMiddlewareOptions;
-use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\PersonalAccessToken;
 use OpenApi\Annotations as OA;
-use App\Exceptions\NotFoundException;
 use Throwable;
 
 class UserController extends IMainRouteController
 {
     use AuthorizesRequests;
+
+    public function __construct(ResponseService $responseService,
+        private readonly UserRepository $userRepository
+    ) {
+        parent::__construct($responseService);
+    }
 
     protected function setSanctumMiddleware(): ControllerMiddlewareOptions
     {
@@ -113,37 +111,8 @@ class UserController extends IMainRouteController
 
         return $this->responseService->sendMessage(
             'Users found',
-            User::withAllRelations()
-                ->where('active', true)
-                ->offset($request->offset ?? 0)
-                ->limit($request->limit ?? 15)
-                ->get()
-                ->toArray()
+            $this->userRepository->list($request->offset ?? 0, $request->limit ?? 15)->toArray()
         );
-    }
-
-    /**
-     * @throws DBQueryException
-     * @throws Throwable
-     */
-    protected function fetch(string|int $id): Model
-    {
-        $user = User::findOr(
-            $id,
-            fn() => NotFoundException::throw("User $id was not found")
-        )// Fetch by PK
-            ->loadAllRelations();
-
-        throw_unless(
-            $user->active, // Unless account is active
-            new UnprocessableEntityException("User $id's account is disabled")
-        );
-
-        if (auth()->user()?->id == $id) {
-            $user->showConfidentialData();
-        }
-
-        return $user;
     }
 
     /**
@@ -201,6 +170,8 @@ class UserController extends IMainRouteController
      *      ),
      *
      * )
+     *
+     * @throws HttpRequestException
      */
     public function show(Request $request): JsonResponse
     {
@@ -210,7 +181,7 @@ class UserController extends IMainRouteController
                 auth()->setUser($token->tokenable()->first()); // set token owner to auth
             }
         }
-        $user = $this->fetch($request->id);
+        $user = $this->userRepository->fetch($request->id);
 
         return $this->responseService->sendMessage("User $request->id found", $user->toArray());
     }
@@ -254,56 +225,29 @@ class UserController extends IMainRouteController
     public function store(Request $request): JsonResponse
     {
         $request = $this->suitRequest($request);
-
-        $addressData = PostalCodeClientService::make()->get($request->postal_code); // Fetch city and state
-        $requestParameters = $request->all() + (array) $addressData->getData(); // Merge request data and zip code API response
-
-        $user = new User($requestParameters); // Build user
-        $typedAccountData = $request->type == Account::ARTIST ? new Artist : new Enterprise;
-        $typedAccountData->fill($requestParameters);
-
-        DB::beginTransaction();
         try {
-            throw_unless($user->save(), NotSavedModelException::class);
-            $typedAccountData->id = $user->id;
-            throw_unless($typedAccountData->save(), NotSavedModelException::class);
-            DB::commit();
+            $user = $this->userRepository->create($request->validated());
 
-            return $this->responseService->sendMessage('User was created', $user->loadAllRelations()->toArray(), 201);
-        } catch (Exception $e) {
-            DB::rollBack();
-
-            return $this->responseService->sendError('User not created', [$e->getMessage()]);
+            return $this->responseService->sendMessage('User was created', $user->toArray(), 201);
+        } catch (NotSavedModelException) {
+            return $this->responseService->sendMessage('User was not created');
         }
     }
 
     public function update(Request $request): JsonResponse
     {
         $request = $this->suitRequest($request);
-        $userData = $request->validated(); // Get all validated data
 
-        if ($request->exists('postal_code')) { // Fetch information derived from the zip code
-            $userData += (array) PostalCodeClientService::make()->get($request->postal_code)->getData();
-        }
-
-        $user = $this->fetch($request->id); // Fetch user
-
-        $this->authorize('isAdmin', $user);
-        $user->fill($userData);
-
-        $accountData = $user->artistAccountData ?? $user->enterpriseAccountData;
-        $accountData->fill($userData);
-
-        DB::beginTransaction();
         try {
-            throw_unless($user->save() && $accountData->save(), NotSavedModelException::class);
-            DB::commit();
+            $user = $this->userRepository->update(
+                $request->id,
+                $request->validated(),
+                fn ($u) => $this->authorize('isAdmin', $u)
+            );
 
-            return $this->responseService->sendMessage("User $user->id was updated", $user->toArray());
-        } catch (Exception $e) {
-            DB::rollBack();
-
-            return $this->responseService->sendError("User $user->id was not updated", [$e->getMessage()]);
+            return $this->responseService->sendMessage("User $request->id was updated", $user->toArray());
+        } catch (NotSavedModelException $e) {
+            return $this->responseService->sendError("User $request->id was not updated", [$e->getMessage()]);
         }
     }
 
@@ -364,16 +308,11 @@ class UserController extends IMainRouteController
      */
     public function destroy(Request $request): JsonResponse
     {
-        $user = User::find($request->id);
-        $this->authorize('isAdmin', $user);
-        $user->fill([
-            'image' => null,
-            'slug' => null,
-            'active' => false,
-        ]);
-
-        return $user->save() ?
-            $this->responseService->sendMessage("Account $request->id was disabled") :
+        return $this->userRepository->delete(
+            $request->id,
+            fn ($u) => $this->authorize('isAdmin', $u)
+        ) ?
+            $this->responseService->sendMessage("Account $request->id was disabled", status: 204) :
             $this->responseService->sendError("User $request->id was not disabled");
     }
 }

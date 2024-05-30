@@ -57,11 +57,4 @@ class Post extends Model
     {
         return $this->load('user');
     }
-
-    public function save($options = []): bool
-    {
-        throw_unless($this->user->active, NotSavedModelException::class);
-
-        return parent::save($options);
-    }
 }

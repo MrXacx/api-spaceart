@@ -2,17 +2,23 @@
 
 namespace App\Http\Controllers;
 
-
-use App\Models\Post;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Http\Requests\PostRequest;
 use App\Exceptions\NotSavedModelException;
-use App\Exceptions\NotFoundException;
+use App\Http\Requests\PostRequest;
+use App\Repositories\PostRepository;
+use App\Services\ResponseService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\ControllerMiddlewareOptions;
 
 class PostController extends IMainRouteController
 {
+    public function __construct(
+        ResponseService $responseService,
+        private readonly PostRepository $postRepository,
+    ) {
+        parent::__construct($responseService);
+    }
+
     protected function setSanctumMiddleware(): ControllerMiddlewareOptions
     {
         return parent::setSanctumMiddleware()->except('index', 'show');
@@ -27,12 +33,7 @@ class PostController extends IMainRouteController
 
         return $this->responseService->sendMessage(
             'Posts found.',
-            Post::withAllRelations()
-                ->limit($request->limit ?? 10)
-                ->inRandomOrder()
-                ->get()
-                ->filter(fn($p) => $p->user->active)
-                ->toArray()
+            $this->postRepository->list($request->limit ?? 50)
         );
     }
 
@@ -41,21 +42,16 @@ class PostController extends IMainRouteController
      */
     public function store(PostRequest $request): JsonResponse
     {
-        $post = new Post($request->validated());
-        $this->authorize('isAdmin', $post->user);
-
         try {
-            throw_unless($post->save(), NotSavedModelException::class);
+            $post = $this->postRepository->create(
+                $request->validated(),
+                fn ($p) => $this->authorize('isAdmin', $p->user)
+            );
 
             return $this->responseService->sendMessage('Post created.', $post->toArray(), 201);
-        } catch (NotSavedModelException $e) {
-            return $this->responseService->sendError('Post not created.', [$e->getMessage()]);
+        } catch (NotSavedModelException) {
+            return $this->responseService->sendError('Post not created.');
         }
-    }
-
-    protected function fetch(string|int $id): Post
-    {
-        return Post::findOr($id, fn() => NotFoundException::throw("Post $id not found."))->loadAllRelations();
     }
 
     /**
@@ -63,7 +59,7 @@ class PostController extends IMainRouteController
      */
     public function show(PostRequest $request): JsonResponse
     {
-        return $this->responseService->sendMessage('Post found.', [$this->fetch($request->post)]);
+        return $this->responseService->sendMessage("Post $request->post was found.", $this->postRepository->fetch($request->post));
     }
 
     /**
@@ -71,10 +67,10 @@ class PostController extends IMainRouteController
      */
     public function destroy(PostRequest $request): JsonResponse
     {
-        $post = $this->fetch($request->post);
-        $this->authorize('isOwner', $post);
-
-        return $post->delete() ?
+        return $this->postRepository->delete(
+            $request->post,
+            fn ($p) => $this->authorize('isAdmin', $p->user)
+        ) ?
             $this->responseService->sendMessage('Post deleted.') :
             $this->responseService->sendError('Post not deleted.');
     }

@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers;
 
-
-use Exception;
-use Carbon\Carbon;
-use App\Models\Selective;
-use Illuminate\Http\Request;
-use UnexpectedValueException;
-use App\Models\Art as ModelsArt;
-use Illuminate\Http\JsonResponse;
-use App\Enumerate\TimeStringFormat;
-use App\Http\Requests\SelectiveRequest;
-use Illuminate\Database\Eloquent\Model;
 use App\Exceptions\NotSavedModelException;
-use App\Exceptions\NotFoundException;
+use App\Http\Requests\SelectiveRequest;
+use App\Repositories\SelectiveRepository;
+use App\Services\ResponseService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\ControllerMiddlewareOptions;
 
 class SelectiveController extends IMainRouteController
 {
+    public function __construct(
+        private readonly SelectiveRepository $selectiveRepository,
+        ResponseService $responseService
+    ) {
+        parent::__construct($responseService);
+    }
+
     protected function setSanctumMiddleware(): ControllerMiddlewareOptions
     {
         return parent::setSanctumMiddleware()->except('index');
@@ -33,77 +33,53 @@ class SelectiveController extends IMainRouteController
 
         return $this->responseService->sendMessage(
             'Selectives found',
-            Selective::withAllRelations()
-                ->where('end_moment', '>', Carbon::now())
-                ->offset($request->offset ?? 0)
-                ->limit($request->limit ?? 20)
-                ->inRandomOrder()
-                ->get()
-                ->random()
-                ->toArray()
+            $this->selectiveRepository->list($request->offset ?? 0, $request->limit ?? 20)
         );
     }
 
     public function store(SelectiveRequest $request): JsonResponse
     {
-        $selective = new Selective($request->validated());
-        $this->authorize('isOwner', $selective);
-        $selective->art_id = ModelsArt::where('name', $request->art)->firstOrFail()->id;
         try {
-            throw_unless($selective->save(), NotSavedModelException::class);
+            $selective = $this->selectiveRepository->create(
+                $request->validated(),
+                fn ($s) => $this->authorize('isOwner', $s)
+            );
 
-            return $this->responseService->sendMessage('Selective created', $selective->loadAllRelations()->toArray(), 201);
-        } catch (Exception $e) {
-            return $this->responseService->sendError('Selective not created', [$e->getMessage()]);
+            return $this->responseService->sendMessage('Selective was created', $selective->toArray(), 201);
+        } catch (NotSavedModelException) {
+            return $this->responseService->sendError('Selective was not created');
         }
-    }
-
-    /**
-     * @throws NotFoundException
-     */
-    protected function fetch(string|int $id): Model
-    {
-        return Selective::findOr(
-            $id,
-            fn() => NotFoundException::throw("Selective $id was not found")
-        )->loadAllRelations();
     }
 
     public function show(SelectiveRequest $request): JsonResponse
     {
         return $this->responseService->sendMessage(
-            'Selective found',
-            $this->fetch($request->id)
+            "Selective $request->id found",
+            $this->selectiveRepository->fetch($request->id)
         );
     }
 
     public function update(SelectiveRequest $request): JsonResponse
     {
         try {
-            $selective = $this->fetch($request->id);
-            $this->authorize('isOwner', $selective);
-            throw_unless(
-                Carbon::createFromFormat(TimeStringFormat::DATE_TIME_FORMAT->value, $selective->start_moment)
-                    ->isFuture(),
-                new UnexpectedValueException('The start_moment must be a future moment')
+            $selective = $this->selectiveRepository->update(
+                $request->validated(),
+                fn ($s) => $this->authorize('isOwner', $s)
             );
-            $selective->fill($request->validated());
-
-            throw_unless($selective->save(), NotSavedModelException::class);
 
             return $this->responseService->sendMessage('Selective updated', $selective);
-        } catch (Exception $e) {
-            return $this->responseService->sendError('Selective not updated', [$e->getMessage()]);
+        } catch (NotSavedModelException) {
+            return $this->responseService->sendError('Selective not updated');
         }
     }
 
     public function destroy(SelectiveRequest $request): JsonResponse
     {
-        $selective = $this->fetch($request->id);
-        $this->authorize('isOwner', $selective);
-
-        return $selective->delete() ?
-            $this->responseService->sendMessage('Selective deleted') :
+        return $this->selectiveRepository->delete(
+            $request->id,
+            fn ($s) => $this->authorize('isAdmin', $s->enterprise)
+        ) ?
+            $this->responseService->sendMessage('Selective deleted', 204) :
             $this->responseService->sendError('Selective not deleted');
     }
 }

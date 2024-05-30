@@ -101,14 +101,4 @@ class Selective extends Model
     {
         return static::with('art', 'enterprise', 'candidates');
     }
-
-    public function save(array $options = []): bool
-    {
-        throw_unless(
-            $this->enterprise->active,
-            new CheckDBOperationException("The enterprise's account $this->enterprise_id is disabled")
-        );
-
-        return parent::save($options);
-    }
 }

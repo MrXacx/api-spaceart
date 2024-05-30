@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Rate;
 use App\Enumerate\Account;
+use App\Repositories\RateRepository;
+use App\Services\ResponseService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\RateRequest;
 use Illuminate\Database\Eloquent\Model;
@@ -15,67 +17,61 @@ use App\Exceptions\NotFoundException;
 
 class RateController extends IRouteController
 {
-    public function store(RateRequest $request): JsonResponse
+    public function __construct(
+        ResponseService $responseService,
+        private readonly RateRepository $rateRepository
+    )
     {
-        $rate = new Rate($request->validated() + ['agreement_id' => $request->agreement]);
-        $this->authorize('isStakeholder', $rate->agreement);
-
-        $rate->rated_id = ($rate->author->type == Account::ARTIST ?
-            $rate->agreement->enterprise :
-            $rate->agreement->artist)->id;
-
-        try {
-            throw_unless($rate->save(), NotSavedModelException::class);
-
-            return $this->responseService->sendMessage('Rate created', $rate->loadAllRelations()->toArray(), 201);
-        } catch (\Exception $e) {
-            return $this->responseService->sendError('Rate not created', [$e->getMessage()]);
-        }
+        parent::__construct($responseService);
     }
 
-    /**
-     * @throws NotFoundException
-     */
-    protected function fetch(string $serviceId, string $userId): Model
+    public function store(RateRequest $request): JsonResponse
     {
-        $rate = Rate::find([$userId, $serviceId]);
-        throw_unless($rate, new NotFoundException("user $userId's rate was not found on agreement $serviceId"));
-        return $rate->loadAllRelations();
+        try {
+            $rate = $this->rateRepository->create(
+                $request->validated() + ['agreement_id' => $request->agreement],
+                fn($r) => $this->authorize('isStakeholder', $r->agreement)
+            );
+
+            return $this->responseService->sendMessage('Rate created', $rate->toArray(), 201);
+        } catch (NotSavedModelException) {
+            return $this->responseService->sendError('Rate not created');
+        }
     }
 
     public function show(RateRequest $request): JsonResponse
     {
-        $rate = $this->fetch($request->agreement, $request->author);
+        $rate = $this->rateRepository->fetch($request->author, $request->agreement);
 
         return $this->responseService->sendMessage(
             'Rate found',
-            $rate->loadAllRelations()->toArray()
+            $rate->toArray()
         );
     }
 
     public function update(RateRequest $request): JsonResponse
     {
-        $rate = $this->fetch($request->agreement, $request->author);
-        $this->authorize('isAuthor', $rate);
-
-        $rate->fill($request->validated());
-
         try {
-            throw_unless($rate->save(), NotSavedModelException::class);
+            $rate = $this->rateRepository->update(
+                $request->author,
+                $request->agreement,
+                $request->validated(),
+                fn($r) => $this->authorize('isAdmin', $r->author)
+            );
 
             return $this->responseService->sendMessage('Rate updated', $rate->toArray());
-        } catch (\Exception $e) {
-            return $this->responseService->sendError('Rate not updated', [$e->getMessage()]);
+        } catch (NotSavedModelException) {
+            return $this->responseService->sendError('Rate not updated');
         }
     }
 
-    public function destroy(
-        RateRequest $request
-    ): JsonResponse {
-        $rate = $this->fetch($request->agreement, $request->author);
-        $this->authorize('isAuthor', $rate);
-
-        return $rate->delete() ?
+    public function destroy(RateRequest $request): JsonResponse
+    {
+        return $this->rateRepository->delete(
+            $request->author,
+            $request->agreement,
+            fn($r) => $this->authorize('isAdmin', $r->author)
+        ) ?
             $this->responseService->sendMessage("$request->author's rate has been deleted from the $request->agreement") :
             $this->responseService->sendError("$request->author's rate continues on the $request->agreement");
     }

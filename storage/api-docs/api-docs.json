@@ -25,7 +25,8 @@
                         "description": "Limit per page",
                         "style": "form",
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "nullable": true
                         }
                     },
                     {
@@ -34,7 +35,18 @@
                         "description": "Offset for search",
                         "style": "form",
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "nullable": true
+                        }
+                    },
+                    {
+                        "name": "start_with",
+                        "in": "query",
+                        "description": "User's name start with",
+                        "style": "form",
+                        "schema": {
+                            "type": "string",
+                            "nullable": true
                         }
                     }
                 ],
@@ -66,24 +78,51 @@
                         }
                     },
                     "500": {
-                        "description": "Unexpected error",
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "/user"
+                ],
+                "summary": "Store user",
+                "description": "Store user on database",
+                "operationId": "ce3cf31668a69eb39e5e98738715afa1",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/UserStore"
+                },
+                "responses": {
+                    "201": {
+                        "description": "User was created",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "default": "Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/"
+                                            "default": "User created"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/User"
+                                            }
                                         },
                                         "fails": {
-                                            "type": "boolean",
-                                            "default": "true"
+                                            "type": "boolean"
                                         }
                                     },
                                     "type": "object"
                                 }
                             }
                         }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
                     }
                 }
             }
@@ -122,8 +161,7 @@
                                             "$ref": "#/components/schemas/User"
                                         },
                                         "fails": {
-                                            "type": "boolean",
-                                            "default": "false"
+                                            "type": "boolean"
                                         }
                                     },
                                     "type": "object"
@@ -132,21 +170,42 @@
                         }
                     },
                     "422": {
-                        "description": "User not found",
+                        "$ref": "#/components/responses/422"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "/user"
+                ],
+                "summary": "Update user",
+                "description": "Update user, artist or enterprise data on database",
+                "operationId": "786a794071cb7098f55a4a4911e7d3f0",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/UserUpdate"
+                },
+                "responses": {
+                    "200": {
+                        "description": "User was updated",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "default": "User {id} not found"
+                                            "default": "User was updated"
                                         },
-                                        "errors": {
-                                            "type": "object"
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/User"
+                                            }
                                         },
                                         "fails": {
-                                            "type": "boolean",
-                                            "default": "true"
+                                            "type": "boolean"
                                         }
                                     },
                                     "type": "object"
@@ -154,27 +213,18 @@
                             }
                         }
                     },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
                     "500": {
-                        "description": "Unexpected error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "default": "Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/"
-                                        },
-                                        "fails": {
-                                            "type": "boolean",
-                                            "default": "true"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/500"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/Sanctum"
+                    }
+                ]
             },
             "delete": {
                 "tags": [
@@ -196,41 +246,17 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "User disabled",
+                        "description": "User was disabled",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "default": "User disabled"
+                                            "default": "User was disabled"
                                         },
                                         "fails": {
-                                            "type": "boolean",
-                                            "default": "false"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "User not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "default": "User {id} not found"
-                                        },
-                                        "errors": {
-                                            "type": "object"
-                                        },
-                                        "fails": {
-                                            "type": "boolean",
-                                            "default": "true"
+                                            "type": "boolean"
                                         }
                                     },
                                     "type": "object"
@@ -239,29 +265,52 @@
                         }
                     },
                     "500": {
-                        "description": "Unexpected error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "default": "Internal error! Please, report it on https://github.com/MrXacx/api-spaceart/issues/new/"
-                                        },
-                                        "fails": {
-                                            "type": "boolean",
-                                            "default": "true"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/500"
                     }
                 },
                 "security": [
                     {
-                        "bearerAuth": []
+                        "$ref": "#/components/securitySchemes/Sanctum"
+                    }
+                ]
+            }
+        },
+        "/user/{id}/update": {
+            "post": {
+                "tags": [
+                    "/user"
+                ],
+                "summary": "[PUT]::/user/{id} alias",
+                "description": "Alternative route to [PUT]::/user/{id}",
+                "operationId": "9b143dc285908601878cfa00acfb15f5",
+                "responses": {
+                    "302": {
+                        "description": "Redirected to [PUT]::/user/{id}"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/Sanctum"
+                    }
+                ]
+            }
+        },
+        "/user/{id}/delete": {
+            "post": {
+                "tags": [
+                    "/user"
+                ],
+                "summary": "[DELETE]::/user/{id} alias",
+                "description": "Alternative route to [DELETE]::/user/{id}",
+                "operationId": "3076d808c7bfb8d9643c2f811f46b757",
+                "responses": {
+                    "200": {
+                        "description": "Redirected to [DELETE]::/user/{id}"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/Sanctum"
                     }
                 ]
             }
@@ -269,6 +318,98 @@
     },
     "components": {
         "schemas": {
+            "ArtistStoreBody": {
+                "required": [
+                    "cpf",
+                    "birthday",
+                    "art",
+                    "wage"
+                ],
+                "properties": {
+                    "cpf": {
+                        "type": "string",
+                        "pattern": "^\\d{11}$",
+                        "example": "01499146000196"
+                    },
+                    "birthday": {
+                        "type": "string",
+                        "format": "d/m/Y",
+                        "example": "01/01/1970"
+                    },
+                    "art": {
+                        "enum": [
+                            "acting",
+                            "dance",
+                            "music",
+                            "painting",
+                            "sculpture"
+                        ],
+                        "example": "music"
+                    },
+                    "wage": {
+                        "type": "number",
+                        "example": "100"
+                    }
+                },
+                "type": "object"
+            },
+            "ArtistUpdateBody": {
+                "properties": {
+                    "art": {
+                        "enum": [
+                            "acting",
+                            "dance",
+                            "music",
+                            "painting",
+                            "sculpture"
+                        ],
+                        "example": "music"
+                    },
+                    "wage": {
+                        "type": "number",
+                        "example": "100"
+                    }
+                },
+                "type": "object"
+            },
+            "EnterpriseStoreBody": {
+                "required": [
+                    "cnpj",
+                    "company_name",
+                    "address_complement"
+                ],
+                "properties": {
+                    "cnpj": {
+                        "type": "string",
+                        "pattern": "^\\d{14}$",
+                        "example": "40033796599"
+                    },
+                    "company_name": {
+                        "type": "string",
+                        "minLength": 3,
+                        "example": "José e Gabriela Esportes ME"
+                    },
+                    "address_complement": {
+                        "type": "string",
+                        "example": "Beside of SESI Saúde"
+                    }
+                },
+                "type": "object"
+            },
+            "EnterpriseUpdateBody": {
+                "properties": {
+                    "company_name": {
+                        "type": "string",
+                        "minLength": 3,
+                        "example": "José e Gabriela Esportes ME"
+                    },
+                    "address_complement": {
+                        "type": "string",
+                        "example": "Beside of SESI Saúde"
+                    }
+                },
+                "type": "object"
+            },
             "Agreement": {
                 "description": "Schema of Model Agreement",
                 "properties": {
@@ -334,8 +475,7 @@
                     },
                     "wage": {
                         "type": "number",
-                        "format": "float",
-                        "example": "100.0"
+                        "example": "100"
                     },
                     "art_id": {
                         "$ref": "#/components/schemas/Art"
@@ -510,7 +650,11 @@
                         "example": "<FO<k2&K83.;<RAeiC?@"
                     },
                     "type": {
-                        "description": "Account type"
+                        "description": "Account type",
+                        "enum": [
+                            "artist",
+                            "enterprise"
+                        ]
                     },
                     "postal_code": {
                         "description": "Brazilian zip code",
@@ -582,6 +726,178 @@
                     }
                 },
                 "type": "object"
+            }
+        },
+        "responses": {
+            "500": {
+                "description": "Unexpected error",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "fails": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "422": {
+                "description": "Expected interruption",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "minItems": 1
+                                    }
+                                },
+                                "fails": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "requestBodies": {
+            "UserStore": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "name",
+                                "email",
+                                "phone",
+                                "password",
+                                "type",
+                                "postal_code",
+                                "image"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "maxLength": 30,
+                                    "minLength": 3,
+                                    "example": "José Carlos"
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "example": "example@org.net"
+                                },
+                                "phone": {
+                                    "type": "string",
+                                    "example": "71988469787"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "minLength": 8,
+                                    "example": "<FO<k2&K83.;<RAeiC?@"
+                                },
+                                "type": {
+                                    "type": "enterprise",
+                                    "enum": [
+                                        "artist",
+                                        "enterprise"
+                                    ]
+                                },
+                                "postal_code": {
+                                    "type": "string",
+                                    "example": "41000000"
+                                },
+                                "image": {
+                                    "type": "string",
+                                    "maxLength": 10000000
+                                }
+                            },
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/components/schemas/ArtistStoreBody"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/EnterpriseStoreBody"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "UserUpdate": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "type"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "maxLength": 30,
+                                    "minLength": 3
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "phone": {
+                                    "type": "string",
+                                    "maxLength": 11,
+                                    "minLength": 11
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "minLength": 8
+                                },
+                                "type": {
+                                    "enum": [
+                                        "artist",
+                                        "enterprise"
+                                    ]
+                                },
+                                "image": {
+                                    "type": "string",
+                                    "maxLength": 10000000
+                                },
+                                "postal_code": {
+                                    "type": "string"
+                                },
+                                "address": {
+                                    "type": "string"
+                                },
+                                "slug": {
+                                    "description": "uri",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/components/schemas/ArtistUpdateBody"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/EnterpriseUpdateBody"
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "Sanctum": {
+                "type": "apiKey",
+                "scheme": {
+                    "bearerToken": []
+                }
             }
         }
     }

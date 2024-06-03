@@ -27,7 +27,8 @@ class UserController extends IMainRouteController
 {
     use AuthorizesRequests;
 
-    public function __construct(ResponseService $responseService,
+    public function __construct(
+        ResponseService $responseService,
         private readonly UserRepository $userRepository
     ) {
         parent::__construct($responseService);
@@ -39,12 +40,14 @@ class UserController extends IMainRouteController
     }
 
     /**
+     * Get the correct FormRequest to account type
+     *
      * @throws HttpRequestException
      * @throws BindingResolutionException
      */
     private function suitRequest(Request $request): FormRequest
     {
-        return match (Account::tryFrom((string) $request->type)) { // Find correct request for account type
+        return match (Account::tryFrom((string) $request->type)) { // Build correct request for account type
             Account::ARTIST => app()->make(ArtistRequest::class, $request->all()),
             Account::ENTERPRISE => app()->make(EnterpriseRequest::class, $request->all()),
             default => UnprocessableEntityException::throw('Account type not found'),
@@ -63,7 +66,7 @@ class UserController extends IMainRouteController
      *      in="query",
      *      description="Limit per page",
      *
-     *      @OA\Schema(type="integer"),
+     *      @OA\Schema(type="integer", nullable=true),
      *      style="form"
      *     ),
      *
@@ -72,7 +75,16 @@ class UserController extends IMainRouteController
      *      in="query",
      *      description="Offset for search",
      *
-     *      @OA\Schema(type="integer"),
+     *      @OA\Schema(type="integer", nullable=true),
+     *      style="form"
+     *     ),
+     *
+     *     @OA\Parameter(
+     *      name="start_with",
+     *      in="query",
+     *      description="User's name start with",
+     *
+     *      @OA\Schema(type="string", nullable=true),
      *      style="form"
      *     ),
      *
@@ -89,18 +101,7 @@ class UserController extends IMainRouteController
      *         )
      *     ),
      *
-     *     @OA\Response(
-     *          response="500",
-     *          description="Unexpected error",
-     *
-     *          @OA\JsonContent(
-     *              type="object",
-     *
-     *              @OA\Property(property="message", type="string", default="Unexpected error"),
-     *              @OA\Property(property="fails", type="bool", default="true"),
-     *          )
-     *      ),
-     *
+     *     @OA\Response(response="500", ref="#/components/responses/500")
      * )
      */
     public function index(Request $request): JsonResponse
@@ -108,11 +109,16 @@ class UserController extends IMainRouteController
         $request->validate([
             'limit' => ['numeric', 'min:1', 'max:50', 'nullable'],
             'offset' => ['numeric', 'min:1', 'nullable'],
+            'start_with' => ['string', 'nullable'],
         ]);
 
         return $this->responseService->sendMessage(
             'Users found',
-            $this->userRepository->list($request->offset ?? 0, $request->limit ?? 15)->toArray()
+            $this->userRepository->list(
+                $request->offset ?? 0,
+                $request->limit ?? 15,
+                $request->start_with ?? ''
+            )->toArray()
         );
     }
 
@@ -141,35 +147,12 @@ class UserController extends IMainRouteController
      *
      *             @OA\Property(property="message", type="string", default="User {id} found"),
      *             @OA\Property(property="data", type="object", ref="#/components/schemas/User"),
-     *             @OA\Property(property="fails", type="bool", default="false"),
+     *             @OA\Property(property="fails", type="bool"),
      *         )
      *     ),
      *
-     *     @OA\Response(
-     *         response="422",
-     *         description="User not found",
-     *
-     *         @OA\JsonContent(
-     *             type="object",
-     *
-     *             @OA\Property(property="message", type="string", default="User {id} not found"),
-     *             @OA\Property(property="errors", type="array", @OA\Items()),
-     *             @OA\Property(property="fails", type="bool", default="true"),
-     *         )
-     *     ),
-     *
-     *     @OA\Response(
-     *          response="500",
-     *          description="Unexpected error",
-     *
-     *          @OA\JsonContent(
-     *              type="object",
-     *
-     *              @OA\Property(property="message", type="string", default="Unexpected error"),
-     *              @OA\Property(property="fails", type="bool", default="true"),
-     *          )
-     *      ),
-     *
+     *     @OA\Response(response="422", ref="#/components/responses/422"),
+     *     @OA\Response(response="500", ref="#/components/responses/500"),
      * )
      *
      * @throws HttpRequestException
@@ -191,32 +174,25 @@ class UserController extends IMainRouteController
      * @OA\Post(
      *     path="/user",
      *     tags={"/user"},
+     *     summary="Store user",
+     *     description="Store user on database",
+     *
+     *     @OA\RequestBody(ref="#/components/requestBodies/UserStore"),
      *
      *     @OA\Response(
-     *         response="200",
-     *          description="User created",
+     *         response="201",
+     *          description="User was created",
      *
      *          @OA\JsonContent(
-     *              type="object",
      *
      *              @OA\Property(property="message", type="string", default="User created"),
      *              @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/User")),
-     *              @OA\Property(property="fails", type="bool", default="false")
+     *              @OA\Property(property="fails", type="bool")
      *          )
      *     ),
      *
-     *     @OA\Response(
-     *          response="422",
-     *           description="User not created",
-     *
-     *           @OA\JsonContent(
-     *               type="object",
-     *
-     *               @OA\Property(property="message", type="string", default="User not created"),
-     *               @OA\Property(property="errors", type="array", @OA\Items()),
-     *               @OA\Property(property="fails", type="bool", default="trur")
-     *           )
-     *      )
+     *     @OA\Response(response="422", ref="#/components/responses/422"),
+     *     @OA\Response(response="500", ref="#/components/responses/500")
      * )
      *
      * @throws BindingResolutionException
@@ -235,6 +211,47 @@ class UserController extends IMainRouteController
         }
     }
 
+    /**
+     * @OA\Post(
+     *    path="/user/{id}/update",
+     *    summary="[PUT]::/user/{id} alias",
+     *    description="Alternative route to [PUT]::/user/{id}",
+     *    tags={"/user"},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *
+     *    @OA\Response(response="302", description="Redirected to [PUT]::/user/{id}")
+     * )
+     *
+     * @OA\Put(
+     *     path="/user/{id}",
+     *     tags={"/user"},
+     *     summary="Update user",
+     *     description="Update user, artist or enterprise data on database",
+     *
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *
+     *     @OA\RequestBody(ref="#/components/requestBodies/UserUpdate"),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *          description="User was updated",
+     *
+     *          @OA\JsonContent(
+     *
+     *              @OA\Property(property="message", type="string", default="User was updated"),
+     *              @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/User")),
+     *              @OA\Property(property="fails", type="bool")
+     *          )
+     *     ),
+     *
+     *     @OA\Response(response="422", ref="#/components/responses/422"),
+     *     @OA\Response(response="500", ref="#/components/responses/500"),
+     * )
+     *
+     * @throws BindingResolutionException
+     * @throws HttpRequestException
+     * @throws Throwable
+     */
     public function update(Request $request): JsonResponse
     {
         $request = $this->suitRequest($request);
@@ -253,12 +270,22 @@ class UserController extends IMainRouteController
     }
 
     /**
+     * @OA\Post(
+     *     tags={"/user"},
+     *     path="/user/{id}/delete",
+     *     summary="[DELETE]::/user/{id} alias",
+     *     description="Alternative route to [DELETE]::/user/{id}",
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *
+     *     @OA\Response(response="200", description="Redirected to [DELETE]::/user/{id}")
+     * )
+     *
      * @OA\Delete(
      *     tags={"/user"},
      *     path="/user/{id}",
      *     summary="Disable user account",
      *     description="Disable access to user account",
-     *     security={{"bearerAuth": {}}},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *     @OA\Parameter(
      *      name="id",
@@ -271,40 +298,17 @@ class UserController extends IMainRouteController
      *
      *     @OA\Response(
      *         response="200",
-     *         description="User disabled",
+     *         description="User was disabled",
      *
      *         @OA\JsonContent(
      *             type="object",
      *
-     *             @OA\Property(property="message", type="string", default="User disabled"),
-     *             @OA\Property(property="fails", type="bool", default="false"),
+     *             @OA\Property(property="message", type="string", default="User was disabled"),
+     *             @OA\Property(property="fails", type="bool"),
      *         )
      *     ),
      *
-     *     @OA\Response(
-     *         response="422",
-     *         description="User not found",
-     *
-     *         @OA\JsonContent(
-     *             type="object",
-     *
-     *             @OA\Property(property="message", type="string", default="User {id} not found"),
-     *             @OA\Property(property="errors", type="object"),
-     *             @OA\Property(property="fails", type="bool", default="true"),
-     *         )
-     *     ),
-     *
-     *     @OA\Response(
-     *          response="500",
-     *          description="Unexpected error",
-     *
-     *          @OA\JsonContent(
-     *              type="object",
-     *
-     *              @OA\Property(property="message", type="string", default="Unexpected error"),
-     *              @OA\Property(property="fails", type="bool", default="true"),
-     *          )
-     *      )
+     *     @OA\Response(response="500", ref="#/components/responses/500"),
      * )
      */
     public function destroy(Request $request): JsonResponse

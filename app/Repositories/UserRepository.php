@@ -35,11 +35,12 @@ class UserRepository implements Contracts\IUserRepository
         return $user->loadAllRelations();
     }
 
-    public function list(int $offset, int $limit): Collection|array
+    public function list(int $offset, int $limit, string $startWith = ''): Collection|array
     {
         return User::withAllRelations()
             ->where('id', '>', $offset)
             ->where('active', true)
+            ->where('name', 'REGEXP', "^{$startWith}")
             ->limit($limit)
             ->get();
     }

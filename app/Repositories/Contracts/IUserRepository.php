@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Contracts;
 
+use App\Enumerate\Account;
 use App\Exceptions\NotSavedModelException;
 use App\Models\User;
 use Closure;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface IUserRepository
 {
-    public function list(int $offset, int $limit): Collection|array;
+    public function list(int $offset, int $limit, string $startWith = ''): Collection|array;
 
     public function fetch(string|int $id): User;
 

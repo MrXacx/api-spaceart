@@ -3,7 +3,18 @@
 namespace App\Enumerate;
 
 use App\Traits\BackedEnumTrait;
+use Doctrine\Common\Annotations\Annotation\Enum;
 
+/**
+ * @Enum(
+ *     value={
+ *         "send",
+ *         "accepted",
+ *         "refused",
+ *         "canceled",
+ *     }
+ * )
+ */
 enum AgreementStatus: string
 {
     use BackedEnumTrait;
@@ -11,5 +22,5 @@ enum AgreementStatus: string
     case SEND = 'send';
     case ACCEPTED = 'accepted';
     case REFUSED = 'refused';
-    case CENCELED = 'canceled';
+    case CANCELED = 'canceled';
 }

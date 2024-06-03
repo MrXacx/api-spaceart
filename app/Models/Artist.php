@@ -21,7 +21,7 @@ use OpenApi\Annotations as OA;
  *
  *     @OA\Property(property="cpf", type="string", example="40033796599"),
  *     @OA\Property(property="bithday", type="date", example="01/01/1970"),
- *     @OA\Property(property="wage", type="float", example="100.0"),
+ *     @OA\Property(property="wage", type="number", example="100"),
  *     @OA\Property(property="art_id", ref="#/components/schemas/Art"),
  * )
  */

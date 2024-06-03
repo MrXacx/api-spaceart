@@ -10,10 +10,35 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller;
 use Illuminate\Routing\ControllerMiddlewareOptions;
+use OpenApi\Annotations as OA;
 
 /**
  * @OA\Server(url="http://api-spaceart.local/api/")
+ *
  * @OA\Info(title="SpaceArt API", version="2.0.0")
+ *
+ * @OA\Response(
+ *     response="500",
+ *     description="Unexpected error",
+ *
+ *     @OA\JsonContent(@OA\Property(property="fails", type="bool"))
+ * )
+ * @OA\Response(
+ *     response="422",
+ *     description="Expected interruption",
+ *
+ *     @OA\JsonContent(
+ *      @OA\Property(property="message", type="string"),
+ *      @OA\Property(property="data", type="array", @OA\Items(minItems=1)),
+ *      @OA\Property(property="fails", type="bool"),
+ *     )
+ * )
+ *
+ * @OA\SecurityScheme(
+ * *      securityScheme="Sanctum",
+ * *      type="apiKey",
+ * *       scheme={"bearerToken": {}}
+ * *  )
  */
 abstract class IRouteController extends Controller
 {

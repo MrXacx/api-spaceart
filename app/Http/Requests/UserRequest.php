@@ -33,7 +33,7 @@ class UserRequest extends FormRequest
      *          @OA\Property(property="email", type="string", example="example@org.net"),
      *          @OA\Property(property="phone", type="string", example="71988469787"),
      *          @OA\Property(property="password", type="string", minLength=8, example="<FO<k2&K83.;<RAeiC?@" ),
-     *          @OA\Property(property="type", enum="App\Enumerate\Account", type="enterprise"),
+     *          @OA\Property(property="type", type="enum", enum="App\Enumerate\Account", type="enterprise"),
      *          @OA\Property(property="postal_code", type="string", example="41000000"),
      *          @OA\Property(property="image", type="string", maxLength=10000000),
      *     )
@@ -58,7 +58,6 @@ class UserRequest extends FormRequest
      *
      *     @OA\JsonContent(
      *          type="object",
-     *          required={"type"},
      *          oneOf={
      *
      *               @OA\Property(ref="#/components/schemas/ArtistUpdateBody"),
@@ -68,7 +67,6 @@ class UserRequest extends FormRequest
      *          @OA\Property(property="email", type="string"),
      *          @OA\Property(property="phone", type="string", minLength=11, maxLength=11),
      *          @OA\Property(property="password", type="string", minLength=8),
-     *          @OA\Property(property="type", enum="App\Enumerate\Account"),
      *          @OA\Property(property="image", type="string", maxLength=10000000),
      *          @OA\Property(property="postal_code", type="string"),
      *          @OA\Property(property="address", type="string"),

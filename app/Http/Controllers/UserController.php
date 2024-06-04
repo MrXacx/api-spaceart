@@ -23,6 +23,19 @@ use Laravel\Sanctum\PersonalAccessToken;
 use OpenApi\Annotations as OA;
 use Throwable;
 
+/**
+ * @OA\Response(
+ *  response="ReturnUser",
+ *   description="Response is successful",
+ *
+ *   @OA\JsonContent(
+ *
+ *       @OA\Property(property="message", type="string", default="User was updated"),
+ *       @OA\Property(property="data", type="array", maxItems=1, @OA\Items(ref="#/components/schemas/User")),
+ *       @OA\Property(property="fails", type="bool")
+ *   )
+ * ),
+ */
 class UserController extends IMainRouteController
 {
     use AuthorizesRequests;
@@ -61,24 +74,8 @@ class UserController extends IMainRouteController
      *     summary="List active users",
      *     description="Get users on database and paginate them",
      *
-     *     @OA\Parameter(
-     *      name="limit",
-     *      in="query",
-     *      description="Limit per page",
-     *
-     *      @OA\Schema(type="integer", nullable=true),
-     *      style="form"
-     *     ),
-     *
-     *     @OA\Parameter(
-     *      name="offset",
-     *      in="query",
-     *      description="Offset for search",
-     *
-     *      @OA\Schema(type="integer", nullable=true),
-     *      style="form"
-     *     ),
-     *
+     *     @OA\Parameter(ref="#/components/parameters/Limit"),
+     *     @OA\Parameter(ref="#/components/parameters/Offset"),
      *     @OA\Parameter(
      *      name="start_with",
      *      in="query",
@@ -129,28 +126,9 @@ class UserController extends IMainRouteController
      *     summary="Show user",
      *     description="Get an unique user on database",
      *
-     *     @OA\Parameter(
-     *      name="id",
-     *      in="path",
-     *      description="User id",
+     *     @OA\Parameter(ref="#/components/parameters/Id"),
      *
-     *      @OA\Schema(type="integer"),
-     *      style="form"
-     *     ),
-     *
-     *     @OA\Response(
-     *         response="200",
-     *         description="User found",
-     *
-     *         @OA\JsonContent(
-     *             type="object",
-     *
-     *             @OA\Property(property="message", type="string", default="User {id} found"),
-     *             @OA\Property(property="data", type="object", ref="#/components/schemas/User"),
-     *             @OA\Property(property="fails", type="bool"),
-     *         )
-     *     ),
-     *
+     *     @OA\Response(response="200", ref="#/components/responses/ReturnUser"),
      *     @OA\Response(response="422", ref="#/components/responses/422"),
      *     @OA\Response(response="500", ref="#/components/responses/500"),
      * )
@@ -232,18 +210,8 @@ class UserController extends IMainRouteController
      *
      *     @OA\RequestBody(ref="#/components/requestBodies/UserUpdate"),
      *
-     *     @OA\Response(
-     *         response="200",
-     *          description="User was updated",
-     *
-     *          @OA\JsonContent(
-     *
-     *              @OA\Property(property="message", type="string", default="User was updated"),
-     *              @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/User")),
-     *              @OA\Property(property="fails", type="bool")
-     *          )
-     *     ),
-     *
+     *     @OA\Response(response="200", ref="#/components/responses/ReturnUser"),
+     *     @OA\Response(response="401", ref="#/components/responses/401"),
      *     @OA\Response(response="422", ref="#/components/responses/422"),
      *     @OA\Response(response="500", ref="#/components/responses/500"),
      * )
@@ -296,18 +264,8 @@ class UserController extends IMainRouteController
      *      style="form"
      *     ),
      *
-     *     @OA\Response(
-     *         response="200",
-     *         description="User was disabled",
-     *
-     *         @OA\JsonContent(
-     *             type="object",
-     *
-     *             @OA\Property(property="message", type="string", default="User was disabled"),
-     *             @OA\Property(property="fails", type="bool"),
-     *         )
-     *     ),
-     *
+     *     @OA\Response(response="204", ref="#/components/responses/204"),
+     *     @OA\Response(response="401", ref="#/components/responses/401"),
      *     @OA\Response(response="500", ref="#/components/responses/500"),
      * )
      */

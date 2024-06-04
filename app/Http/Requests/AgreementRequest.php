@@ -3,17 +3,10 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use OpenApi\Annotations as OA;
 
 class AgreementRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     public function rules(): array
     {
         return match ($this->getMethod()) {
@@ -23,6 +16,23 @@ class AgreementRequest extends FormRequest
         };
     }
 
+    /**
+     * @OA\RequestBody(
+     *     request="AgreementStore",
+     *
+     *     @OA\JsonContent(
+     *         required={"enterprise_id", "artist_id", "price", "note", "date","start_time","end_time",},
+     *
+     *         @OA\Property(property="enterprise_id", type="int"),
+     *         @OA\Property(property="artist_id", type="int"),
+     *         @OA\Property(property="price", type="number", format="^\d*(\.\d*)?$", example="350.99"),
+     *         @OA\Property(property="note", type="string"),
+     *         @OA\Property(property="date", type="date", format="d/m/Y", example="31/12/2005"),
+     *         @OA\Property(property="start_time", type="date", format="H:i", example="00:00"),
+     *         @OA\Property(property="end_time", type="date", format="H:i", example="22:00"),
+     *     )
+     * )
+     */
     private function store(): array
     {
         return [
@@ -36,6 +46,21 @@ class AgreementRequest extends FormRequest
         ];
     }
 
+    /**
+     * @OA\RequestBody(
+     *     request="AgreementUpdate",
+     *
+     *     @OA\JsonContent(
+     *         required={"status"},
+     *
+     *         @OA\Property(property="note", type="string"),
+     *         @OA\Property(property="date", type="date", format="d/m/Y", example="31/12/2005"),
+     *         @OA\Property(property="start_time", type="date", format="H:i", example="00:00"),
+     *         @OA\Property(property="end_time", type="date", format="H:i", example="22:00"),
+     *         @OA\Property(property="status", type="enum", enum="App\Enumerate\AgreementStatus"),
+     *     )
+     * )
+     */
     private function update(): array
     {
         return [

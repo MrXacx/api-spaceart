@@ -18,6 +18,15 @@ use OpenApi\Annotations as OA;
  * @OA\Info(title="SpaceArt API", version="2.0.0")
  *
  * @OA\Response(
+ *  response="204",
+ *  description="Resource was disabled",
+ *  @OA\JsonContent(
+ *      type="object",
+ *      @OA\Property(property="message", type="string"),
+ *      @OA\Property(property="fails", type="bool"),
+ *  )
+ * )
+ * @OA\Response(
  *     response="500",
  *     description="Unexpected error",
  *
@@ -25,7 +34,7 @@ use OpenApi\Annotations as OA;
  * )
  * @OA\Response(
  *     response="422",
- *     description="Expected interruption",
+ *     description="Unprocessable entity",
  *
  *     @OA\JsonContent(
  *      @OA\Property(property="message", type="string"),
@@ -33,12 +42,28 @@ use OpenApi\Annotations as OA;
  *      @OA\Property(property="fails", type="bool"),
  *     )
  * )
+ * @OA\Response(
+ *     response="401",
+ *     description="Authentication failed",
  *
+ *     @OA\JsonContent(
+ *      @OA\Property(property="message", type="string"),
+ *      @OA\Property(property="fails", type="bool"),
+ *     )
+ * )
+ *  @OA\Parameter(
+ *     parameter="Id",
+ *      name="id",
+ *      in="path",
+ *      description="Resource id",
+ *      style="form",
+ *      @OA\Schema(type="integer"),
+ *  )
  * @OA\SecurityScheme(
- * *      securityScheme="Sanctum",
- * *      type="apiKey",
- * *       scheme={"bearerToken": {}}
- * *  )
+ *     securityScheme="Sanctum",
+ *     type="apiKey",
+ *     scheme={"bearerToken": {}},
+ *  )
  */
 abstract class IRouteController extends Controller
 {

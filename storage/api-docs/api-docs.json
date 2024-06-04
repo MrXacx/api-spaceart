@@ -10,6 +10,248 @@
         }
     ],
     "paths": {
+        "/agreement": {
+            "get": {
+                "tags": [
+                    "/agreement"
+                ],
+                "summary": "List agreements",
+                "description": "Fetch user's agreements on database",
+                "operationId": "b0b7da895d6337b674f1bd9aa691dcb3",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Limit"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Agreements found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Agreement"
+                                            }
+                                        },
+                                        "fails": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/Sanctum"
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "/agreement"
+                ],
+                "summary": "Store agreement",
+                "description": "Store agreement on database",
+                "operationId": "f10a4ab3169d1c99602c0cbb796fb1bc",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/AgreementStore"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Agreements was created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Agreement"
+                                            },
+                                            "maxItems": 1
+                                        },
+                                        "fails": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/Sanctum"
+                    }
+                ]
+            }
+        },
+        "/agreement/{id}": {
+            "get": {
+                "tags": [
+                    "/agreement"
+                ],
+                "summary": "Fetch agreement",
+                "description": "Fetch an unique agreement on database",
+                "operationId": "9fa8fb46551571eb6faa2efa87bc758e",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ReturnAgreement"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/Sanctum"
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "/agreement"
+                ],
+                "summary": "Update agreement",
+                "description": "Update agreement on database",
+                "operationId": "02e650c7a48dc10b28c4617ab39b57d1",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Id"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/AgreementUpdate"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ReturnAgreement"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/Sanctum"
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "/agreement"
+                ],
+                "summary": "Delete agreement",
+                "description": "Delete agreement on database",
+                "operationId": "6fe0d6aab93ac2f9f1c3cec475827b1d",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "$ref": "#/components/responses/204"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/Sanctum"
+                    }
+                ]
+            }
+        },
+        "/agreement/{id}/update": {
+            "post": {
+                "tags": [
+                    "/agreement"
+                ],
+                "summary": "[PUT]::/agreement/{id} alias",
+                "description": "Redirect request to [PUT]::/agreement/{id} alias",
+                "operationId": "917f24a664563a08e429246d8456463d",
+                "responses": {
+                    "302": {
+                        "description": "Redirected to [PUT]::/agreement/{id}"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/Sanctum"
+                    }
+                ]
+            }
+        },
+        "/agreement/{id}/delete": {
+            "post": {
+                "tags": [
+                    "/agreement"
+                ],
+                "summary": "[DELETE]::/agreement/{id} alias",
+                "description": "Redirect request to [DELETE]::/agreement/{id} alias",
+                "operationId": "c204776d0d5f93ef877ff6c54a0d2013",
+                "responses": {
+                    "302": {
+                        "description": "Redirected to [DELETE]::/agreement/{id}"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/Sanctum"
+                    }
+                ]
+            }
+        },
         "/user": {
             "get": {
                 "tags": [
@@ -20,24 +262,10 @@
                 "operationId": "23679253d16f34d2972249751e3631dd",
                 "parameters": [
                     {
-                        "name": "limit",
-                        "in": "query",
-                        "description": "Limit per page",
-                        "style": "form",
-                        "schema": {
-                            "type": "integer",
-                            "nullable": true
-                        }
+                        "$ref": "#/components/parameters/Limit"
                     },
                     {
-                        "name": "offset",
-                        "in": "query",
-                        "description": "Offset for search",
-                        "style": "form",
-                        "schema": {
-                            "type": "integer",
-                            "nullable": true
-                        }
+                        "$ref": "#/components/parameters/Offset"
                     },
                     {
                         "name": "start_with",
@@ -137,37 +365,12 @@
                 "operationId": "1ec60d4ee968175164a94c21f897f8ea",
                 "parameters": [
                     {
-                        "name": "id",
-                        "in": "path",
-                        "description": "User id",
-                        "style": "form",
-                        "schema": {
-                            "type": "integer"
-                        }
+                        "$ref": "#/components/parameters/Id"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "User found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "default": "User {id} found"
-                                        },
-                                        "data": {
-                                            "$ref": "#/components/schemas/User"
-                                        },
-                                        "fails": {
-                                            "type": "boolean"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ReturnUser"
                     },
                     "422": {
                         "$ref": "#/components/responses/422"
@@ -189,29 +392,10 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "User was updated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "default": "User was updated"
-                                        },
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/User"
-                                            }
-                                        },
-                                        "fails": {
-                                            "type": "boolean"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ReturnUser"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
                     },
                     "422": {
                         "$ref": "#/components/responses/422"
@@ -245,24 +429,11 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "User was disabled",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "default": "User was disabled"
-                                        },
-                                        "fails": {
-                                            "type": "boolean"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                    "204": {
+                        "$ref": "#/components/responses/204"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
                     },
                     "500": {
                         "$ref": "#/components/responses/500"
@@ -337,6 +508,7 @@
                         "example": "01/01/1970"
                     },
                     "art": {
+                        "type": "enum",
                         "enum": [
                             "acting",
                             "dance",
@@ -356,6 +528,7 @@
             "ArtistUpdateBody": {
                 "properties": {
                     "art": {
+                        "type": "enum",
                         "enum": [
                             "acting",
                             "dance",
@@ -447,6 +620,15 @@
                         "type": "string",
                         "format": "date",
                         "example": "20:30"
+                    },
+                    "status": {
+                        "type": "enum",
+                        "enum": [
+                            "send",
+                            "accepted",
+                            "refused",
+                            "canceled"
+                        ]
                     }
                 },
                 "type": "object"
@@ -455,8 +637,26 @@
                 "description": "Schema of Model Art",
                 "properties": {
                     "name": {
-                        "type": "string",
-                        "example": "music"
+                        "type": "enum",
+                        "enum": [
+                            "acting",
+                            "dance",
+                            "music",
+                            "painting",
+                            "sculpture"
+                        ]
+                    },
+                    "artists_count": {
+                        "description": "number of relationed artists",
+                        "type": "integer"
+                    },
+                    "agreements_count": {
+                        "description": "number of relationed agreements",
+                        "type": "integer"
+                    },
+                    "selectives_count": {
+                        "description": "number of relationed selectives",
+                        "type": "integer"
                     }
                 },
                 "type": "object"
@@ -477,7 +677,7 @@
                         "type": "number",
                         "example": "100"
                     },
-                    "art_id": {
+                    "art": {
                         "$ref": "#/components/schemas/Art"
                     }
                 },
@@ -651,6 +851,7 @@
                     },
                     "type": {
                         "description": "Account type",
+                        "type": "enum",
                         "enum": [
                             "artist",
                             "enterprise"
@@ -729,6 +930,49 @@
             }
         },
         "responses": {
+            "ReturnAgreement": {
+                "description": "Response is successful",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Agreement"
+                                    },
+                                    "maxItems": 1
+                                },
+                                "fails": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "204": {
+                "description": "Resource was disabled",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "fails": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
             "500": {
                 "description": "Unexpected error",
                 "content": {
@@ -745,7 +989,7 @@
                 }
             },
             "422": {
-                "description": "Expected interruption",
+                "description": "Unprocessable entity",
                 "content": {
                     "application/json": {
                         "schema": {
@@ -767,9 +1011,174 @@
                         }
                     }
                 }
+            },
+            "401": {
+                "description": "Authentication failed",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "fails": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "ReturnUser": {
+                "description": "Response is successful",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "default": "User was updated"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    },
+                                    "maxItems": 1
+                                },
+                                "fails": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "parameters": {
+            "Limit": {
+                "name": "limit",
+                "in": "query",
+                "description": "Limit per page",
+                "style": "form",
+                "schema": {
+                    "type": "integer",
+                    "nullable": true
+                }
+            },
+            "Offset": {
+                "name": "offset",
+                "in": "query",
+                "description": "Offset for search",
+                "style": "form",
+                "schema": {
+                    "type": "integer",
+                    "nullable": true
+                }
+            },
+            "Id": {
+                "name": "id",
+                "in": "path",
+                "description": "Resource id",
+                "style": "form",
+                "schema": {
+                    "type": "integer"
+                }
             }
         },
         "requestBodies": {
+            "AgreementStore": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "enterprise_id",
+                                "artist_id",
+                                "price",
+                                "note",
+                                "date",
+                                "start_time",
+                                "end_time"
+                            ],
+                            "properties": {
+                                "enterprise_id": {
+                                    "type": "integer"
+                                },
+                                "artist_id": {
+                                    "type": "integer"
+                                },
+                                "price": {
+                                    "type": "number",
+                                    "format": "^\\d*(\\.\\d*)?$",
+                                    "example": "350.99"
+                                },
+                                "note": {
+                                    "type": "string"
+                                },
+                                "date": {
+                                    "type": "string",
+                                    "format": "d/m/Y",
+                                    "example": "31/12/2005"
+                                },
+                                "start_time": {
+                                    "type": "string",
+                                    "format": "H:i",
+                                    "example": "00:00"
+                                },
+                                "end_time": {
+                                    "type": "string",
+                                    "format": "H:i",
+                                    "example": "22:00"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "AgreementUpdate": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "status"
+                            ],
+                            "properties": {
+                                "note": {
+                                    "type": "string"
+                                },
+                                "date": {
+                                    "type": "string",
+                                    "format": "d/m/Y",
+                                    "example": "31/12/2005"
+                                },
+                                "start_time": {
+                                    "type": "string",
+                                    "format": "H:i",
+                                    "example": "00:00"
+                                },
+                                "end_time": {
+                                    "type": "string",
+                                    "format": "H:i",
+                                    "example": "22:00"
+                                },
+                                "status": {
+                                    "type": "enum",
+                                    "enum": [
+                                        "send",
+                                        "accepted",
+                                        "refused",
+                                        "canceled"
+                                    ]
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
             "UserStore": {
                 "content": {
                     "application/json": {
@@ -836,9 +1245,6 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "required": [
-                                "type"
-                            ],
                             "properties": {
                                 "name": {
                                     "type": "string",
@@ -856,12 +1262,6 @@
                                 "password": {
                                     "type": "string",
                                     "minLength": 8
-                                },
-                                "type": {
-                                    "enum": [
-                                        "artist",
-                                        "enterprise"
-                                    ]
                                 },
                                 "image": {
                                     "type": "string",

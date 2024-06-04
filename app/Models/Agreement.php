@@ -27,6 +27,7 @@ use OpenApi\Annotations as OA;
  *     @OA\Property(property="date", type="date", description="Day of service", example="01/01/2025"),
  *     @OA\Property(property="start_time", type="date", description="Hour of service", example="18:30"),
  *     @OA\Property(property="end_time", type="date", description="Hour of finish service", example="20:30"),
+ *     @OA\Property(property="status", type="enum", enum="App\Enumerate\AgreementStatus"),
  * )
  */
 class Agreement extends Model

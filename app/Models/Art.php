@@ -13,7 +13,10 @@ use OpenApi\Annotations as OA;
  *     schema="Art",
  *     description="Schema of Model Art",
  *
- *     @OA\Property(property="name", type="string", example="music")
+ *     @OA\Property(property="name", type="enum", enum="App\Enumerate\Art"),
+ *     @OA\Property(property="artists_count", type="int", description="number of relationed artists"),
+ *     @OA\Property(property="agreements_count", type="int", description="number of relationed agreements"),
+ *     @OA\Property(property="selectives_count", type="int", description="number of relationed selectives"),
  * )
  */
 class Art extends Model
@@ -42,7 +45,6 @@ class Art extends Model
     public function toArray()
     {
         $this->loadCount('artists', 'agreements', 'selectives');
-
         return parent::toArray();
     }
 }

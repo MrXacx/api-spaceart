@@ -77,4 +77,10 @@ class Enterprise extends Model
     {
         return $this->makeVisible('cnpj');
     }
+
+    public function toArray(): array
+    {
+        $this->loadMissing('agreements', 'selectives');
+        return parent::toArray();
+    }
 }

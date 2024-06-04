@@ -14,7 +14,7 @@ class ArtistRequest extends UserRequest
      *
      *       @OA\Property(property="cpf", type="string", pattern="^\d{11}$", example="01499146000196"),
      *       @OA\Property(property="birthday", type="date", format="d/m/Y", example="01/01/1970"),
-     *       @OA\Property(property="art", enum="App\Enumerate\Art", example="music"),
+     *       @OA\Property(property="art",type="enum", enum="App\Enumerate\Art", example="music"),
      *       @OA\Property(property="wage", type="number", example="100"),
      *       required={
      *           "cpf",
@@ -39,7 +39,7 @@ class ArtistRequest extends UserRequest
     /**
      * @OA\Schema(
      *     schema="ArtistUpdateBody",
-     *     @OA\Property(property="art", enum="App\Enumerate\Art", example="music"),
+     *     @OA\Property(property="art",type="enum", enum="App\Enumerate\Art", example="music"),
      *     @OA\Property(property="wage", type="number", example="100"),
      * )
      */

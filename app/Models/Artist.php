@@ -18,11 +18,10 @@ use OpenApi\Annotations as OA;
  *     schema="Artist",
  *     description="Schema of Model Artist User",
  *
- *
  *     @OA\Property(property="cpf", type="string", example="40033796599"),
  *     @OA\Property(property="bithday", type="date", example="01/01/1970"),
  *     @OA\Property(property="wage", type="number", example="100"),
- *     @OA\Property(property="art_id", ref="#/components/schemas/Art"),
+ *     @OA\Property(property="art", ref="#/components/schemas/Art"),
  * )
  */
 class Artist extends Model
@@ -101,5 +100,11 @@ class Artist extends Model
     public function showConfidentialData(): Artist
     {
         return $this->makeVisible('cpf');
+    }
+
+    public function toArray(): array
+    {
+        $this->loadMissing('art', 'agreements', 'candidatures');
+        return parent::toArray();
     }
 }

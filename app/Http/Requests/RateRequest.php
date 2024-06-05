@@ -3,22 +3,10 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use OpenApi\Annotations as OA;
 
 class RateRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return match ($this->method()) {
@@ -28,7 +16,20 @@ class RateRequest extends FormRequest
         };
     }
 
-    private function store()
+    /**
+     * @OA\RequestBody(
+     *     request="RateStore",
+     *
+     *     @OA\JsonContent(
+     *          required={"author_id", "score", "note"},
+     *
+     *         @OA\Property(property="author_id", type="int"),
+     *         @OA\Property(property="score", type="number", minimum=0, maximum=5),
+     *         @OA\Property(property="note", type="string"),
+     *     )
+     * )
+     */
+    private function store(): array
     {
         return [
             'author_id' => ['required', 'exists:users,id'],
@@ -37,6 +38,17 @@ class RateRequest extends FormRequest
         ];
     }
 
+    /**
+     * @OA\RequestBody(
+     *     request="RateUpdate",
+     *
+     *     @OA\JsonContent(
+     *         required={"score"},
+     *         @OA\Property(property="score", type="number", minimum=0, maximum=5),
+     *         @OA\Property(property="note", type="string"),
+     *     )
+     * )
+     */
     private function update()
     {
         return [

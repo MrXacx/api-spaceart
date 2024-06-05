@@ -17,20 +17,41 @@ use OpenApi\Annotations as OA;
  *
  * @OA\Info(title="SpaceArt API", version="2.0.0")
  *
+ * @OA\Parameter(
+ *      parameter="Id",
+ *       name="id",
+ *       in="path",
+ *       description="Resource id",
+ *       style="form",
+ *       @OA\Schema(type="integer"),
+ *   )
+ *
+ * @OA\Parameter(
+ *      parameter="Author",
+ *      name="author",
+ *      in="path",
+ *      description="Author id",
+ *      style="form",
+ *      @OA\Schema(type="integer"),
+ *   )
+ *
  * @OA\Response(
  *  response="204",
  *  description="Resource was disabled",
  *  @OA\JsonContent(
  *      type="object",
  *      @OA\Property(property="message", type="string"),
- *      @OA\Property(property="fails", type="bool"),
+ *      @OA\Property(property="fails", type="bool", default="false"),
  *  )
  * )
  * @OA\Response(
- *     response="500",
- *     description="Unexpected error",
+ *     response="401",
+ *     description="Authentication failed",
  *
- *     @OA\JsonContent(@OA\Property(property="fails", type="bool"))
+ *     @OA\JsonContent(
+ *      @OA\Property(property="message", type="string"),
+ *      @OA\Property(property="fails", type="bool"),
+ *     )
  * )
  * @OA\Response(
  *     response="422",
@@ -43,22 +64,12 @@ use OpenApi\Annotations as OA;
  *     )
  * )
  * @OA\Response(
- *     response="401",
- *     description="Authentication failed",
+ *     response="500",
+ *     description="Unexpected error",
  *
- *     @OA\JsonContent(
- *      @OA\Property(property="message", type="string"),
- *      @OA\Property(property="fails", type="bool"),
- *     )
+ *     @OA\JsonContent(@OA\Property(property="fails", type="bool"))
  * )
- *  @OA\Parameter(
- *     parameter="Id",
- *      name="id",
- *      in="path",
- *      description="Resource id",
- *      style="form",
- *      @OA\Schema(type="integer"),
- *  )
+ *
  * @OA\SecurityScheme(
  *     securityScheme="Sanctum",
  *     type="apiKey",

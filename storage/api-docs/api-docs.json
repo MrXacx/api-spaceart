@@ -220,6 +220,11 @@
                 "summary": "[PUT]::/agreement/{id} alias",
                 "description": "Redirect request to [PUT]::/agreement/{id} alias",
                 "operationId": "917f24a664563a08e429246d8456463d",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Id"
+                    }
+                ],
                 "responses": {
                     "302": {
                         "description": "Redirected to [PUT]::/agreement/{id}"
@@ -240,9 +245,214 @@
                 "summary": "[DELETE]::/agreement/{id} alias",
                 "description": "Redirect request to [DELETE]::/agreement/{id} alias",
                 "operationId": "c204776d0d5f93ef877ff6c54a0d2013",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Id"
+                    }
+                ],
                 "responses": {
                     "302": {
                         "description": "Redirected to [DELETE]::/agreement/{id}"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/Sanctum"
+                    }
+                ]
+            }
+        },
+        "/agreement/{agreement}/rate": {
+            "post": {
+                "tags": [
+                    "/rate"
+                ],
+                "summary": "Store rate",
+                "description": "Relates rate to agreement on database",
+                "operationId": "b31d47e125d7ced6cba151fdeaee3a31",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Agreement"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/RateStore"
+                },
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/ReturnRate"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/Sanctum"
+                    }
+                ]
+            }
+        },
+        "/agreement/{agreement}/rate/{author}": {
+            "get": {
+                "tags": [
+                    "/rate"
+                ],
+                "summary": "Fetch rate",
+                "description": "Fetch unique rate of an agreement",
+                "operationId": "f7782f6db85bd524b92a5f6e9165a240",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Agreement"
+                    },
+                    {
+                        "$ref": "#/components/parameters/Author"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ReturnRate"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/Sanctum"
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "/rate"
+                ],
+                "summary": "Update rate",
+                "description": "Update rate on database",
+                "operationId": "264c601c7f38b30f4c67b7eb0cad92d8",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Agreement"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/RateUpdate"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ReturnRate"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/Sanctum"
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "/rate"
+                ],
+                "summary": "Delete rate",
+                "description": "Delete rate on database",
+                "operationId": "6a7bc5251550e59c502647c1e8e0e4d6",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Agreement"
+                    },
+                    {
+                        "$ref": "#/components/parameters/Author"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "$ref": "#/components/responses/204"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/422"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/500"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/Sanctum"
+                    }
+                ]
+            }
+        },
+        "/agreement/{agreement}/rate/{author}/update": {
+            "post": {
+                "tags": [
+                    "/rate"
+                ],
+                "summary": "[PUT]::/agreement/{agreement}/rate/{author} alias",
+                "description": "Redirect request to [PUT]::/agreement/{agreement}/rate/{author}",
+                "operationId": "11277d33f03ad19571937f528f5ce8b0",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Agreement"
+                    },
+                    {
+                        "$ref": "#/components/parameters/Author"
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Redirected to [PUT]::/agreement/{agreement}/rate/{author}"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/Sanctum"
+                    }
+                ]
+            }
+        },
+        "/agreement/{agreement}/rate/{author}/delete": {
+            "post": {
+                "tags": [
+                    "/rate"
+                ],
+                "summary": "[DELETE]::/agreement/{agreement}/rate/{author} alias",
+                "description": "Redirect request to [DELETE]::/agreement/{agreement}/rate/{author}",
+                "operationId": "30aef47e3a00200df4f8abd616c3b96d",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Agreement"
+                    },
+                    {
+                        "$ref": "#/components/parameters/Author"
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Redirected to [DELETE]::/agreement/{agreement}/rate/{author}"
                     }
                 },
                 "security": [
@@ -965,7 +1175,8 @@
                                     "type": "string"
                                 },
                                 "fails": {
-                                    "type": "boolean"
+                                    "type": "boolean",
+                                    "default": "false"
                                 }
                             },
                             "type": "object"
@@ -973,12 +1184,15 @@
                     }
                 }
             },
-            "500": {
-                "description": "Unexpected error",
+            "401": {
+                "description": "Authentication failed",
                 "content": {
                     "application/json": {
                         "schema": {
                             "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
                                 "fails": {
                                     "type": "boolean"
                                 }
@@ -1012,14 +1226,36 @@
                     }
                 }
             },
-            "401": {
-                "description": "Authentication failed",
+            "500": {
+                "description": "Unexpected error",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "fails": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "ReturnRate": {
+                "description": "Response is successful",
                 "content": {
                     "application/json": {
                         "schema": {
                             "properties": {
                                 "message": {
                                     "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Rate"
+                                    },
+                                    "maxItems": 1
                                 },
                                 "fails": {
                                     "type": "boolean"
@@ -1082,6 +1318,24 @@
                 "name": "id",
                 "in": "path",
                 "description": "Resource id",
+                "style": "form",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "Author": {
+                "name": "author",
+                "in": "path",
+                "description": "Author id",
+                "style": "form",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "Agreement": {
+                "name": "agreement",
+                "in": "path",
+                "description": "Agreement id",
                 "style": "form",
                 "schema": {
                     "type": "integer"
@@ -1172,6 +1426,55 @@
                                         "refused",
                                         "canceled"
                                     ]
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "RateStore": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "author_id",
+                                "score",
+                                "note"
+                            ],
+                            "properties": {
+                                "author_id": {
+                                    "type": "integer"
+                                },
+                                "score": {
+                                    "type": "number",
+                                    "maximum": 5,
+                                    "minimum": 0
+                                },
+                                "note": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "RateUpdate": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "score"
+                            ],
+                            "properties": {
+                                "score": {
+                                    "type": "number",
+                                    "maximum": 5,
+                                    "minimum": 0
+                                },
+                                "note": {
+                                    "type": "string"
                                 }
                             },
                             "type": "object"

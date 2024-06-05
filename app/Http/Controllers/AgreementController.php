@@ -26,11 +26,13 @@ use OpenApi\Annotations as OA;
  */
 class AgreementController extends IMainRouteController
 {
+    private readonly AgreementRepository $agreementRepository;
+
     public function __construct(
-        ResponseService                      $responseService,
-        private readonly AgreementRepository $agreementRepository
-    )
-    {
+        ResponseService $responseService,
+        AgreementRepository $agreementRepository
+    ) {
+        $this->agreementRepository = $agreementRepository;
         parent::__construct($responseService);
     }
 
@@ -43,19 +45,16 @@ class AgreementController extends IMainRouteController
      *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Limit"),
-     *
      *     @OA\Response(
      *         response="200",
      *          description="Agreements found",
      *
      *          @OA\JsonContent(
-     *
      *              @OA\Property(property="message", type="string"),
      *              @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/Agreement")),
      *              @OA\Property(property="fails", type="bool"),
      *          )
      *     ),
-     *
      *     @OA\Response(response="401", ref="#/components/responses/401"),
      *     @OA\Response(response="500", ref="#/components/responses/500")
      * )
@@ -79,19 +78,16 @@ class AgreementController extends IMainRouteController
      *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *     @OA\RequestBody(ref="#/components/requestBodies/AgreementStore"),
-     *
      *     @OA\Response(
      *         response="200",
      *          description="Agreements was created",
      *
      *          @OA\JsonContent(
-     *
      *              @OA\Property(property="message", type="string"),
      *              @OA\Property(property="data", type="array", maxItems=1, @OA\Items(ref="#/components/schemas/Agreement")),
      *              @OA\Property(property="fails", type="bool"),
      *          )
      *     ),
-     *
      *     @OA\Response(response="401", ref="#/components/responses/401"),
      *     @OA\Response(response="422", ref="#/components/responses/422"),
      *     @OA\Response(response="500", ref="#/components/responses/500"),
@@ -120,7 +116,6 @@ class AgreementController extends IMainRouteController
      *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
-     *
      *     @OA\Response(response="200", ref="#/components/responses/ReturnAgreement"),
      *     @OA\Response(response="401", ref="#/components/responses/401"),
      *     @OA\Response(response="500", ref="#/components/responses/500"),
@@ -146,8 +141,11 @@ class AgreementController extends IMainRouteController
      *     summary="[PUT]::/agreement/{id} alias",
      *     description="Redirect request to [PUT]::/agreement/{id} alias",
      *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *
+     *     @OA\Parameter(ref="#/components/parameters/Id"),
      *     @OA\Response(response="302", description="Redirected to [PUT]::/agreement/{id}")
      * )
+     *
      * @OA\Put(
      *     tags={"/agreement"},
      *     path="/agreement/{id}",
@@ -187,8 +185,11 @@ class AgreementController extends IMainRouteController
      *     summary="[DELETE]::/agreement/{id} alias",
      *     description="Redirect request to [DELETE]::/agreement/{id} alias",
      *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *
+     *     @OA\Parameter(ref="#/components/parameters/Id"),
      *     @OA\Response(response="302", description="Redirected to [DELETE]::/agreement/{id}")
      * )
+     *
      * @OA\Delete(
      *     tags={"/agreement"},
      *     path="/agreement/{id}",
@@ -202,7 +203,6 @@ class AgreementController extends IMainRouteController
      *     @OA\Response(response="422", ref="#/components/responses/422"),
      *     @OA\Response(response="500", ref="#/components/responses/500"),
      * )
-     *
      */
     public function destroy(AgreementRequest $request): JsonResponse
     {

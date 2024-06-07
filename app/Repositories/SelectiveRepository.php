@@ -10,7 +10,7 @@ use App\Models\Art;
 use App\Models\Selective;
 use Carbon\Carbon;
 use Closure;
-use Ramsey\Collection\Collection;
+use Illuminate\Database\Eloquent\Collection;
 
 class SelectiveRepository implements Contracts\ISelectiveRepository
 {

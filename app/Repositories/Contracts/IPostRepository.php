@@ -4,7 +4,7 @@ namespace App\Repositories\Contracts;
 
 use App\Exceptions\NotSavedModelException;
 use App\Models\Post;
-use Ramsey\Collection\Collection;
+use Illuminate\Database\Eloquent\Collection;
 
 interface IPostRepository
 {

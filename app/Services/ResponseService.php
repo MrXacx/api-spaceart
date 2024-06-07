@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
-use Ramsey\Collection\Collection;
 
 class ResponseService
 {

@@ -5,7 +5,7 @@ namespace App\Repositories\Contracts;
 use App\Exceptions\NotSavedModelException;
 use App\Models\Selective;
 use Closure;
-use Ramsey\Collection\Collection;
+use Illuminate\Database\Eloquent\Collection;
 
 interface ISelectiveRepository
 {

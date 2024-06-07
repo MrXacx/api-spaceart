@@ -6,7 +6,7 @@ use App\Exceptions\NotFoundException;
 use App\Exceptions\NotSavedModelException;
 use App\Models\Post;
 use Closure;
-use Ramsey\Collection\Collection;
+use Illuminate\Database\Eloquent\Collection;
 
 class PostRepository implements Contracts\IPostRepository
 {

@@ -70,8 +70,8 @@ $apiResources = [
 buildApiRoutes($apiResources);
 
 // Auth routes
-Route::get('/auth', [AuthController::class, 'authenticate'])->name('auth');
-Route::middleware('auth:sanctum')->get('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
+Route::post('/auth', [AuthController::class, 'authenticate'])->name('auth');
+Route::middleware('auth:sanctum')->post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
 // Unique posting route
 Route::post('/selective/{selective}/candidate', [SelectiveCandidateController::class, 'store']);

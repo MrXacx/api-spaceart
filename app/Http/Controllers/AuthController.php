@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use OpenApi\Annotations as OA;
 
 class AuthController extends Controller
 {
@@ -19,6 +20,32 @@ class AuthController extends Controller
     ) {
     }
 
+    /**
+     * @OA\Post(
+     *     tags={"Auth"},
+     *     path="/auth",
+     *
+     *     @OA\RequestBody(ref="#/components/requestBodies/Auth"),
+     *
+     *     @OA\Response(
+     *          response="200",
+     *          description="Has been authenticated",
+     *          @OA\JsonContent(
+     *           @OA\Property(property="data", type="object", @OA\Property(property="token", type="string"))
+     *          )
+     *    ),
+     *     @OA\Response(
+     *          response="422",
+     *          description="Authentication failed",
+     *
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", default="User not authenticated."),
+     *              @OA\Property(property="data", type="array", @OA\Items(minItems=1, @OA\Property(default="Email or password is incorrect."))),
+     *              @OA\Property(property="fails", type="bool", default="true"),
+     *          )
+     *     )
+     * )
+     */
     public function authenticate(AuthRequest $request): JsonResponse
     {
         $credentials = $request->only('email', 'password');
@@ -38,6 +65,15 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *     tags={"Auth"},
+     *     path="/auth/logout",
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *
+     *     @OA\Response(response="200", description="Logged out", @OA\JsonContent(@OA\Property(property="message", type="string", default="User logout."))),
+     * )
+     */
     public function logout(Request $request): JsonResponse
     {
         $this->logger->auth('Logged out.');

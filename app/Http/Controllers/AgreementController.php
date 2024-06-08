@@ -18,6 +18,7 @@ use OpenApi\Annotations as OA;
  *  description="Response is successful",
  *
  *  @OA\JsonContent(
+ *
  *       @OA\Property(property="message", type="string"),
  *       @OA\Property(property="data", type="array", maxItems=1, @OA\Items(ref="#/components/schemas/Agreement")),
  *       @OA\Property(property="fails", type="bool"),
@@ -38,25 +39,25 @@ class AgreementController extends IMainRouteController
 
     /**
      * @OA\Get(
-     *     tags={"/agreement"},
+     *     tags={"Agreement"},
      *     path="/agreement",
      *     summary="List agreements",
      *     description="Fetch user's agreements on database",
      *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Limit"),
+     *
      *     @OA\Response(
      *         response="200",
      *          description="Agreements found",
      *
      *          @OA\JsonContent(
+     *
      *              @OA\Property(property="message", type="string"),
      *              @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/Agreement")),
      *              @OA\Property(property="fails", type="bool"),
      *          )
      *     ),
-     *     @OA\Response(response="401", ref="#/components/responses/401"),
-     *     @OA\Response(response="500", ref="#/components/responses/500")
      * )
      */
     public function index(Request $request): JsonResponse
@@ -71,26 +72,26 @@ class AgreementController extends IMainRouteController
 
     /**
      * @OA\Post(
-     *     tags={"/agreement"},
+     *     tags={"Agreement"},
      *     path="/agreement",
      *     summary="Store agreement",
      *     description="Store agreement on database",
      *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *     @OA\RequestBody(ref="#/components/requestBodies/AgreementStore"),
+     *
      *     @OA\Response(
      *         response="200",
      *          description="Agreements was created",
      *
      *          @OA\JsonContent(
+     *
      *              @OA\Property(property="message", type="string"),
      *              @OA\Property(property="data", type="array", maxItems=1, @OA\Items(ref="#/components/schemas/Agreement")),
      *              @OA\Property(property="fails", type="bool"),
      *          )
      *     ),
-     *     @OA\Response(response="401", ref="#/components/responses/401"),
-     *     @OA\Response(response="422", ref="#/components/responses/422"),
-     *     @OA\Response(response="500", ref="#/components/responses/500"),
+     *
      * )
      */
     public function store(AgreementRequest $request): JsonResponse
@@ -109,16 +110,16 @@ class AgreementController extends IMainRouteController
 
     /**
      * @OA\Get(
-     *     tags={"/agreement"},
+     *     tags={"Agreement"},
      *     path="/agreement/{id}",
      *     summary="Fetch agreement",
      *     description="Fetch an unique agreement on database",
      *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
+     *
      *     @OA\Response(response="200", ref="#/components/responses/ReturnAgreement"),
-     *     @OA\Response(response="401", ref="#/components/responses/401"),
-     *     @OA\Response(response="500", ref="#/components/responses/500"),
+     *
      * )
      */
     public function show(AgreementRequest $request): JsonResponse//: JsonResponse
@@ -136,31 +137,30 @@ class AgreementController extends IMainRouteController
 
     /**
      * @OA\Post(
-     *     tags={"/agreement"},
+     *     tags={"Agreement"},
      *     path="/agreement/{id}/update",
      *     summary="[PUT]::/agreement/{id} alias",
      *     description="Redirect request to [PUT]::/agreement/{id} alias",
      *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
+     *
      *     @OA\Response(response="302", description="Redirected to [PUT]::/agreement/{id}")
      * )
      *
      * @OA\Put(
-     *     tags={"/agreement"},
+     *     tags={"Agreement"},
      *     path="/agreement/{id}",
      *     summary="Update agreement",
      *     description="Update agreement on database",
      *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
-     *     @OA\RequestBody(ref="#/components/requestBodies/AgreementUpdate"),
-     *     @OA\Response(response="200", ref="#/components/responses/ReturnAgreement"),
-     *     @OA\Response(response="401", ref="#/components/responses/401"),
-     *     @OA\Response(response="422", ref="#/components/responses/422"),
-     *     @OA\Response(response="500", ref="#/components/responses/500"),
-     * )
      *
+     *     @OA\RequestBody(ref="#/components/requestBodies/AgreementUpdate"),
+     *
+     *     @OA\Response(response="200", ref="#/components/responses/ReturnAgreement"),
+     * )
      * @throws CheckDBOperationException
      */
     public function update(AgreementRequest $request): JsonResponse
@@ -180,28 +180,27 @@ class AgreementController extends IMainRouteController
 
     /**
      * @OA\Post(
-     *     tags={"/agreement"},
+     *     tags={"Agreement"},
      *     path="/agreement/{id}/delete",
      *     summary="[DELETE]::/agreement/{id} alias",
      *     description="Redirect request to [DELETE]::/agreement/{id} alias",
      *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
+     *
      *     @OA\Response(response="302", description="Redirected to [DELETE]::/agreement/{id}")
      * )
      *
      * @OA\Delete(
-     *     tags={"/agreement"},
+     *     tags={"Agreement"},
      *     path="/agreement/{id}",
      *     summary="Delete agreement",
      *     description="Delete agreement on database",
      *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
+     *
      *     @OA\Response(response="204", ref="#/components/responses/204"),
-     *     @OA\Response(response="401", ref="#/components/responses/401"),
-     *     @OA\Response(response="422", ref="#/components/responses/422"),
-     *     @OA\Response(response="500", ref="#/components/responses/500"),
      * )
      */
     public function destroy(AgreementRequest $request): JsonResponse

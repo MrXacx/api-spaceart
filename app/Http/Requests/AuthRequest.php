@@ -3,21 +3,22 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use OpenApi\Annotations as OA;
 
 class AuthRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
+     * @OA\RequestBody(
+     *     request="Auth",
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     *     @OA\JsonContent(
+     *          required={"email", "password", "device_name"},
+     *
+     *          @OA\Property(property="email", type="string"),
+     *          @OA\Property(property="password", type="string", minLength=8),
+     *          @OA\Property(property="device_name", type="string"),
+     *     )
+     * )
      */
     public function rules(): array
     {

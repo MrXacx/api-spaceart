@@ -44,31 +44,6 @@ use OpenApi\Annotations as OA;
  *      @OA\Property(property="fails", type="bool", default="false"),
  *  )
  * )
- * @OA\Response(
- *     response="401",
- *     description="Authentication failed",
- *
- *     @OA\JsonContent(
- *      @OA\Property(property="message", type="string"),
- *      @OA\Property(property="fails", type="bool"),
- *     )
- * )
- * @OA\Response(
- *     response="422",
- *     description="Unprocessable entity",
- *
- *     @OA\JsonContent(
- *      @OA\Property(property="message", type="string"),
- *      @OA\Property(property="data", type="array", @OA\Items(minItems=1)),
- *      @OA\Property(property="fails", type="bool"),
- *     )
- * )
- * @OA\Response(
- *     response="500",
- *     description="Unexpected error",
- *
- *     @OA\JsonContent(@OA\Property(property="fails", type="bool"))
- * )
  *
  * @OA\SecurityScheme(
  *     securityScheme="Sanctum",

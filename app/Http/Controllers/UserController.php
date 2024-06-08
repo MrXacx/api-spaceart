@@ -69,7 +69,7 @@ class UserController extends IMainRouteController
 
     /**
      * @OA\Get(
-     *     tags={"/user"},
+     *     tags={"User"},
      *     path="/user",
      *     summary="List active users",
      *     description="Get users on database and paginate them",
@@ -84,7 +84,6 @@ class UserController extends IMainRouteController
      *      @OA\Schema(type="string", nullable=true),
      *      style="form"
      *     ),
-     *
      *     @OA\Response(
      *         response="200",
      *         description="Users found",
@@ -97,8 +96,6 @@ class UserController extends IMainRouteController
      *             @OA\Property(property="fails", type="bool", default="false"),
      *         )
      *     ),
-     *
-     *     @OA\Response(response="500", ref="#/components/responses/500")
      * )
      */
     public function index(Request $request): JsonResponse
@@ -121,7 +118,7 @@ class UserController extends IMainRouteController
 
     /**
      * @OA\Get(
-     *     tags={"/user"},
+     *     tags={"User"},
      *     path="/user/{id}",
      *     summary="Show user",
      *     description="Get an unique user on database",
@@ -129,8 +126,7 @@ class UserController extends IMainRouteController
      *     @OA\Parameter(ref="#/components/parameters/Id"),
      *
      *     @OA\Response(response="200", ref="#/components/responses/ReturnUser"),
-     *     @OA\Response(response="422", ref="#/components/responses/422"),
-     *     @OA\Response(response="500", ref="#/components/responses/500"),
+     *
      * )
      *
      * @throws HttpRequestException
@@ -151,26 +147,21 @@ class UserController extends IMainRouteController
     /**
      * @OA\Post(
      *     path="/user",
-     *     tags={"/user"},
+     *     tags={"User"},
      *     summary="Store user",
      *     description="Store user on database",
      *
      *     @OA\RequestBody(ref="#/components/requestBodies/UserStore"),
-     *
      *     @OA\Response(
      *         response="201",
      *          description="User was created",
      *
      *          @OA\JsonContent(
-     *
      *              @OA\Property(property="message", type="string", default="User created"),
      *              @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/User")),
      *              @OA\Property(property="fails", type="bool")
      *          )
-     *     ),
-     *
-     *     @OA\Response(response="422", ref="#/components/responses/422"),
-     *     @OA\Response(response="500", ref="#/components/responses/500")
+     *     )
      * )
      *
      * @throws BindingResolutionException
@@ -194,26 +185,20 @@ class UserController extends IMainRouteController
      *    path="/user/{id}/update",
      *    summary="[PUT]::/user/{id} alias",
      *    description="Alternative route to [PUT]::/user/{id}",
-     *    tags={"/user"},
+     *    tags={"User"},
      *    security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *    @OA\Response(response="302", description="Redirected to [PUT]::/user/{id}")
      * )
-     *
      * @OA\Put(
      *     path="/user/{id}",
-     *     tags={"/user"},
+     *     tags={"User"},
      *     summary="Update user",
      *     description="Update user, artist or enterprise data on database",
-     *
      *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *     @OA\RequestBody(ref="#/components/requestBodies/UserUpdate"),
-     *
      *     @OA\Response(response="200", ref="#/components/responses/ReturnUser"),
-     *     @OA\Response(response="401", ref="#/components/responses/401"),
-     *     @OA\Response(response="422", ref="#/components/responses/422"),
-     *     @OA\Response(response="500", ref="#/components/responses/500"),
      * )
      *
      * @throws BindingResolutionException
@@ -239,7 +224,7 @@ class UserController extends IMainRouteController
 
     /**
      * @OA\Post(
-     *     tags={"/user"},
+     *     tags={"User"},
      *     path="/user/{id}/delete",
      *     summary="[DELETE]::/user/{id} alias",
      *     description="Alternative route to [DELETE]::/user/{id}",
@@ -247,9 +232,8 @@ class UserController extends IMainRouteController
      *
      *     @OA\Response(response="302", description="Redirected to [DELETE]::/user/{id}")
      * )
-     *
      * @OA\Delete(
-     *     tags={"/user"},
+     *     tags={"User"},
      *     path="/user/{id}",
      *     summary="Disable user account",
      *     description="Disable access to user account",
@@ -263,11 +247,8 @@ class UserController extends IMainRouteController
      *      @OA\Schema(type="integer"),
      *      style="form"
      *     ),
-     *
      *     @OA\Response(response="204", ref="#/components/responses/204"),
-     *     @OA\Response(response="401", ref="#/components/responses/401"),
-     *     @OA\Response(response="500", ref="#/components/responses/500"),
-     * )
+      * )
      */
     public function destroy(Request $request): JsonResponse
     {

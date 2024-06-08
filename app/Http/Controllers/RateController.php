@@ -44,7 +44,7 @@ class RateController extends IRouteController
 
     /**
      * @OA\Post(
-     *     tags={"/rate"},
+     *     tags={"Rate"},
      *     path="/agreement/{agreement}/rate",
      *     summary="Store rate",
      *     description="Relates rate to agreement on database",
@@ -52,9 +52,6 @@ class RateController extends IRouteController
      *     @OA\Parameter(ref="#/components/parameters/Agreement"),
      *     @OA\RequestBody(ref="#/components/requestBodies/RateStore"),
      *     @OA\Response(response="201", ref="#/components/responses/ReturnRate"),
-     *     @OA\Response(response="401", ref="#/components/responses/401"),
-     *     @OA\Response(response="422", ref="#/components/responses/422"),
-     *     @OA\Response(response="500", ref="#/components/responses/500"),
      * )
      *
      * @throws CheckDBOperationException
@@ -76,7 +73,7 @@ class RateController extends IRouteController
 
     /**
      * @OA\Get(
-     *     tags={"/rate"},
+     *     tags={"Rate"},
      *     path="/agreement/{agreement}/rate/{author}",
      *     summary="Fetch rate",
      *     description="Fetch unique rate of an agreement",
@@ -84,9 +81,6 @@ class RateController extends IRouteController
      *     @OA\Parameter(ref="#/components/parameters/Agreement"),
      *     @OA\Parameter(ref="#/components/parameters/Author"),
      *     @OA\Response(response="200", ref="#/components/responses/ReturnRate"),
-     *     @OA\Response(response="401", ref="#/components/responses/401"),
-     *     @OA\Response(response="422", ref="#/components/responses/422"),
-     *     @OA\Response(response="500", ref="#/components/responses/500"),
      * )
      *
      * @throws CheckDBOperationException
@@ -104,7 +98,7 @@ class RateController extends IRouteController
 
     /**
      * @OA\Post(
-     *     tags={"/rate"},
+     *     tags={"Rate"},
      *     path="/agreement/{agreement}/rate/{author}/update",
      *     summary="[PUT]::/agreement/{agreement}/rate/{author} alias",
      *     description="Redirect request to [PUT]::/agreement/{agreement}/rate/{author}",
@@ -115,7 +109,7 @@ class RateController extends IRouteController
      *     @OA\Response(response="302", description="Redirected to [PUT]::/agreement/{agreement}/rate/{author}")
      * )
      * @OA\Put(
-     *     tags={"/rate"},
+     *     tags={"Rate"},
      *     path="/agreement/{agreement}/rate/{author}",
      *     summary="Update rate",
      *     description="Update rate on database",
@@ -123,9 +117,6 @@ class RateController extends IRouteController
      *     @OA\Parameter(ref="#/components/parameters/Agreement"),
      *     @OA\RequestBody(ref="#/components/requestBodies/RateUpdate"),
      *     @OA\Response(response="200", ref="#/components/responses/ReturnRate"),
-     *     @OA\Response(response="401", ref="#/components/responses/401"),
-     *     @OA\Response(response="422", ref="#/components/responses/422"),
-     *     @OA\Response(response="500", ref="#/components/responses/500"),
      * )
      *
      * @throws CheckDBOperationException
@@ -149,7 +140,7 @@ class RateController extends IRouteController
 
     /**
      * @OA\Post(
-     *      tags={"/rate"},
+     *      tags={"Rate"},
      *      path="/agreement/{agreement}/rate/{author}/delete",
      *      summary="[DELETE]::/agreement/{agreement}/rate/{author} alias",
      *      description="Redirect request to [DELETE]::/agreement/{agreement}/rate/{author}",
@@ -160,7 +151,7 @@ class RateController extends IRouteController
      *      @OA\Response(response="302", description="Redirected to [DELETE]::/agreement/{agreement}/rate/{author}")
      *  )
      * @OA\Delete(
-     *     tags={"/rate"},
+     *     tags={"Rate"},
      *     path="/agreement/{agreement}/rate/{author}",
      *     summary="Delete rate",
      *     description="Delete rate on database",
@@ -168,10 +159,7 @@ class RateController extends IRouteController
      *     @OA\Parameter(ref="#/components/parameters/Agreement"),
      *     @OA\Parameter(ref="#/components/parameters/Author"),
      *     @OA\Response(response="204", ref="#/components/responses/204"),
-     *     @OA\Response(response="401", ref="#/components/responses/401"),
-     *     @OA\Response(response="422", ref="#/components/responses/422"),
-     *     @OA\Response(response="500", ref="#/components/responses/500"),
-     * )
+      * )
      *
      * @throws CheckDBOperationException
      * @throws AuthorizationException

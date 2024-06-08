@@ -26,6 +26,7 @@ class Art extends Model
     protected $table = 'arts';
 
     protected $hidden = ['id'];
+    protected $casts = ['name' => \App\Enumerate\Art::class];
 
     public function artists(): HasMany
     {
@@ -40,11 +41,5 @@ class Art extends Model
     public function selectives(): HasMany
     {
         return $this->hasMany(Selective::class);
-    }
-
-    public function toArray()
-    {
-        $this->loadCount('artists', 'agreements', 'selectives');
-        return parent::toArray();
     }
 }

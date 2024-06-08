@@ -3,13 +3,19 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use OpenApi\Annotations as OA;
 
 class PostRequest extends FormRequest
 {
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @OA\RequestBody(
+     *     request="PostStore",
+     *     @OA\JsonContent(
+     *         @OA\Property(property="user_id", type="int"),
+     *         @OA\Property(property="text", type="string"),
+     *         @OA\Property(property="image", description="Image in base64 ou URL", type="string", maxLength=10000000),
+     *     )
+     * )
      */
     public function rules(): array
     {

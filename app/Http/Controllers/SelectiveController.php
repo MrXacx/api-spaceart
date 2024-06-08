@@ -42,14 +42,13 @@ class SelectiveController extends IMainRouteController
 
     /**
      * @OA\Get(
-     *     tags={"/selective"},
+     *     tags={"Selective"},
      *     path="/selective",
      *     summary="List selectives",
      *     description="Fetch selectives on database",
      *
      *     @OA\Parameter(ref="#/components/parameters/Offset"),
      *     @OA\Parameter(ref="#/components/parameters/Limit"),
-     *
      *     @OA\Response(
      *       response="200",
      *       description="Operation was realized",
@@ -59,8 +58,6 @@ class SelectiveController extends IMainRouteController
      *           @OA\Property(property="fails", type="boolean", default="false"),
      *       )
      *     ),
-     *     @OA\Response(response="422", ref="#/components/responses/422"),
-     *     @OA\Response(response="500", ref="#/components/responses/500"),
      * )
      */
     public function index(Request $request): JsonResponse
@@ -78,7 +75,7 @@ class SelectiveController extends IMainRouteController
 
     /**
      * @OA\Post(
-     *      tags={"/selective"},
+     *      tags={"Selective"},
      *      path="/selective",
      *      summary="Store selective",
      *      description="Store selective on database",
@@ -86,9 +83,6 @@ class SelectiveController extends IMainRouteController
      *
      *      @OA\RequestBody(ref="#/components/requestBodies/SelectiveStore"),
      *      @OA\Response(response="200", ref="#/components/responses/ReturnSelective"),
-     *      @OA\Response(response="422", ref="#/components/responses/422"),
-     *      @OA\Response(response="401", ref="#/components/responses/401"),
-     *      @OA\Response(response="500", ref="#/components/responses/500"),
      *  )
      *
      * @throws CheckDBOperationException
@@ -110,7 +104,7 @@ class SelectiveController extends IMainRouteController
 
     /**
      * @OA\Get(
-     *     tags={"/selective"},
+     *     tags={"Selective"},
      *     path="/selective/{id}",
      *     summary="Fetch unique selective",
      *     description="Fetch selective on database",
@@ -118,9 +112,6 @@ class SelectiveController extends IMainRouteController
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
      *     @OA\Response(response="200", ref="#/components/responses/ReturnSelective"),
-     *     @OA\Response(response="422", ref="#/components/responses/422"),
-     *     @OA\Response(response="401", ref="#/components/responses/401"),
-     *     @OA\Response(response="500", ref="#/components/responses/500"),
      * )
      */
     public function show(SelectiveRequest $request): JsonResponse
@@ -133,7 +124,7 @@ class SelectiveController extends IMainRouteController
 
     /**
      * @OA\Post(
-     *    tags={"/selective"},
+     *    tags={"Selective"},
      *    path="/selective/{id}/update",
      *    summary="[PUT] /selective/{id} alias ",
      *    description="Redirect to [PUT] /selective/{id}",
@@ -143,7 +134,7 @@ class SelectiveController extends IMainRouteController
      *    @OA\Response(response="302", description="Redirected to [PUT] /selective/{id}"),
      * )
      * @OA\Put(
-     *     tags={"/selective"},
+     *     tags={"Selective"},
      *     path="/selective/{id}",
      *     summary="Update selective",
      *     description="Update selective on database",
@@ -152,9 +143,6 @@ class SelectiveController extends IMainRouteController
      *     @OA\Parameter(ref="#/components/parameters/Id"),
      *     @OA\RequestBody(ref="#/components/requestBodies/SelectiveUpdate"),
      *     @OA\Response(response="200", ref="#/components/responses/ReturnSelective"),
-     *     @OA\Response(response="422", ref="#/components/responses/422"),
-     *     @OA\Response(response="401", ref="#/components/responses/401"),
-     *     @OA\Response(response="500", ref="#/components/responses/500"),
      * )
      */
     public function update(SelectiveRequest $request): JsonResponse
@@ -173,7 +161,7 @@ class SelectiveController extends IMainRouteController
 
     /**
      * @OA\Post(
-     *    tags={"/selective"},
+     *    tags={"Selective"},
      *    path="/selective/{id}/delete",
      *    summary="[DELETE] /selective/{id} alias ",
      *    description="Redirect to [DELETE] /selective/{id}",
@@ -183,7 +171,7 @@ class SelectiveController extends IMainRouteController
      *    @OA\Response(response="302", description="Redirected to [DELETE] /selective/{id}"),
      * )
      * @OA\Delete(
-     *     tags={"/selective"},
+     *     tags={"Selective"},
      *     path="/selective/{id}",
      *     summary="Delete selective",
      *     description="Delete selective on database",
@@ -191,9 +179,6 @@ class SelectiveController extends IMainRouteController
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
      *     @OA\Response(response="204", ref="#/components/responses/204"),
-     *     @OA\Response(response="422", ref="#/components/responses/422"),
-     *     @OA\Response(response="401", ref="#/components/responses/401"),
-     *     @OA\Response(response="500", ref="#/components/responses/500"),
      * )
      */
     public function destroy(SelectiveRequest $request): JsonResponse

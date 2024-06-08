@@ -195,7 +195,7 @@ class UserController extends IMainRouteController
      *    summary="[PUT]::/user/{id} alias",
      *    description="Alternative route to [PUT]::/user/{id}",
      *    tags={"/user"},
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *    security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *    @OA\Response(response="302", description="Redirected to [PUT]::/user/{id}")
      * )
@@ -245,7 +245,7 @@ class UserController extends IMainRouteController
      *     description="Alternative route to [DELETE]::/user/{id}",
      *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
-     *     @OA\Response(response="200", description="Redirected to [DELETE]::/user/{id}")
+     *     @OA\Response(response="302", description="Redirected to [DELETE]::/user/{id}")
      * )
      *
      * @OA\Delete(

@@ -2,15 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\CheckDBOperationException;
 use App\Exceptions\NotSavedModelException;
 use App\Http\Controllers\Contracts\IMainRouteController;
 use App\Http\Requests\SelectiveRequest;
 use App\Repositories\SelectiveRepository;
 use App\Services\ResponseService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\ControllerMiddlewareOptions;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Response(
+ *     response="ReturnSelective",
+ *     description="Operation was realized",
+ *
+ *     @OA\JsonContent(
+ *         @OA\Property(property="message", type="string"),
+ *         @OA\Property(property="data", type="array", maxItems=1, @OA\Items(ref="#/components/schemas/Selective")),
+ *         @OA\Property(property="fails", type="boolean", default="false"),
+ *     )
+ * )
+ */
 class SelectiveController extends IMainRouteController
 {
     public function __construct(
@@ -25,6 +40,29 @@ class SelectiveController extends IMainRouteController
         return parent::setSanctumMiddleware()->except('index');
     }
 
+    /**
+     * @OA\Get(
+     *     tags={"/selective"},
+     *     path="/selective",
+     *     summary="List selectives",
+     *     description="Fetch selectives on database",
+     *
+     *     @OA\Parameter(ref="#/components/parameters/Offset"),
+     *     @OA\Parameter(ref="#/components/parameters/Limit"),
+     *
+     *     @OA\Response(
+     *       response="200",
+     *       description="Operation was realized",
+     *       @OA\JsonContent(
+     *           @OA\Property(property="message", type="string"),
+     *           @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/Selective")),
+     *           @OA\Property(property="fails", type="boolean", default="false"),
+     *       )
+     *     ),
+     *     @OA\Response(response="422", ref="#/components/responses/422"),
+     *     @OA\Response(response="500", ref="#/components/responses/500"),
+     * )
+     */
     public function index(Request $request): JsonResponse
     {
         $request->validate([
@@ -34,10 +72,28 @@ class SelectiveController extends IMainRouteController
 
         return $this->responseService->sendMessage(
             'Selectives found',
-            $this->selectiveRepository->list($request->offset ?? 0, $request->limit ?? 20)
+            $this->selectiveRepository->list((int) $request->offset, $request->limit ?? 20)
         );
     }
 
+    /**
+     * @OA\Post(
+     *      tags={"/selective"},
+     *      path="/selective",
+     *      summary="Store selective",
+     *      description="Store selective on database",
+     *      security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *
+     *      @OA\RequestBody(ref="#/components/requestBodies/SelectiveStore"),
+     *      @OA\Response(response="200", ref="#/components/responses/ReturnSelective"),
+     *      @OA\Response(response="422", ref="#/components/responses/422"),
+     *      @OA\Response(response="401", ref="#/components/responses/401"),
+     *      @OA\Response(response="500", ref="#/components/responses/500"),
+     *  )
+     *
+     * @throws CheckDBOperationException
+     * @throws AuthorizationException
+     */
     public function store(SelectiveRequest $request): JsonResponse
     {
         try {
@@ -52,6 +108,21 @@ class SelectiveController extends IMainRouteController
         }
     }
 
+    /**
+     * @OA\Get(
+     *     tags={"/selective"},
+     *     path="/selective/{id}",
+     *     summary="Fetch unique selective",
+     *     description="Fetch selective on database",
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *
+     *     @OA\Parameter(ref="#/components/parameters/Id"),
+     *     @OA\Response(response="200", ref="#/components/responses/ReturnSelective"),
+     *     @OA\Response(response="422", ref="#/components/responses/422"),
+     *     @OA\Response(response="401", ref="#/components/responses/401"),
+     *     @OA\Response(response="500", ref="#/components/responses/500"),
+     * )
+     */
     public function show(SelectiveRequest $request): JsonResponse
     {
         return $this->responseService->sendMessage(
@@ -60,6 +131,32 @@ class SelectiveController extends IMainRouteController
         );
     }
 
+    /**
+     * @OA\Post(
+     *    tags={"/selective"},
+     *    path="/selective/{id}/update",
+     *    summary="[PUT] /selective/{id} alias ",
+     *    description="Redirect to [PUT] /selective/{id}",
+     *    security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *
+     *    @OA\Parameter(ref="#/components/parameters/Id"),
+     *    @OA\Response(response="302", description="Redirected to [PUT] /selective/{id}"),
+     * )
+     * @OA\Put(
+     *     tags={"/selective"},
+     *     path="/selective/{id}",
+     *     summary="Update selective",
+     *     description="Update selective on database",
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *
+     *     @OA\Parameter(ref="#/components/parameters/Id"),
+     *     @OA\RequestBody(ref="#/components/requestBodies/SelectiveUpdate"),
+     *     @OA\Response(response="200", ref="#/components/responses/ReturnSelective"),
+     *     @OA\Response(response="422", ref="#/components/responses/422"),
+     *     @OA\Response(response="401", ref="#/components/responses/401"),
+     *     @OA\Response(response="500", ref="#/components/responses/500"),
+     * )
+     */
     public function update(SelectiveRequest $request): JsonResponse
     {
         try {
@@ -74,6 +171,31 @@ class SelectiveController extends IMainRouteController
         }
     }
 
+    /**
+     * @OA\Post(
+     *    tags={"/selective"},
+     *    path="/selective/{id}/delete",
+     *    summary="[DELETE] /selective/{id} alias ",
+     *    description="Redirect to [DELETE] /selective/{id}",
+     *    security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *
+     *    @OA\Parameter(ref="#/components/parameters/Id"),
+     *    @OA\Response(response="302", description="Redirected to [DELETE] /selective/{id}"),
+     * )
+     * @OA\Delete(
+     *     tags={"/selective"},
+     *     path="/selective/{id}",
+     *     summary="Delete selective",
+     *     description="Delete selective on database",
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *
+     *     @OA\Parameter(ref="#/components/parameters/Id"),
+     *     @OA\Response(response="204", ref="#/components/responses/204"),
+     *     @OA\Response(response="422", ref="#/components/responses/422"),
+     *     @OA\Response(response="401", ref="#/components/responses/401"),
+     *     @OA\Response(response="500", ref="#/components/responses/500"),
+     * )
+     */
     public function destroy(SelectiveRequest $request): JsonResponse
     {
         return $this->selectiveRepository->delete(

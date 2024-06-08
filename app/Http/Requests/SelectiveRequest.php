@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enumerate\Art;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use OpenApi\Annotations as OA;
 
 class SelectiveRequest extends FormRequest
 {
@@ -30,7 +31,23 @@ class SelectiveRequest extends FormRequest
         };
     }
 
-    private function store()
+    /**
+     * @OA\RequestBody(
+     *     request="SelectiveStore",
+     *
+     *     @OA\JsonContent(
+     *         required={"enterprise_id","title", "start_moment", "end_moment", "art", "note", "price"},
+     *         @OA\Property(property="enterprise_id", type="int"),
+     *         @OA\Property(property="title", type="string", example="Summer 2025"),
+     *         @OA\Property(property="start_moment", type="date", example="", format="d/m/Y H:i"),
+     *         @OA\Property(property="end_moment", type="date", example="", format="d/m/Y H:i"),
+     *         @OA\Property(property="art", type="enum", enum="App\Enumerate\Art"),
+     *         @OA\Property(property="note", type="string", example="perfect!!"),
+     *         @OA\Property(property="price", type="number"),
+     *     )
+     * )
+     */
+    private function store(): array
     {
         return [
             'enterprise_id' => ['required', 'exists:enterprises,id'],
@@ -43,7 +60,20 @@ class SelectiveRequest extends FormRequest
         ];
     }
 
-    private function update()
+    /**
+     * @OA\RequestBody(
+     *     request="SelectiveUpdate",
+     *
+     *     @OA\JsonContent(
+     *         @OA\Property(property="title", type="string", example="Summer 2025"),
+     *         @OA\Property(property="start_moment", type="date", example="", format="d/m/Y H:i"),
+     *         @OA\Property(property="end_moment", type="date", example="", format="d/m/Y H:i"),
+     *         @OA\Property(property="note", type="string", example="perfect!!"),
+     *         @OA\Property(property="price", type="number"),
+     *     )
+     * )
+     */
+    private function update(): array
     {
         return [
             'title' => ['string', 'min:5', 'max:30'],

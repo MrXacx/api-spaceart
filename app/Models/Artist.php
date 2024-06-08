@@ -105,6 +105,7 @@ class Artist extends Model
     public function toArray(): array
     {
         $this->loadMissing('art', 'agreements', 'candidatures');
+
         return parent::toArray();
     }
 }

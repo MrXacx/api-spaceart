@@ -23,6 +23,7 @@ use OpenApi\Annotations as OA;
  *       in="path",
  *       description="Resource id",
  *       style="form",
+ *
  *       @OA\Schema(type="integer"),
  *   )
  *
@@ -32,14 +33,17 @@ use OpenApi\Annotations as OA;
  *      in="path",
  *      description="Author id",
  *      style="form",
+ *
  *      @OA\Schema(type="integer"),
  *   )
  *
  * @OA\Response(
  *  response="204",
  *  description="Resource was disabled",
+ *
  *  @OA\JsonContent(
  *      type="object",
+ *
  *      @OA\Property(property="message", type="string"),
  *      @OA\Property(property="fails", type="bool", default="false"),
  *  )

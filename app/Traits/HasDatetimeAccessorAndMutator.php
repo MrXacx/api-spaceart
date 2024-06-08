@@ -2,8 +2,8 @@
 
 namespace App\Traits;
 
-use Carbon\Carbon;
 use App\Enumerate\TimeStringFormat;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 /**

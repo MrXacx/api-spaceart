@@ -10,6 +10,7 @@ class SelectiveCandidateRequest extends FormRequest
     /**
      * @OA\RequestBody(
      *     request="SelectiveCandidateStore",
+     *
      *     @OA\JsonContent(required={"artist_id"}, @OA\Property(property="artist_id", type="int"))
      * )
      */

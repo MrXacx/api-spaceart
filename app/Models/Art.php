@@ -26,6 +26,7 @@ class Art extends Model
     protected $table = 'arts';
 
     protected $hidden = ['id'];
+
     protected $casts = ['name' => \App\Enumerate\Art::class];
 
     public function artists(): HasMany

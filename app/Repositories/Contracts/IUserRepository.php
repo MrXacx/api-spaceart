@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Contracts;
 
-use App\Enumerate\Account;
 use App\Exceptions\NotSavedModelException;
 use App\Models\User;
 use Closure;

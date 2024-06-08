@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Exceptions\NotSavedModelException;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;

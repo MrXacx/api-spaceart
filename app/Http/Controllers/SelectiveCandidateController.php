@@ -29,11 +29,15 @@ class SelectiveCandidateController extends IRouteController
      *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *     @OA\Parameter(name="selective", in="path", description="Selective id", style="form", @OA\Schema(type="integer")),
+     *
      *     @OA\RequestBody(ref="#/components/requestBodies/SelectiveCandidateStore"),
+     *
      *     @OA\Response(
      *         response="201",
      *         description="Candidature finished successfully",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", default="Candidature was created"),
      *             @OA\Property(property="data", type="array", @OA\Items(maxItems=1, ref="#/components/schemas/SelectiveCandidate")),
      *             @OA\Property(property="fails", type="boolean", default="false"),

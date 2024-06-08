@@ -161,6 +161,7 @@ class AgreementController extends IMainRouteController
      *
      *     @OA\Response(response="200", ref="#/components/responses/ReturnAgreement"),
      * )
+     *
      * @throws CheckDBOperationException
      */
     public function update(AgreementRequest $request): JsonResponse

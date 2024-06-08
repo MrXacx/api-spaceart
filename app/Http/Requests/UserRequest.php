@@ -26,6 +26,7 @@ class UserRequest extends FormRequest
      *          type="object",
      *          required={"name", "email", "phone", "password", "type", "postal_code", "image"},
      *          oneOf={
+     *
      *              @OA\Property(ref="#/components/schemas/ArtistStoreBody"),
      *              @OA\Property(ref="#/components/schemas/EnterpriseStoreBody"),
      *          },

@@ -18,6 +18,7 @@ use OpenApi\Annotations as OA;
  *
  *        @OA\Schema(type="integer", nullable=true),
  *       ),
+ *
  * @OA\Parameter(
  *     parameter="Offset",
  *       name="offset",
@@ -30,9 +31,5 @@ use OpenApi\Annotations as OA;
  */
 abstract class IMainRouteController extends IRouteController
 {
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
     abstract public function index(Request $request): JsonResponse;
 }

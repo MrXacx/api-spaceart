@@ -37,6 +37,7 @@ class SelectiveRequest extends FormRequest
      *
      *     @OA\JsonContent(
      *         required={"enterprise_id","title", "start_moment", "end_moment", "art", "note", "price"},
+     *
      *         @OA\Property(property="enterprise_id", type="int"),
      *         @OA\Property(property="title", type="string", example="Summer 2025"),
      *         @OA\Property(property="start_moment", type="date", example="", format="d/m/Y H:i"),
@@ -65,6 +66,7 @@ class SelectiveRequest extends FormRequest
      *     request="SelectiveUpdate",
      *
      *     @OA\JsonContent(
+     *
      *         @OA\Property(property="title", type="string", example="Summer 2025"),
      *         @OA\Property(property="start_moment", type="date", example="", format="d/m/Y H:i"),
      *         @OA\Property(property="end_moment", type="date", example="", format="d/m/Y H:i"),

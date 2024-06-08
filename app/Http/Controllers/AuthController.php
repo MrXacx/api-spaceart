@@ -30,15 +30,19 @@ class AuthController extends Controller
      *     @OA\Response(
      *          response="200",
      *          description="Has been authenticated",
+     *
      *          @OA\JsonContent(
+     *
      *           @OA\Property(property="data", type="object", @OA\Property(property="token", type="string"))
      *          )
      *    ),
+     *
      *     @OA\Response(
      *          response="422",
      *          description="Authentication failed",
      *
      *          @OA\JsonContent(
+     *
      *              @OA\Property(property="message", default="User not authenticated."),
      *              @OA\Property(property="data", type="array", @OA\Items(minItems=1, @OA\Property(default="Email or password is incorrect."))),
      *              @OA\Property(property="fails", type="bool", default="true"),

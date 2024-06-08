@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use App\Exceptions\CheckDBOperationException;
+use App\Enumerate\TimeStringFormat;
 use App\Traits\HasDatetimeAccessorAndMutator;
 use App\Traits\HasHiddenTimestamps;
-use App\Enumerate\TimeStringFormat;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

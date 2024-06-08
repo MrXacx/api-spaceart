@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Enumerate\Account;
 use App\Models\Enterprise;
 use App\Models\User;
-use App\Enumerate\Account;
 use Illuminate\Database\Seeder;
 
 class EnterpriseSeeder extends Seeder

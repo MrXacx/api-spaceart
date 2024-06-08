@@ -84,6 +84,7 @@ class UserController extends IMainRouteController
      *      @OA\Schema(type="string", nullable=true),
      *      style="form"
      *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Users found",
@@ -152,11 +153,13 @@ class UserController extends IMainRouteController
      *     description="Store user on database",
      *
      *     @OA\RequestBody(ref="#/components/requestBodies/UserStore"),
+     *
      *     @OA\Response(
      *         response="201",
      *          description="User was created",
      *
      *          @OA\JsonContent(
+     *
      *              @OA\Property(property="message", type="string", default="User created"),
      *              @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/User")),
      *              @OA\Property(property="fails", type="bool")
@@ -190,6 +193,7 @@ class UserController extends IMainRouteController
      *
      *    @OA\Response(response="302", description="Redirected to [PUT]::/user/{id}")
      * )
+     *
      * @OA\Put(
      *     path="/user/{id}",
      *     tags={"User"},
@@ -198,6 +202,7 @@ class UserController extends IMainRouteController
      *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *     @OA\RequestBody(ref="#/components/requestBodies/UserUpdate"),
+     *
      *     @OA\Response(response="200", ref="#/components/responses/ReturnUser"),
      * )
      *
@@ -232,6 +237,7 @@ class UserController extends IMainRouteController
      *
      *     @OA\Response(response="302", description="Redirected to [DELETE]::/user/{id}")
      * )
+     *
      * @OA\Delete(
      *     tags={"User"},
      *     path="/user/{id}",
@@ -247,8 +253,9 @@ class UserController extends IMainRouteController
      *      @OA\Schema(type="integer"),
      *      style="form"
      *     ),
+     *
      *     @OA\Response(response="204", ref="#/components/responses/204"),
-      * )
+     * )
      */
     public function destroy(Request $request): JsonResponse
     {

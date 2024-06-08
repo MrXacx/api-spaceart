@@ -28,6 +28,5 @@ interface IRateRepository
      */
     public function update(string|int $userID, string|int $agreementID, array $data, Closure $validate): Rate;
 
-
     public function delete(string|int $userID, string|int $agreementID, Closure $validate): bool;
 }

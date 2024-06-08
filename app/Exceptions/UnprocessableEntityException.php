@@ -6,5 +6,5 @@ use App\Exceptions\Contracts\HttpRequestException;
 
 class UnprocessableEntityException extends HttpRequestException
 {
-  protected $code = 422;
+    protected $code = 422;
 }

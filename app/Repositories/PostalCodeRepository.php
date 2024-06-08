@@ -31,6 +31,7 @@ class PostalCodeRepository extends WebClientRepository
         }
 
         $responseBody = JsonResponse::fromJsonString($response->getBody()->getContents());
+
         return new Address((array) $responseBody);
     }
 }

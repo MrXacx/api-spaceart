@@ -39,6 +39,7 @@ class ArtistRequest extends UserRequest
     /**
      * @OA\Schema(
      *     schema="ArtistUpdateBody",
+     *
      *     @OA\Property(property="art",type="enum", enum="App\Enumerate\Art", example="music"),
      *     @OA\Property(property="wage", type="number", example="100"),
      * )

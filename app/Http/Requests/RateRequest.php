@@ -44,6 +44,7 @@ class RateRequest extends FormRequest
      *
      *     @OA\JsonContent(
      *         required={"score"},
+     *
      *         @OA\Property(property="score", type="number", minimum=0, maximum=5),
      *         @OA\Property(property="note", type="string"),
      *     )

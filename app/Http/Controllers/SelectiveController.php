@@ -20,6 +20,7 @@ use OpenApi\Annotations as OA;
  *     description="Operation was realized",
  *
  *     @OA\JsonContent(
+ *
  *         @OA\Property(property="message", type="string"),
  *         @OA\Property(property="data", type="array", maxItems=1, @OA\Items(ref="#/components/schemas/Selective")),
  *         @OA\Property(property="fails", type="boolean", default="false"),
@@ -49,10 +50,13 @@ class SelectiveController extends IMainRouteController
      *
      *     @OA\Parameter(ref="#/components/parameters/Offset"),
      *     @OA\Parameter(ref="#/components/parameters/Limit"),
+     *
      *     @OA\Response(
      *       response="200",
      *       description="Operation was realized",
+     *
      *       @OA\JsonContent(
+     *
      *           @OA\Property(property="message", type="string"),
      *           @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/Selective")),
      *           @OA\Property(property="fails", type="boolean", default="false"),
@@ -82,6 +86,7 @@ class SelectiveController extends IMainRouteController
      *      security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *      @OA\RequestBody(ref="#/components/requestBodies/SelectiveStore"),
+     *
      *      @OA\Response(response="200", ref="#/components/responses/ReturnSelective"),
      *  )
      *
@@ -111,6 +116,7 @@ class SelectiveController extends IMainRouteController
      *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
+     *
      *     @OA\Response(response="200", ref="#/components/responses/ReturnSelective"),
      * )
      */
@@ -131,8 +137,10 @@ class SelectiveController extends IMainRouteController
      *    security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *    @OA\Parameter(ref="#/components/parameters/Id"),
+     *
      *    @OA\Response(response="302", description="Redirected to [PUT] /selective/{id}"),
      * )
+     *
      * @OA\Put(
      *     tags={"Selective"},
      *     path="/selective/{id}",
@@ -141,7 +149,9 @@ class SelectiveController extends IMainRouteController
      *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
+     *
      *     @OA\RequestBody(ref="#/components/requestBodies/SelectiveUpdate"),
+     *
      *     @OA\Response(response="200", ref="#/components/responses/ReturnSelective"),
      * )
      */
@@ -168,8 +178,10 @@ class SelectiveController extends IMainRouteController
      *    security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *    @OA\Parameter(ref="#/components/parameters/Id"),
+     *
      *    @OA\Response(response="302", description="Redirected to [DELETE] /selective/{id}"),
      * )
+     *
      * @OA\Delete(
      *     tags={"Selective"},
      *     path="/selective/{id}",
@@ -178,6 +190,7 @@ class SelectiveController extends IMainRouteController
      *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
+     *
      *     @OA\Response(response="204", ref="#/components/responses/204"),
      * )
      */

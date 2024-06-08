@@ -10,7 +10,9 @@ class PostRequest extends FormRequest
     /**
      * @OA\RequestBody(
      *     request="PostStore",
+     *
      *     @OA\JsonContent(
+     *
      *         @OA\Property(property="user_id", type="int"),
      *         @OA\Property(property="text", type="string"),
      *         @OA\Property(property="image", description="Image in base64 ou URL", type="string", maxLength=10000000),

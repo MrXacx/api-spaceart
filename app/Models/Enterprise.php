@@ -81,6 +81,7 @@ class Enterprise extends Model
     public function toArray(): array
     {
         $this->loadMissing('agreements', 'selectives');
+
         return parent::toArray();
     }
 }

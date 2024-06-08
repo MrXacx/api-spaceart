@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Address extends Model
 {
     protected $table = null;
+
     protected $primaryKey = null;
+
     protected $fillable = [
         'postal_code',
         'state',

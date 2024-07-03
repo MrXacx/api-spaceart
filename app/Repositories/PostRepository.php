@@ -6,16 +6,18 @@ use App\Exceptions\NotFoundException;
 use App\Exceptions\NotSavedModelException;
 use App\Models\Post;
 use Closure;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 class PostRepository implements Contracts\IPostRepository
 {
-    public function list(int $limit): Collection|array
+    public function list(int|string $limit): Collection|array
     {
         return Post::withAllRelations()
-            ->where(fn ($p) => $p->user->active)
-            ->limit($limit)
+            ->where('created_at', '>=', now()->subDays(2))
+            ->whereHas('user', fn (Builder $u) => $u->where('active', true))
             ->inRandomOrder()
+            ->limit($limit)
             ->get();
     }
 

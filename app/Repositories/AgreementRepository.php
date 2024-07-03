@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class AgreementRepository implements Contracts\IAgreementRepository
 {
-    public function list(string|int $userID, int $limit): Collection|array
+    public function list(int|string $userID, int|string $limit): Collection|array
     {
         return Agreement::withAllRelations()
             ->where('artist_id', '=', $userID)

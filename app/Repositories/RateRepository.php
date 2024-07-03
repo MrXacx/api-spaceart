@@ -14,7 +14,7 @@ class RateRepository implements Contracts\IRateRepository
     /**
      * {@inheritDoc}
      */
-    public function fetch(string|int $userID, string|int $agreementID): Rate
+    public function fetch(int|string $userID, int|string $agreementID): Rate
     {
         $rate = Rate::find([$userID, $agreementID]);
         throw_unless($rate, new NotFoundException("user $userID's rate was not found on agreement $agreementID"));
@@ -52,7 +52,7 @@ class RateRepository implements Contracts\IRateRepository
     /**
      * {@inheritDoc}
      */
-    public function update(string|int $userID, string|int $agreementID, array $data, Closure $validate): Rate
+    public function update(int|string $userID, int|string $agreementID, array $data, Closure $validate): Rate
     {
         $rate = $this->fetch($userID, $agreementID);
         $validate($rate);
@@ -66,7 +66,7 @@ class RateRepository implements Contracts\IRateRepository
         return $rate;
     }
 
-    public function delete(string|int $userID, string|int $agreementID, Closure $validate): bool
+    public function delete(int|string $userID, int|string $agreementID, Closure $validate): bool
     {
         $rate = $this->fetch($userID, $agreementID);
         $validate($rate);

@@ -14,12 +14,12 @@ use Illuminate\Database\Eloquent\Collection;
 
 class SelectiveRepository implements Contracts\ISelectiveRepository
 {
-    public function list(int $offset, int $limit): Collection|array
+    public function list(int|string $offset, int|string $limit = 20): Collection|array
     {
         return Selective::withAllRelations()
             ->where('id', '>', $offset)
             ->where('end_moment', '>', Carbon::now())
-            ->where(fn ($s) => $s->enterprise->active)
+            ->whereHas('enterprise', fn ($q) => $q->where('active', 1))
             ->inRandomOrder()
             ->limit($limit)
             ->get();

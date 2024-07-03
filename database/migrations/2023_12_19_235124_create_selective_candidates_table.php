@@ -14,8 +14,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('selective_candidates', function (Blueprint $table) {
-            $table->foreignIdFor(Artist::class);
-            $table->foreignIdFor(Selective::class);
+            $table->foreignIdFor(Artist::class)->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(Selective::class)->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
 
             $table->primary(['artist_id', 'selective_id']);

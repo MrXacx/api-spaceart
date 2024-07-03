@@ -20,7 +20,7 @@ class ArtistFactory extends FakerFactory
             'cpf' => preg_replace('/[\.-]/', '', $this->faker->cpf),
             'art_id' => Art::pluck('id')->random(),
             'wage' => $this->faker->randomFloat(2, 500, 1200),
-            'birthday' => $this->faker->date(max: '2006-12-31'),
+            'birthday' => $this->faker->dateTime(max: '2006-12-31')->format('d/m/Y'),
         ];
     }
 }

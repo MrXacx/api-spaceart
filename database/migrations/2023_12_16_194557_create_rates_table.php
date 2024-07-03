@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('rates', function (Blueprint $table) {
             $table->foreignIdFor(User::class, 'author_id')->cascadeOnUpdate();
             $table->foreignIdFor(User::class, 'rated_id')->cascadeOnUpdate();
-            $table->foreignIdFor(Agreement::class)->cascadeOnUpdate();
+            $table->foreignIdFor(Agreement::class)->cascadeOnUpdate()->cascadeOnDelete();
 
             $table->float('score', 3, 2, true);
             $table->text('note')->nullable();

@@ -23,19 +23,17 @@ return new class extends Migration
             $table->string('phone')->unique();
             $table->text('password');
             $table->enum('type', Account::values());
-            $table->boolean('active')->default(true);
 
             $table->text('postal_code');
             $table->enum('state', State::values());
             $table->string('city');
-            $table->text('neighborhood')->nullable();
-            $table->text('street')->nullable();
-            $table->text('address_complement')->nullable();
+            $table->string('neighborhood')->nullable();
+            $table->string('street')->nullable();
+            $table->string('address_complement')->nullable();
 
             $table->longText('image')->nullable();
             $table->string('slug')->nullable();
             $table->text('biography')->nullable();
-
             $table->timestamps();
         });
     }

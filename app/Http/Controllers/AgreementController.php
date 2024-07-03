@@ -98,7 +98,7 @@ class AgreementController extends IMainRouteController
     {
         try {
             $agreement = $this->agreementRepository->create(
-                $request->id,
+                $request->validated(),
                 fn ($a) => $this->authorize('isStakeholder', $a)
             );
 

@@ -51,8 +51,8 @@ use OpenApi\Annotations as OA;
  *
  * @OA\SecurityScheme(
  *     securityScheme="Sanctum",
- *     type="apiKey",
- *     scheme={"bearerToken": {}},
+ *     type="http",
+ *     scheme="bearer",
  *  )
  */
 abstract class IRouteController extends Controller

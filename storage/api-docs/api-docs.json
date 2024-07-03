@@ -1085,7 +1085,7 @@
                     "cpf": {
                         "type": "string",
                         "pattern": "^\\d{11}$",
-                        "example": "01499146000196"
+                        "example": "01499146000"
                     },
                     "birthday": {
                         "type": "string",
@@ -2053,7 +2053,7 @@
                                 },
                                 "postal_code": {
                                     "type": "string",
-                                    "example": "41000000"
+                                    "example": "40226000"
                                 },
                                 "image": {
                                     "type": "string",
@@ -2126,10 +2126,8 @@
         },
         "securitySchemes": {
             "Sanctum": {
-                "type": "apiKey",
-                "scheme": {
-                    "bearerToken": []
-                }
+                "type": "http",
+                "scheme": "bearer"
             }
         }
     }

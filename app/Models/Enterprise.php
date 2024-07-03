@@ -47,12 +47,12 @@ class Enterprise extends Model
 
     public function agreements(): HasMany
     {
-        return $this->hasMany(Agreement::class, 'enterprise_id');
+        return $this->hasMany(Agreement::class);
     }
 
     public function selectives(): HasMany
     {
-        return $this->hasMany(Selective::class, 'enterprise_id');
+        return $this->hasMany(Selective::class);
     }
 
     protected function cnpj(): Attribute

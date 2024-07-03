@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Exceptions\NotFoundException;
 use App\Exceptions\NotSavedModelException;
+use App\Exceptions\TrashedModelReferenceException;
 use App\Models\Post;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
@@ -34,8 +35,7 @@ class PostRepository implements Contracts\IPostRepository
         $post = new Post($data);
         $validate($post->user);
 
-        throw_unless($post->user->active, NotSavedModelException::class);
-
+        throw_if($post->user->trashed(), TrashedModelReferenceException::class, "The user account {$post->user->id} is disabled");
         throw_unless($post->save(), NotSavedModelException::class);
 
         return $post->loadAllRelations();

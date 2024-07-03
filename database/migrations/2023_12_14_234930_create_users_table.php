@@ -35,6 +35,7 @@ return new class extends Migration
             $table->string('slug')->nullable();
             $table->text('biography')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

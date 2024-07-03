@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Exceptions\CheckDBOperationException;
 use App\Exceptions\NotFoundException;
 use App\Exceptions\NotSavedModelException;
+use App\Exceptions\TrashedModelReferenceException;
 use App\Models\Rate;
 use Carbon\Carbon;
 use Closure;
@@ -17,7 +18,7 @@ class RateRepository implements Contracts\IRateRepository
     public function fetch(int|string $userID, int|string $agreementID): Rate
     {
         $rate = Rate::find([$userID, $agreementID]);
-        throw_unless($rate, new NotFoundException("user $userID's rate was not found on agreement $agreementID"));
+        throw_unless($rate, NotFoundException::class, "user $userID's rate was not found on agreement $agreementID");
 
         return $rate->loadAllRelations();
     }
@@ -33,17 +34,10 @@ class RateRepository implements Contracts\IRateRepository
 
         $user = $rate->author->type;
         $rate->rated_id = $rate->agreement->$user->id;
+        throw_if($this->author->trashed(), TrashedModelReferenceException::class, "The author's account $this->author_id is disabled");
 
-        if (! $this->author->active) {
-            CheckDBOperationException::throw("The author's account $this->author_id is disabled");
-        }
-
-        [,$endMoment] = $this->agreement->getActiveInterval();
-        throw_unless(
-            $now->isBefore($endMoment),
-            new CheckDBOperationException("The agreement $this->agreement_id is not finished")
-        );
-
+        [, $endMoment] = $this->agreement->getActiveInterval();
+        throw_if($now->isBefore($endMoment), CheckDBOperationException::class, "The agreement $this->agreement_id is not finished");
         throw_unless($rate->save(), NotSavedModelException::class);
 
         return $rate->loadAllRelations();
@@ -57,10 +51,7 @@ class RateRepository implements Contracts\IRateRepository
         $rate = $this->fetch($userID, $agreementID);
         $validate($rate);
 
-        if (! $this->author->active) {
-            CheckDBOperationException::throw("The author's account $this->author_id is disabled");
-        }
-
+        throw_if($this->author->trashed(), TrashedModelReferenceException::class, "The author's account $this->author_id is disabled");
         throw_unless($rate->update($data), NotSavedModelException::class);
 
         return $rate;

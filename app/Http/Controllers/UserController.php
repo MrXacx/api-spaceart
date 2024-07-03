@@ -12,7 +12,9 @@ use App\Http\Controllers\Contracts\IMainRouteController;
 use App\Http\Requests\ArtistRequest;
 use App\Http\Requests\EnterpriseRequest;
 use App\Repositories\UserRepository;
+use App\Services\Logger;
 use App\Services\ResponseService;
+use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Http\FormRequest;
@@ -135,9 +137,14 @@ class UserController extends IMainRouteController
     public function show(Request $request): JsonResponse
     {
         if ($request->bearerToken()) { // If bearer token exists
-            $token = PersonalAccessToken::findToken($request->bearerToken());
-            if ($token) {
-                auth()->setUser($token->tokenable()->first()); // set token owner to auth
+            try {
+                $token = PersonalAccessToken::findToken($request->bearerToken());
+                if ($token) {
+                    auth()->setUser($token->tokenable()->first()); // set token owner to auth
+                }
+            } catch (Exception $e) {
+                $logger = new Logger;
+                $logger->request($e->getMessage());
             }
         }
         $user = $this->userRepository->fetch($request->id);

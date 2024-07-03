@@ -111,6 +111,7 @@ class Agreement extends Model
     {
         $now ??= now();
         ['start_moment' => $start, 'end_moment' => $end] = $this->getActiveInterval();
+
         return $this->status === AgreementStatus::ACCEPTED && $now->isBetween($start, $end);
     }
 

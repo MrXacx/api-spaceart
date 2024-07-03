@@ -6,13 +6,13 @@ use App\Enumerate\Account;
 use App\Exceptions\Contracts\HttpRequestException;
 use App\Exceptions\NotFoundException;
 use App\Exceptions\NotSavedModelException;
-use App\Exceptions\UnprocessableEntityException;
 use App\Models\Agreement;
 use App\Models\Art;
 use App\Models\Artist;
 use App\Models\Enterprise;
 use App\Models\User;
 use Closure;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -24,11 +24,6 @@ class UserRepository implements Contracts\IUserRepository
     public function fetch(int|string $id): User
     {
         $user = User::findOr($id, fn () => NotFoundException::throw("User $id was not found")); // Fetch by PK
-
-        throw_if(
-            $user->deleted_at, // Unless account is active
-            new UnprocessableEntityException("User $id's account is disabled")
-        );
 
         if (auth()->user()?->id == $id) {
             $user->showConfidentialData();
@@ -115,29 +110,31 @@ class UserRepository implements Contracts\IUserRepository
 
         DB::beginTransaction();
         try {
-            $isSuccessfulRelationshipDeletion = $this->deleteAgreementRelationships($user->artistAccountData ?? $user->enterpriseAccountData);
+            $isSuccessfulRelationshipDeletion = $this->deleteAgreementRelationships($user->artistAccountData ?? $user->enterpriseAccountData, $validate);
             throw_unless($isSuccessfulRelationshipDeletion && $user->delete(), NotSavedModelException::class);
             DB::commit();
 
             return true;
         } catch (NotSavedModelException) {
             DB::rollBack();
+
             return false;
         }
     }
 
-    public function deleteAgreementRelationships(Artist|Enterprise $user): bool
+    public function deleteAgreementRelationships(Artist|Enterprise $user, Closure $validate): bool
     {
         $now = now();
-        $agreements = $user->agreements;
+        $agreementRepository = new AgreementRepository;
+        $validate = fn (Agreement $agreement) => $validate($agreement->enterprise);
 
-        throw_if( // Not delete if exists an agreement active
-            $agreements->contains(fn ($a) => $a->isActive($now)),
-            new NotSavedModelException('An agreement is active for this user')
-        );
+        try {
+            $user->agreements
+                ->each(fn ($a) => throw_unless($agreementRepository->delete($a->id, $validate, $now), NotSavedModelException::class));
 
-        return $agreements
-            ->filter(fn (Agreement $a) => $now->isBefore($a->getActiveInterval()['start_moment']))
-            ->reduce(fn (bool $isSuccessful, Agreement $a) => $isSuccessful && $a->delete(), true);
+            return true;
+        } catch (Exception) {
+            return false;
+        }
     }
 }

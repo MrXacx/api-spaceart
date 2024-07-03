@@ -19,7 +19,7 @@ class SelectiveRepository implements Contracts\ISelectiveRepository
         return Selective::withAllRelations()
             ->where('id', '>', $offset)
             ->where('end_moment', '>', Carbon::now())
-            ->whereHas('enterprise', fn ($q) => $q->where('active', 1))
+            ->whereHas('enterprise', fn ($q) => $q->whereNull('deleted_at'))
             ->inRandomOrder()
             ->limit($limit)
             ->get();
@@ -36,10 +36,9 @@ class SelectiveRepository implements Contracts\ISelectiveRepository
             fn () => NotFoundException::throw("Selective $id was not found")
         )->loadAllRelations();
 
-        if ($selective->enterprise->active) {
-            return $selective;
-        }
-        CheckDBOperationException::throw("The enterprise's account $selective->enterprise_id is disabled");
+        throw_if($selective->enterprise->trashed(), CheckDBOperationException::class, "The enterprise's account $selective->enterprise_id is disabled");
+
+        return $selective;
     }
 
     /**
@@ -52,7 +51,7 @@ class SelectiveRepository implements Contracts\ISelectiveRepository
         $selective = new Selective($data);
         $validate($selective);
 
-        if (! $selective->enterprise->active) {
+        if (! $selective->enterprise->trashed()) {
             CheckDBOperationException::throw("The enterprise's account $selective->enterprise_id is disabled");
         }
 
@@ -77,10 +76,7 @@ class SelectiveRepository implements Contracts\ISelectiveRepository
 
         [$start] = $selective->getActiveInterval();
 
-        throw_unless(
-            $start->isFuture(),
-            new CheckDBOperationException('The start_moment must be a future moment')
-        );
+        throw_unless($start->isFuture(), CheckDBOperationException::class, 'The start_moment must be a future moment');
 
         throw_unless($selective->update($data), NotSavedModelException::class);
 

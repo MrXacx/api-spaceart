@@ -6,7 +6,9 @@ use App\Enumerate\AgreementStatus;
 use App\Exceptions\CheckDBOperationException;
 use App\Exceptions\NotFoundException;
 use App\Exceptions\NotSavedModelException;
+use App\Exceptions\TrashedModelReferenceException;
 use App\Models\Agreement;
+use Carbon\Carbon;
 use Closure;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -26,11 +28,8 @@ class AgreementRepository implements Contracts\IAgreementRepository
         $agreement = Agreement::findOr($id, fn () => NotFoundException::throw("Agreement $id was not found"))->loadAllRelations();
         $validate($agreement);
 
-        if (! $agreement->enterprise->active) {
-            CheckDBOperationException::throw("The enterprise's account $agreement->enterprise_id is disabled");
-        } elseif (! $agreement->artist->active) {
-            CheckDBOperationException::throw("The artist's account $agreement->artist_id is disabled");
-        }
+        throw_if($agreement->enterprise->trashed(), TrashedModelReferenceException::class, "The enterprise's account $agreement->enterprise_id is disabled");
+        throw_if($agreement->artist->trashed(), TrashedModelReferenceException::class, "The artist's account $agreement->artist_id is disabled");
 
         return $agreement;
     }
@@ -59,12 +58,12 @@ class AgreementRepository implements Contracts\IAgreementRepository
 
         $validate($agreement);
 
-        throw_unless($agreement->enterprise->active, new CheckDBOperationException("The enterprise's account $this->enterprise_id is disabled"));
-        throw_unless($agreement->artist->active, new CheckDBOperationException("The artist's account $this->artist_id is disabled"));
+        throw_if($agreement->enterprise->trashed(), TrashedModelReferenceException::class, "The enterprise's account $this->enterprise_id is disabled");
+        throw_if($agreement->artist->trashed(), TrashedModelReferenceException::class, "The artist's account $this->artist_id is disabled");
 
         [$start] = $agreement->getActiveInterval();
 
-        throw_unless($start->isFuture(), new CheckDBOperationException('The contracted service has already started.'));
+        throw_unless($start->isFuture(), CheckDBOperationException::class, 'The contracted service has already started.');
 
         $status = $data['status'];
         unset($data['status']);
@@ -77,10 +76,15 @@ class AgreementRepository implements Contracts\IAgreementRepository
         return $agreement;
     }
 
-    public function delete(int|string $id, Closure $validate): bool
+    public function delete(int|string $id, Closure $validate, ?Carbon $now = null): bool
     {
+        $now ??= now();
+
         $agreement = $this->fetch($id);
         $validate($agreement);
+
+        throw_if($agreement->isActive($now), NotSavedModelException::class, "The agreement $agreement->id is active for the user");
+        throw_if($agreement->getActiveInterval()['end_moment']->isBefore($now));
 
         return $agreement->delete();
     }

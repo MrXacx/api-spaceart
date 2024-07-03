@@ -25,8 +25,8 @@ class EnterpriseRequest extends UserRequest
         return array_merge(
             parent::store(),
             [
-                'cnpj' => ['required', 'cnpj'],
-                'company_name' => ['required', 'string', 'min:3'],
+                'cnpj' => ['required', 'cnpj', 'unique:enterprises,cnpj'],
+                'company_name' => ['required', 'string', 'min:3', 'unique:enterprises,company_name'],
                 'address_complement' => ['required', 'string'],
             ]
         );
@@ -45,7 +45,7 @@ class EnterpriseRequest extends UserRequest
         return array_merge(
             parent::update(),
             [
-                'company_name' => ['string', 'min:3'],
+                'company_name' => ['string', 'min:3', 'unique:enterprises,company_name'],
                 'address_complement' => ['string'],
             ]
         );

@@ -12,7 +12,7 @@ class ArtistRequest extends UserRequest
      * @OA\Schema(
      *      schema="ArtistStoreBody",
      *
-     *       @OA\Property(property="cpf", type="string", pattern="^\d{11}$", example="01499146000196"),
+     *       @OA\Property(property="cpf", type="string", pattern="^\d{11}$", example="01499146000"),
      *       @OA\Property(property="birthday", type="date", format="d/m/Y", example="01/01/1970"),
      *       @OA\Property(property="art",type="enum", enum="App\Enumerate\Art", example="music"),
      *       @OA\Property(property="wage", type="number", example="100"),
@@ -29,7 +29,7 @@ class ArtistRequest extends UserRequest
         return array_merge(
             parent::store(),
             [
-                'cpf' => ['required', 'cpf'],
+                'cpf' => ['required', 'cpf', 'unique:artists,cpf'],
                 'birthday' => ['required', 'date_format:d/m/Y'],
                 'art' => ['required', Rule::enum(Art::class)],
                 'wage' => ['required', 'decimal:0,2'],

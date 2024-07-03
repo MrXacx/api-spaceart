@@ -35,7 +35,7 @@ class UserRequest extends FormRequest
      *          @OA\Property(property="phone", type="string", example="71988469787"),
      *          @OA\Property(property="password", type="string", minLength=8, example="<FO<k2&K83.;<RAeiC?@" ),
      *          @OA\Property(property="type", type="enum", enum="App\Enumerate\Account", type="enterprise"),
-     *          @OA\Property(property="postal_code", type="string", example="41000000"),
+     *          @OA\Property(property="postal_code", type="string", example="40226000"),
      *          @OA\Property(property="image", type="string", maxLength=10000000),
      *     )
      * )

@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Enumerate\AgreementStatus;
 use App\Enumerate\TimeStringFormat;
 use App\Traits\HasDatetimeAccessorAndMutator;
 use App\Traits\HasHiddenTimestamps;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -105,7 +107,14 @@ class Agreement extends Model
         ];
     }
 
-    public function loadAllRelations()
+    public function isActive(?Carbon $now = null): bool
+    {
+        $now ??= now();
+        ['start_moment' => $start, 'end_moment' => $end] = $this->getActiveInterval();
+        return $this->status === AgreementStatus::ACCEPTED && $now->isBetween($start, $end);
+    }
+
+    public function loadAllRelations(): Agreement
     {
         return $this->load('art', 'artist', 'enterprise', 'rates');
     }

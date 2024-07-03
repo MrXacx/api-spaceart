@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enumerate\TimeStringFormat;
 use App\Traits\HasDatetimeAccessorAndMutator;
 use App\Traits\HasHiddenTimestamps;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -89,6 +90,14 @@ class Selective extends Model
             'start_moment' => $this->getCarbon($this->start_moment, TimeStringFormat::DATE_TIME_FORMAT),
             'end_moment' => $this->getCarbon($this->end_moment, TimeStringFormat::DATE_TIME_FORMAT),
         ];
+    }
+
+    public function isActive(?Carbon $now = null): bool
+    {
+        $now ??= now();
+        ['start_moment' => $start, 'end_moment' => $end] = $this->getActiveInterval();
+
+        return $now->isBetween($start, $end);
     }
 
     public function loadAllRelations(): Selective

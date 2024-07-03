@@ -8,12 +8,12 @@ abstract class WebClientRepository
 {
     protected Client $client;
 
-    private string $uri;
+    private string $uri = '';
 
     abstract public static function make(): WebClientRepository;
 
     public function __construct()
     {
-        $this->client = new Client;
+        $this->client = new Client();
     }
 }

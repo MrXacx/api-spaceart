@@ -14,7 +14,7 @@ interface IRateRepository
      * @throws NotFoundException
      * @throws CheckDBOperationException
      */
-    public function fetch(string|int $userID, string|int $agreementID): Rate;
+    public function fetch(int|string $userID, int|string $agreementID): Rate;
 
     /**
      * @throws NotSavedModelException
@@ -26,7 +26,7 @@ interface IRateRepository
      * @throws NotSavedModelException
      * @throws CheckDBOperationException
      */
-    public function update(string|int $userID, string|int $agreementID, array $data, Closure $validate): Rate;
+    public function update(int|string $userID, int|string $agreementID, array $data, Closure $validate): Rate;
 
-    public function delete(string|int $userID, string|int $agreementID, Closure $validate): bool;
+    public function delete(int|string $userID, int|string $agreementID, Closure $validate): bool;
 }

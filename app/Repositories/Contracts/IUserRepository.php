@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface IUserRepository
 {
-    public function list(int $offset, int $limit, string $startWith = ''): Collection|array;
+    public function list(int|string $offset, int|string $limit, string $startWith = ''): Collection|array;
 
-    public function fetch(string|int $id): User;
+    public function fetch(int|string $id): User;
 
     /**
      * @throws NotSavedModelException
@@ -23,10 +23,10 @@ interface IUserRepository
      *
      * @throws NotSavedModelException
      */
-    public function update(string|int $id, array $data, Closure $validate): User;
+    public function update(int|string $id, array $data, Closure $validate): User;
 
     /**
      * @throws NotSavedModelException
      */
-    public function delete(string|int $id, Closure $validate): bool;
+    public function delete(int|string $id, Closure $validate): bool;
 }

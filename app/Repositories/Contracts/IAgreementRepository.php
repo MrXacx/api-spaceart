@@ -10,12 +10,12 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface IAgreementRepository
 {
-    public function list(string|int $userID, int $limit): Collection|array;
+    public function list(int|string $userID, int|string $limit): Collection|array;
 
     /**
      * @throws NotFoundException
      */
-    public function fetch(string|int $id, Closure $validate): Agreement;
+    public function fetch(int|string $id, Closure $validate): Agreement;
 
     /**
      * @throws NotSavedModelException
@@ -27,10 +27,10 @@ interface IAgreementRepository
      *
      * @throws NotSavedModelException
      */
-    public function update(string|int $id, array $data, Closure $validate): Agreement;
+    public function update(int|string $id, array $data, Closure $validate): Agreement;
 
     /**
      * @throws NotSavedModelException
      */
-    public function delete(string|int $id, Closure $validate): bool;
+    public function delete(int|string $id, Closure $validate): bool;
 }

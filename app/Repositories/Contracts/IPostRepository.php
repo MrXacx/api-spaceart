@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface IPostRepository
 {
-    public function list(int $limit): Collection|array;
+    public function list(int|string $limit): Collection|array;
 
-    public function fetch(string|int $id): Post;
+    public function fetch(int|string $id): Post;
 
     /**
      * @throws NotSavedModelException
      */
     public function create(array $data, \Closure $validate): Post;
 
-    public function delete(string|int $id, \Closure $validate): bool;
+    public function delete(int|string $id, \Closure $validate): bool;
 }

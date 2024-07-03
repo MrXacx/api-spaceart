@@ -56,7 +56,7 @@ class AuthController extends Controller
         try {
             throw_unless(Auth::attempt($credentials), AuthenticationException::class);
             $user = $request->user();
-            throw_unless($user->active, AuthenticationException::class);
+            throw_if($user->deleted_at, AuthenticationException::class);
             $user->tokens()->delete();
             $token = $user->createToken($request->device_name);
             $this->logger->auth('Has been authenticated.');

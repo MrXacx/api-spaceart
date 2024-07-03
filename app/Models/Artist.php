@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasDatetimeAccessorAndMutator;
 use App\Traits\HasHiddenTimestamps;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -26,7 +27,7 @@ use OpenApi\Annotations as OA;
  */
 class Artist extends Model
 {
-    use HasFactory, HasHiddenTimestamps {
+    use HasDatetimeAccessorAndMutator, HasFactory, HasHiddenTimestamps {
         HasHiddenTimestamps::__construct as hideTimestamps;
     }
 
@@ -85,6 +86,11 @@ class Artist extends Model
             get: fn (string $value) => Crypt::decryptString($value),
             set: fn (string $value) => Crypt::encryptString($value)
         );
+    }
+
+    public function birthday(): Attribute
+    {
+        return $this->toDate();
     }
 
     public function loadAllRelations(): Artist

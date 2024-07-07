@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\CheckDBOperationException;
+use App\Exceptions\DatabaseValidationException;
 use App\Exceptions\NotSavedModelException;
 use App\Http\Controllers\Contracts\IMainRouteController;
 use App\Http\Requests\SelectiveRequest;
+use App\Models\Selective;
 use App\Repositories\SelectiveRepository;
 use App\Services\ResponseService;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -72,8 +73,8 @@ class SelectiveController extends IMainRouteController
         ]);
 
         return $this->responseService->sendMessage(
-            'Selectives found',
-            $this->selectiveRepository->list((int) $request->offset, $request->limit ?? 20)
+            'Selective found',
+            $this->selectiveRepository->list($request->offset ?? 0, $request->limit ?? 20)
         );
     }
 
@@ -90,7 +91,7 @@ class SelectiveController extends IMainRouteController
      *      @OA\Response(response="200", ref="#/components/responses/ReturnSelective"),
      *  )
      *
-     * @throws CheckDBOperationException
+     * @throws DatabaseValidationException
      * @throws AuthorizationException
      */
     public function store(SelectiveRequest $request): JsonResponse
@@ -98,7 +99,7 @@ class SelectiveController extends IMainRouteController
         try {
             $selective = $this->selectiveRepository->create(
                 $request->validated(),
-                fn ($s) => $this->authorize('isOwner', $s)
+                fn (Selective $s) => $this->authorize('isAdmin', $s->enterprise)
             );
 
             return $this->responseService->sendMessage('Selective was created', $selective->toArray(), 201);
@@ -159,8 +160,9 @@ class SelectiveController extends IMainRouteController
     {
         try {
             $selective = $this->selectiveRepository->update(
+                $request->id,
                 $request->validated(),
-                fn ($s) => $this->authorize('isOwner', $s)
+                fn (Selective $s) => $this->authorize('isAdmin', $s->enterprise)
             );
 
             return $this->responseService->sendMessage('Selective updated', $selective);
@@ -198,9 +200,9 @@ class SelectiveController extends IMainRouteController
     {
         return $this->selectiveRepository->delete(
             $request->id,
-            fn ($s) => $this->authorize('isAdmin', $s->enterprise)
+            fn (Selective $s) => $this->authorize('isAdmin', $s->enterprise)
         ) ?
-            $this->responseService->sendMessage('Selective deleted', 204) :
+            $this->responseService->sendMessage('Selective deleted', [], 204) :
             $this->responseService->sendError('Selective not deleted');
     }
 }

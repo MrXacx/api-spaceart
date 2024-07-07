@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\NotSavedModelException;
 use App\Http\Controllers\Contracts\IRouteController;
 use App\Http\Requests\RateRequest;
+use App\Models\Rate;
 use App\Repositories\RateRepository;
 use App\Services\ResponseService;
 use Illuminate\Http\JsonResponse;
@@ -65,7 +66,7 @@ class RateController extends IRouteController
         try {
             $rate = $this->rateRepository->create(
                 $request->validated() + ['agreement_id' => $request->agreement],
-                fn ($r) => $this->authorize('isStakeholder', $r->agreement)
+                fn (Rate $r) => $this->authorize('isStakeholder', $r->agreement)
             );
 
             return $this->responseService->sendMessage('Rate created', $rate->toArray(), 201);
@@ -139,7 +140,7 @@ class RateController extends IRouteController
                 $request->author,
                 $request->agreement,
                 $request->validated(),
-                fn ($r) => $this->authorize('isAdmin', $r->author)
+                fn (Rate $r) => $this->authorize('isAdmin', $r->author)
             );
 
             return $this->responseService->sendMessage('Rate updated', $rate->toArray());
@@ -183,7 +184,7 @@ class RateController extends IRouteController
         return $this->rateRepository->delete(
             $request->author,
             $request->agreement,
-            fn ($r) => $this->authorize('isAdmin', $r->author)
+            fn (Rate $r) => $this->authorize('isAdmin', $r->author)
         ) ?
             $this->responseService->sendMessage("$request->author's rate has been deleted from the $request->agreement") :
             $this->responseService->sendError("$request->author's rate continues on the $request->agreement");

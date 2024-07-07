@@ -2,8 +2,8 @@
 
 namespace App\Exceptions;
 
-use App\Exceptions\Contracts\DBQueryException;
+use App\Exceptions\Contracts\DatabaseOperationException;
 
-class NotSavedModelException extends DBQueryException
+class NotSavedModelException extends DatabaseOperationException
 {
 }

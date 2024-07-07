@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Exceptions\CheckDBOperationException;
-use App\Exceptions\NotFoundException;
+use App\Exceptions\DatabaseValidationException;
+use App\Exceptions\NotFoundModelException;
 use App\Exceptions\NotSavedModelException;
 use App\Exceptions\TrashedModelReferenceException;
 use App\Models\Rate;
@@ -18,7 +18,7 @@ class RateRepository implements Contracts\IRateRepository
     public function fetch(int|string $userID, int|string $agreementID): Rate
     {
         $rate = Rate::find([$userID, $agreementID]);
-        throw_unless($rate, NotFoundException::class, "user $userID's rate was not found on agreement $agreementID");
+        throw_unless($rate, NotFoundModelException::class, "user $userID's rate was not found on agreement $agreementID");
 
         return $rate->loadAllRelations();
     }
@@ -32,12 +32,12 @@ class RateRepository implements Contracts\IRateRepository
         $rate = new Rate($data);
         $validate($rate);
 
-        $user = $rate->author->type;
-        $rate->rated_id = $rate->agreement->$user->id;
-        throw_if($this->author->trashed(), TrashedModelReferenceException::class, "The author's account $this->author_id is disabled");
+        $userIdKey = $rate->author->type->value.'_id';
+        $rate->rated_id = $rate->agreement->$userIdKey;
+        throw_if($rate->author->trashed(), TrashedModelReferenceException::class, "The author's account $rate->author_id is disabled");
 
-        [, $endMoment] = $this->agreement->getActiveInterval();
-        throw_if($now->isBefore($endMoment), CheckDBOperationException::class, "The agreement $this->agreement_id is not finished");
+        ['end_moment' => $endMoment] = $rate->agreement->getActiveInterval();
+        throw_if($now->isBefore($endMoment), DatabaseValidationException::class, "The agreement $rate->agreement_id is not finished");
         throw_unless($rate->save(), NotSavedModelException::class);
 
         return $rate->loadAllRelations();
@@ -51,7 +51,7 @@ class RateRepository implements Contracts\IRateRepository
         $rate = $this->fetch($userID, $agreementID);
         $validate($rate);
 
-        throw_if($this->author->trashed(), TrashedModelReferenceException::class, "The author's account $this->author_id is disabled");
+        throw_if($rate->author->trashed(), TrashedModelReferenceException::class, "The author's account $rate->author_id is disabled");
         throw_unless($rate->update($data), NotSavedModelException::class);
 
         return $rate;

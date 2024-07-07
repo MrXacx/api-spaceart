@@ -3,8 +3,8 @@
 namespace App\Repositories;
 
 use App\Enumerate\AgreementStatus;
-use App\Exceptions\CheckDBOperationException;
-use App\Exceptions\NotFoundException;
+use App\Exceptions\DatabaseValidationException;
+use App\Exceptions\NotFoundModelException;
 use App\Exceptions\NotSavedModelException;
 use App\Exceptions\TrashedModelReferenceException;
 use App\Models\Agreement;
@@ -25,7 +25,7 @@ class AgreementRepository implements Contracts\IAgreementRepository
 
     public function fetch(int|string $id, Closure $validate): Agreement
     {
-        $agreement = Agreement::findOr($id, fn () => NotFoundException::throw("Agreement $id was not found"))->loadAllRelations();
+        $agreement = Agreement::findOr($id, fn () => NotFoundModelException::throw("Agreement $id was not found"))->loadAllRelations();
         $validate($agreement);
 
         throw_if($agreement->enterprise->trashed(), TrashedModelReferenceException::class, "The enterprise's account $agreement->enterprise_id is disabled");
@@ -50,7 +50,7 @@ class AgreementRepository implements Contracts\IAgreementRepository
     /**
      * {@inheritDoc}
      *
-     * @throws CheckDBOperationException
+     * @throws DatabaseValidationException
      */
     public function update(int|string $id, array $data, Closure $validate): Agreement
     {
@@ -58,12 +58,12 @@ class AgreementRepository implements Contracts\IAgreementRepository
 
         $validate($agreement);
 
-        throw_if($agreement->enterprise->trashed(), TrashedModelReferenceException::class, "The enterprise's account $this->enterprise_id is disabled");
-        throw_if($agreement->artist->trashed(), TrashedModelReferenceException::class, "The artist's account $this->artist_id is disabled");
+        throw_if($agreement->enterprise->trashed(), TrashedModelReferenceException::class, "The enterprise's account $agreement->enterprise_id is disabled");
+        throw_if($agreement->artist->trashed(), TrashedModelReferenceException::class, "The artist's account $agreement->artist_id is disabled");
 
-        [$start] = $agreement->getActiveInterval();
+        ['start_moment' => $start] = $agreement->getActiveInterval();
 
-        throw_unless($start->isFuture(), CheckDBOperationException::class, 'The contracted service has already started.');
+        throw_unless($start->isFuture(), DatabaseValidationException::class, 'The contracted service has already started.');
 
         $status = $data['status'];
         unset($data['status']);
@@ -80,8 +80,7 @@ class AgreementRepository implements Contracts\IAgreementRepository
     {
         $now ??= now();
 
-        $agreement = $this->fetch($id);
-        $validate($agreement);
+        $agreement = $this->fetch($id, $validate);
 
         throw_if($agreement->isActive($now), NotSavedModelException::class, "The agreement $agreement->id is active for the user");
         throw_if($agreement->getActiveInterval()['end_moment']->isBefore($now));

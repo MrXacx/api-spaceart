@@ -3,9 +3,9 @@
 namespace App\Repositories;
 
 use App\Enumerate\Account;
-use App\Exceptions\Contracts\HttpRequestException;
-use App\Exceptions\NotFoundException;
+use App\Exceptions\NotFoundModelException;
 use App\Exceptions\NotSavedModelException;
+use App\Exceptions\TrashedModelReferenceException;
 use App\Models\Agreement;
 use App\Models\Art;
 use App\Models\Artist;
@@ -19,11 +19,11 @@ use Illuminate\Support\Facades\DB;
 class UserRepository implements Contracts\IUserRepository
 {
     /**
-     * @throws HttpRequestException
+     * @throws TrashedModelReferenceException
      */
     public function fetch(int|string $id): User
     {
-        $user = User::findOr($id, fn () => NotFoundException::throw("User $id was not found")); // Fetch by PK
+        $user = User::findOr($id, fn () => NotFoundModelException::throw("User $id was not found")); // Fetch by PK
 
         if (auth()->user()?->id == $id) {
             $user->showConfidentialData();
@@ -43,7 +43,7 @@ class UserRepository implements Contracts\IUserRepository
 
     public function create(array $data): User
     {
-        if ($data['art']) {
+        if (array_key_exists('art', $data)) {
             $data['art_id'] = Art::where('name', $data['art'])->first()->id;
         }
 

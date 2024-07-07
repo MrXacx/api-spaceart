@@ -4,6 +4,6 @@ namespace App\Exceptions;
 
 use App\Exceptions\Contracts\DatabaseOperationException;
 
-class TrashedModelReferenceException extends DatabaseOperationException
+class DatabaseValidationException extends DatabaseOperationException
 {
 }

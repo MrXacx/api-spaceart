@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Exceptions\CheckDBOperationException;
+use App\Exceptions\DatabaseValidationException;
 use App\Exceptions\NotSavedModelException;
 use App\Exceptions\TrashedModelReferenceException;
 use App\Models\SelectiveCandidate;
@@ -22,14 +22,13 @@ class SelectiveCandidateRepository implements Contracts\ISelectiveCandidateRepos
         $validate($candidature);
 
         throw_if($candidature->artist->trashed(), TrashedModelReferenceException::class, "The artist's account $candidature->artist_id is disabled");
-        throw_if($candidature->enterprise->trashed(), TrashedModelReferenceException::class, "The enterprise's account {$candidature->selective->enterprise_id} is disabled");
 
         throw_if(
-            $this->artist->artistAccountData->art !== $this->selective->art, CheckDBOperationException::class,
-            "The {$this->artist->artistAccountData->art->name} account is not able to {$this->selective->art->name} selective"
+            $candidature->artist->artistAccountData->art !== $candidature->selective->art, DatabaseValidationException::class,
+            "The {$candidature->artist->artistAccountData->art->value} account is not able to {$candidature->selective->art->value} selective"
         );
 
-        throw_unless($candidature->selective->isActive($now), CheckDBOperationException::class, "selective $candidature->selective_id is closed");
+        throw_unless($candidature->selective->isActive($now), DatabaseValidationException::class, "selective $candidature->selective_id is closed");
 
         throw_unless($candidature->save(), NotSavedModelException::class);
 

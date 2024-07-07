@@ -2,8 +2,8 @@
 
 namespace App\Repositories\Contracts;
 
-use App\Exceptions\CheckDBOperationException;
-use App\Exceptions\NotFoundException;
+use App\Exceptions\DatabaseValidationException;
+use App\Exceptions\NotFoundModelException;
 use App\Exceptions\NotSavedModelException;
 use App\Models\Rate;
 use Closure;
@@ -11,20 +11,20 @@ use Closure;
 interface IRateRepository
 {
     /**
-     * @throws NotFoundException
-     * @throws CheckDBOperationException
+     * @throws NotFoundModelException
+     * @throws DatabaseValidationException
      */
     public function fetch(int|string $userID, int|string $agreementID): Rate;
 
     /**
      * @throws NotSavedModelException
-     * @throws CheckDBOperationException
+     * @throws DatabaseValidationException
      */
     public function create(array $data, Closure $validate): Rate;
 
     /**
      * @throws NotSavedModelException
-     * @throws CheckDBOperationException
+     * @throws DatabaseValidationException
      */
     public function update(int|string $userID, int|string $agreementID, array $data, Closure $validate): Rate;
 

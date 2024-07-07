@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\CheckDBOperationException;
+use App\Exceptions\DatabaseValidationException;
 use App\Exceptions\NotSavedModelException;
 use App\Http\Controllers\Contracts\IMainRouteController;
 use App\Http\Requests\AgreementRequest;
+use App\Models\Agreement;
 use App\Repositories\AgreementRepository;
 use App\Services\ResponseService;
 use Illuminate\Http\JsonResponse;
@@ -99,7 +100,7 @@ class AgreementController extends IMainRouteController
         try {
             $agreement = $this->agreementRepository->create(
                 $request->validated(),
-                fn ($a) => $this->authorize('isStakeholder', $a)
+                fn (Agreement $a) => $this->authorize('isStakeholder', $a)
             );
 
             return $this->responseService->sendMessage('Agreement created', $agreement->toArray(), 201);
@@ -126,7 +127,7 @@ class AgreementController extends IMainRouteController
     {
         $agreement = $this->agreementRepository->fetch(
             $request->id,
-            fn ($a) => $this->authorize('isStakeholder', $a)
+            fn (Agreement $a) => $this->authorize('isStakeholder', $a)
         );
 
         return $this->responseService->sendMessage(
@@ -162,13 +163,13 @@ class AgreementController extends IMainRouteController
      *     @OA\Response(response="200", ref="#/components/responses/ReturnAgreement"),
      * )
      *
-     * @throws CheckDBOperationException
+     * @throws DatabaseValidationException
      */
     public function update(AgreementRequest $request): JsonResponse
     {
         $validate = count($request->validated()) > 1 ?
-        fn ($a) => $this->authorize('isHirer', $a) :
-        fn ($a) => $this->authorize('isStakeholder', $a);
+            fn (Agreement $a) => $this->authorize('isHirer', $a) :
+            fn (Agreement $a) => $this->authorize('isStakeholder', $a);
 
         try {
             $agreement = $this->agreementRepository->update($request->id, $request->validated(), $validate);
@@ -206,8 +207,11 @@ class AgreementController extends IMainRouteController
      */
     public function destroy(AgreementRequest $request): JsonResponse
     {
-        return $this->agreementRepository->delete($request->id, fn ($a) => $this->authorize('isStakeholder', $a)) ?
-            $this->responseService->sendMessage('Agreement deleted', 204) :
+        return $this->agreementRepository->delete(
+            $request->id,
+            fn (Agreement $a) => $this->authorize('isStakeholder', $a)
+        ) ?
+            $this->responseService->sendMessage('Agreement deleted', [], 204) :
             $this->responseService->sendError('Agreement not deleted');
     }
 }

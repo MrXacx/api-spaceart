@@ -2,13 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Exceptions\CheckDBOperationException;
-use App\Exceptions\Contracts\HttpRequestException;
-use App\Exceptions\NotFoundException;
+use App\Exceptions\DatabaseValidationException;
+use App\Exceptions\NotFoundModelException;
 use App\Exceptions\NotSavedModelException;
+use App\Exceptions\TrashedModelReferenceException;
 use App\Models\Art;
 use App\Models\Selective;
-use Carbon\Carbon;
 use Closure;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -18,7 +17,7 @@ class SelectiveRepository implements Contracts\ISelectiveRepository
     {
         return Selective::withAllRelations()
             ->where('id', '>', $offset)
-            ->where('end_moment', '>', Carbon::now())
+            ->where('end_moment', '>', now())
             ->whereHas('enterprise', fn ($q) => $q->whereNull('deleted_at'))
             ->inRandomOrder()
             ->limit($limit)
@@ -26,17 +25,17 @@ class SelectiveRepository implements Contracts\ISelectiveRepository
     }
 
     /**
-     * @throws HttpRequestException
-     * @throws CheckDBOperationException
+     * @throws TrashedModelReferenceException
+     * @throws DatabaseValidationException
      */
     public function fetch(int|string $id): Selective
     {
         $selective = Selective::findOr(
             $id,
-            fn () => NotFoundException::throw("Selective $id was not found")
+            fn () => NotFoundModelException::throw("Selective $id was not found")
         )->loadAllRelations();
 
-        throw_if($selective->enterprise->trashed(), CheckDBOperationException::class, "The enterprise's account $selective->enterprise_id is disabled");
+        throw_if($selective->enterprise->trashed(), TrashedModelReferenceException::class, "The enterprise's account $selective->enterprise_id is disabled");
 
         return $selective;
     }
@@ -44,15 +43,15 @@ class SelectiveRepository implements Contracts\ISelectiveRepository
     /**
      * {@inheritdoc}
      *
-     * @throws  CheckDBOperationException
+     * @throws  DatabaseValidationException
      */
     public function create(array $data, Closure $validate): Selective
     {
         $selective = new Selective($data);
         $validate($selective);
 
-        if (! $selective->enterprise->trashed()) {
-            CheckDBOperationException::throw("The enterprise's account $selective->enterprise_id is disabled");
+        if ($selective->enterprise->trashed()) {
+            TrashedModelReferenceException::throw("The enterprise's account $selective->enterprise_id is disabled");
         }
 
         $selective->art_id = Art::where('name', $data['art'])->firstOrFail()->id;
@@ -65,8 +64,8 @@ class SelectiveRepository implements Contracts\ISelectiveRepository
     /**
      * {@inheritdoc}
      *
-     * @throws HttpRequestException
-     * @throws CheckDBOperationException
+     * @throws TrashedModelReferenceException
+     * @throws DatabaseValidationException
      */
     public function update(int|string $id, array $data, Closure $validate): Selective
     {
@@ -74,9 +73,9 @@ class SelectiveRepository implements Contracts\ISelectiveRepository
 
         $validate($selective);
 
-        [$start] = $selective->getActiveInterval();
+        ['start_moment' => $start] = $selective->getActiveInterval();
 
-        throw_unless($start->isFuture(), CheckDBOperationException::class, 'The start_moment must be a future moment');
+        throw_unless($start->isFuture(), DatabaseValidationException::class, 'The start moment must be a future moment');
 
         throw_unless($selective->update($data), NotSavedModelException::class);
 

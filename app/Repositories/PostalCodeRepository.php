@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Exceptions\NotFoundException;
+use App\Exceptions\NotFoundModelException;
 use App\Models\Address;
 use App\Repositories\Contracts\WebClientRepository;
 use App\Services\Logger;
@@ -20,7 +20,7 @@ class PostalCodeRepository extends WebClientRepository
 
     /**
      * @throws GuzzleException
-     * @throws NotFoundException
+     * @throws NotFoundModelException
      */
     public function fetch(string $postalCode): Address
     {
@@ -32,7 +32,7 @@ class PostalCodeRepository extends WebClientRepository
 
         $status = $response->getStatusCode();
         if ($status < 200 || $status > 299) {
-            NotFoundException::throw("[HTTP code: $status] - Failed request to $url.");
+            NotFoundModelException::throw("[HTTP code: $status] - Failed request to $url.");
         }
 
         $logger->request("[HTTP code: $status] - Request to $url finished successfully.");

@@ -45,7 +45,7 @@ class SelectiveCandidate extends Model
 
     protected function selective(): BelongsTo
     {
-        return $this->belongsTo(Selective::class, 'selective_id');
+        return $this->belongsTo(Selective::class);
     }
 
     public function loadAllRelations(): SelectiveCandidate

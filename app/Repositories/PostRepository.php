@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Exceptions\NotFoundException;
+use App\Exceptions\NotFoundModelException;
 use App\Exceptions\NotSavedModelException;
 use App\Exceptions\TrashedModelReferenceException;
 use App\Models\Post;
@@ -16,7 +16,7 @@ class PostRepository implements Contracts\IPostRepository
     {
         return Post::withAllRelations()
             ->where('created_at', '>=', now()->subDays(2))
-            ->whereHas('user', fn (Builder $u) => $u->where('active', true))
+            ->whereHas('user', fn (Builder $u) => $u->whereNull('deleted_at'))
             ->inRandomOrder()
             ->limit($limit)
             ->get();
@@ -24,7 +24,7 @@ class PostRepository implements Contracts\IPostRepository
 
     public function fetch(int|string $id): Post
     {
-        return Post::findOr($id, fn () => NotFoundException::throw("Post $id was not found."))->loadAllRelations();
+        return Post::findOr($id, fn () => NotFoundModelException::throw("Post $id was not found."))->loadAllRelations();
     }
 
     /**
@@ -33,7 +33,7 @@ class PostRepository implements Contracts\IPostRepository
     public function create(array $data, Closure $validate): Post
     {
         $post = new Post($data);
-        $validate($post->user);
+        $validate($post);
 
         throw_if($post->user->trashed(), TrashedModelReferenceException::class, "The user account {$post->user->id} is disabled");
         throw_unless($post->save(), NotSavedModelException::class);

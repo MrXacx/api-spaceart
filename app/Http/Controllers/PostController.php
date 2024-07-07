@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\NotSavedModelException;
 use App\Http\Controllers\Contracts\IMainRouteController;
 use App\Http\Requests\PostRequest;
+use App\Models\Post;
 use App\Repositories\PostRepository;
 use App\Services\ResponseService;
 use Illuminate\Http\JsonResponse;
@@ -94,7 +95,7 @@ class PostController extends IMainRouteController
         try {
             $post = $this->postRepository->create(
                 $request->validated(),
-                fn ($p) => $this->authorize('isAdmin', $p->user)
+                fn (Post $p) => $this->authorize('isAdmin', $p->user)
             );
 
             return $this->responseService->sendMessage('Post created.', $post->toArray(), 201);
@@ -119,7 +120,7 @@ class PostController extends IMainRouteController
      */
     public function show(PostRequest $request): JsonResponse
     {
-        return $this->responseService->sendMessage("Post $request->post was found.", $this->postRepository->fetch($request->post));
+        return $this->responseService->sendMessage("Post $request->id was found.", $this->postRepository->fetch($request->id));
     }
 
     /**
@@ -158,8 +159,8 @@ class PostController extends IMainRouteController
     public function destroy(PostRequest $request): JsonResponse
     {
         return $this->postRepository->delete(
-            $request->post,
-            fn ($p) => $this->authorize('isAdmin', $p->user)
+            $request->id,
+            fn (Post $p) => $this->authorize('isAdmin', $p->user)
         ) ?
             $this->responseService->sendMessage('Post deleted.') :
             $this->responseService->sendError('Post not deleted.');

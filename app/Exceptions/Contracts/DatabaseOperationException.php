@@ -6,9 +6,9 @@ use App\Services\Logger;
 use Exception;
 use Psr\Log\LogLevel;
 
-abstract class DBQueryException extends Exception
+abstract class DatabaseOperationException extends Exception
 {
-    public static function throw(string $message)
+    public static function throw(string $message): never
     {
         throw new static($message);
     }

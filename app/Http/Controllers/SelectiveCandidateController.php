@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\CheckDBOperationException;
+use App\Exceptions\DatabaseValidationException;
 use App\Exceptions\NotSavedModelException;
 use App\Http\Controllers\Contracts\IRouteController;
 use App\Http\Requests\SelectiveCandidateRequest;
+use App\Models\SelectiveCandidate;
 use App\Repositories\SelectiveCandidateRepository;
 use App\Services\ResponseService;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -45,7 +46,7 @@ class SelectiveCandidateController extends IRouteController
      *     ),
      * )
      *
-     * @throws CheckDBOperationException
+     * @throws DatabaseValidationException
      * @throws AuthorizationException
      */
     protected function store(SelectiveCandidateRequest $request): JsonResponse
@@ -56,7 +57,7 @@ class SelectiveCandidateController extends IRouteController
             $candidature = $this->selectiveCandidateRepository
                 ->create(
                     $data,
-                    fn ($c) => $this->authorize('isAdmin', $c->artist)
+                    fn (SelectiveCandidate $c) => $this->authorize('isAdmin', $c->artist)
                 );
 
             return $this->responseService->sendMessage('Candidature created', $candidature->toArray(), 201);

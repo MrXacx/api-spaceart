@@ -7,7 +7,7 @@ namespace App\Http\Controllers;
 use App\Enumerate\Account;
 use App\Exceptions\Contracts\HttpRequestException;
 use App\Exceptions\NotSavedModelException;
-use App\Exceptions\UnprocessableEntityException;
+use App\Exceptions\UnknownAccountTypeException;
 use App\Http\Controllers\Contracts\IMainRouteController;
 use App\Http\Requests\ArtistRequest;
 use App\Http\Requests\EnterpriseRequest;
@@ -65,7 +65,7 @@ class UserController extends IMainRouteController
         return match (Account::tryFrom((string) $request->type)) { // Build correct request for account type
             Account::ARTIST => app()->make(ArtistRequest::class, $request->all()),
             Account::ENTERPRISE => app()->make(EnterpriseRequest::class, $request->all()),
-            default => UnprocessableEntityException::throw('Account type not found'),
+            default => UnknownAccountTypeException::throw('Account type not found'),
         };
     }
 

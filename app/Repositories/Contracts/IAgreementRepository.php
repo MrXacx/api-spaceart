@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Contracts;
 
-use App\Exceptions\NotFoundException;
+use App\Exceptions\NotFoundModelException;
 use App\Exceptions\NotSavedModelException;
 use App\Models\Agreement;
 use Closure;
@@ -13,7 +13,7 @@ interface IAgreementRepository
     public function list(int|string $userID, int|string $limit): Collection|array;
 
     /**
-     * @throws NotFoundException
+     * @throws NotFoundModelException
      */
     public function fetch(int|string $id, Closure $validate): Agreement;
 

@@ -64,7 +64,7 @@ class Handler extends ExceptionHandler
         } elseif ($e instanceof AuthorizationException || $e instanceof AuthenticationException) {
             $code = 401;
         } elseif ($e instanceof HttpExceptionInterface) {
-            $code = $e->getCode();
+            $code = $e->getStatusCode();
         } else {
             return $this->responseService->sendError('Unexpected error', ['message' => $e->getMessage(), 'trace' => $e->getTrace()], 500);
         }

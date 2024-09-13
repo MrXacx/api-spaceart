@@ -4,7 +4,6 @@
 
 **ATTENTION!** This repository was created after the commit [ad0a4b4](https://github.com/MrXacx/spaceart/commit/e7915af8d6122693a4a91090e14335389acbf07b) from [MrXacx/spaceart](https://github.com/MrXacx/spaceart/)
 
-
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
@@ -25,7 +24,7 @@ To get started with the API SpaceArt, follow these steps:
 2. Install the project dependencies: `composer install`
 3. Generate your laravel key: `php artisan key:generate`
 4. Start server on Laragon
-5. Insert your BDMS credentials into environment variables (.env):
+5. Insert your DBMS credentials into environment variables (.env):
     ```dotenv
     DB_CONNECTION=mysql
     DB_HOST=localhost

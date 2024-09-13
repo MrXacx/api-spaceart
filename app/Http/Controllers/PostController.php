@@ -83,7 +83,7 @@ class PostController extends IMainRouteController
      *     path="/post",
      *     summary="Publish post",
      *     description="Store post",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\RequestBody(ref="#/components/requestBodies/PostStore"),
      *
@@ -140,7 +140,7 @@ class PostController extends IMainRouteController
      *     path="/post/{id}",
      *     summary="Delete post",
      *     description="Delete post on database",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
      *

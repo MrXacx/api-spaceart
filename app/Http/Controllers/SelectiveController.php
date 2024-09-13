@@ -84,7 +84,7 @@ class SelectiveController extends IMainRouteController
      *      path="/selective",
      *      summary="Store selective",
      *      description="Store selective on database",
-     *      security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *      security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *      @OA\RequestBody(ref="#/components/requestBodies/SelectiveStore"),
      *
@@ -114,7 +114,7 @@ class SelectiveController extends IMainRouteController
      *     path="/selective/{id}",
      *     summary="Fetch unique selective",
      *     description="Fetch selective on database",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
      *
@@ -135,7 +135,7 @@ class SelectiveController extends IMainRouteController
      *    path="/selective/{id}/update",
      *    summary="[PUT] /selective/{id} alias ",
      *    description="Redirect to [PUT] /selective/{id}",
-     *    security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *    security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *    @OA\Parameter(ref="#/components/parameters/Id"),
      *
@@ -147,7 +147,7 @@ class SelectiveController extends IMainRouteController
      *     path="/selective/{id}",
      *     summary="Update selective",
      *     description="Update selective on database",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
      *
@@ -177,7 +177,7 @@ class SelectiveController extends IMainRouteController
      *    path="/selective/{id}/delete",
      *    summary="[DELETE] /selective/{id} alias ",
      *    description="Redirect to [DELETE] /selective/{id}",
-     *    security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *    security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *    @OA\Parameter(ref="#/components/parameters/Id"),
      *
@@ -189,7 +189,7 @@ class SelectiveController extends IMainRouteController
      *     path="/selective/{id}",
      *     summary="Delete selective",
      *     description="Delete selective on database",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
      *

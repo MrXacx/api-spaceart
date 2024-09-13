@@ -6,7 +6,7 @@
     },
     "servers": [
         {
-            "url": "http://api-spaceart.local/api/"
+            "url": "https://api-spaceart.dev/api/"
         }
     ],
     "paths": {
@@ -51,7 +51,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             },
@@ -94,7 +94,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             }
@@ -119,7 +119,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             },
@@ -145,7 +145,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             },
@@ -168,7 +168,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             }
@@ -193,7 +193,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             }
@@ -218,7 +218,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             }
@@ -313,7 +313,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             }
@@ -376,7 +376,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             }
@@ -436,7 +436,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             }
@@ -479,7 +479,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             }
@@ -507,7 +507,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             },
@@ -533,7 +533,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             },
@@ -559,7 +559,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             }
@@ -587,7 +587,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             }
@@ -615,7 +615,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             }
@@ -672,7 +672,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             }
@@ -738,7 +738,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             }
@@ -763,7 +763,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             },
@@ -789,7 +789,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             },
@@ -812,7 +812,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             }
@@ -837,7 +837,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             }
@@ -862,7 +862,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             }
@@ -997,7 +997,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             },
@@ -1026,7 +1026,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             }
@@ -1046,7 +1046,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             }
@@ -1066,7 +1066,7 @@
                 },
                 "security": [
                     {
-                        "$ref": "#/components/securitySchemes/Sanctum"
+                        "$ref": "#/components/securitySchemes/sanctum"
                     }
                 ]
             }
@@ -2125,10 +2125,42 @@
             }
         },
         "securitySchemes": {
-            "Sanctum": {
-                "type": "http",
-                "scheme": "bearer"
+            "sanctum": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Agreement",
+            "description": "Agreement"
+        },
+        {
+            "name": "Auth",
+            "description": "Auth"
+        },
+        {
+            "name": "Post",
+            "description": "Post"
+        },
+        {
+            "name": "Rate",
+            "description": "Rate"
+        },
+        {
+            "name": "Candidate",
+            "description": "Candidate"
+        },
+        {
+            "name": "Selective",
+            "description": "Selective"
+        },
+        {
+            "name": "User",
+            "description": "User"
+        }
+    ]
 }

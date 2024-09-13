@@ -11,6 +11,7 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
+        "openai-php/client": "^0.10.1",
         "thiagoprz/eloquent-composite-key": "^1.0"
     },
     "require-dev": {

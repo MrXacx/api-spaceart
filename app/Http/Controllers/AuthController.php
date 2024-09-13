@@ -72,7 +72,7 @@ class AuthController extends Controller
      * @OA\Post(
      *     tags={"Auth"},
      *     path="/auth/logout",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\Response(response="200", description="Logged out", @OA\JsonContent(@OA\Property(property="message", type="string", default="User logout."))),
      * )

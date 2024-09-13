@@ -196,7 +196,7 @@ class UserController extends IMainRouteController
      *    summary="[PUT]::/user/{id} alias",
      *    description="Alternative route to [PUT]::/user/{id}",
      *    tags={"User"},
-     *    security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *    security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *    @OA\Response(response="302", description="Redirected to [PUT]::/user/{id}")
      * )
@@ -206,7 +206,7 @@ class UserController extends IMainRouteController
      *     tags={"User"},
      *     summary="Update user",
      *     description="Update user, artist or enterprise data on database",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\RequestBody(ref="#/components/requestBodies/UserUpdate"),
      *
@@ -240,7 +240,7 @@ class UserController extends IMainRouteController
      *     path="/user/{id}/delete",
      *     summary="[DELETE]::/user/{id} alias",
      *     description="Alternative route to [DELETE]::/user/{id}",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\Response(response="302", description="Redirected to [DELETE]::/user/{id}")
      * )
@@ -250,7 +250,7 @@ class UserController extends IMainRouteController
      *     path="/user/{id}",
      *     summary="Disable user account",
      *     description="Disable access to user account",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\Parameter(
      *      name="id",

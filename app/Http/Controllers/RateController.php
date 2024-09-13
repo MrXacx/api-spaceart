@@ -49,7 +49,7 @@ class RateController extends IRouteController
      *     path="/agreement/{agreement}/rate",
      *     summary="Store rate",
      *     description="Relates rate to agreement on database",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Agreement"),
      *
@@ -81,7 +81,7 @@ class RateController extends IRouteController
      *     path="/agreement/{agreement}/rate/{author}",
      *     summary="Fetch rate",
      *     description="Fetch unique rate of an agreement",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Agreement"),
      *     @OA\Parameter(ref="#/components/parameters/Author"),
@@ -108,7 +108,7 @@ class RateController extends IRouteController
      *     path="/agreement/{agreement}/rate/{author}/update",
      *     summary="[PUT]::/agreement/{agreement}/rate/{author} alias",
      *     description="Redirect request to [PUT]::/agreement/{agreement}/rate/{author}",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Agreement"),
      *     @OA\Parameter(ref="#/components/parameters/Author"),
@@ -121,7 +121,7 @@ class RateController extends IRouteController
      *     path="/agreement/{agreement}/rate/{author}",
      *     summary="Update rate",
      *     description="Update rate on database",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Agreement"),
      *
@@ -155,7 +155,7 @@ class RateController extends IRouteController
      *      path="/agreement/{agreement}/rate/{author}/delete",
      *      summary="[DELETE]::/agreement/{agreement}/rate/{author} alias",
      *      description="Redirect request to [DELETE]::/agreement/{agreement}/rate/{author}",
-     *      security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *      security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *      @OA\Parameter(ref="#/components/parameters/Agreement"),
      *      @OA\Parameter(ref="#/components/parameters/Author"),
@@ -168,7 +168,7 @@ class RateController extends IRouteController
      *     path="/agreement/{agreement}/rate/{author}",
      *     summary="Delete rate",
      *     description="Delete rate on database",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Agreement"),
      *     @OA\Parameter(ref="#/components/parameters/Author"),

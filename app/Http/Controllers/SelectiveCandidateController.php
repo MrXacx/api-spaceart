@@ -27,7 +27,7 @@ class SelectiveCandidateController extends IRouteController
      *     path="/selective/{selective}/candidate",
      *     summary="Store candidature",
      *     description="Strore candidature on selective",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\Parameter(name="selective", in="path", description="Selective id", style="form", @OA\Schema(type="integer")),
      *

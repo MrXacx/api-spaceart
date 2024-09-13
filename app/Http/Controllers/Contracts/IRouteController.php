@@ -13,7 +13,7 @@ use Illuminate\Routing\ControllerMiddlewareOptions;
 use OpenApi\Annotations as OA;
 
 /**
- * @OA\Server(url="http://api-spaceart.local/api/")
+ * @OA\Server(url="https://api-spaceart.dev/api/")
  *
  * @OA\Info(title="SpaceArt API", version="2.0.0")
  *
@@ -50,10 +50,13 @@ use OpenApi\Annotations as OA;
  * )
  *
  * @OA\SecurityScheme(
- *     securityScheme="Sanctum",
- *     type="http",
- *     scheme="bearer",
- *  )
+ *     securityScheme="sanctum",
+ *     type="apiKey",
+ *     description="Enter token in format (Bearer <token>)",
+ *     name="Authorization",
+ *     in="header",
+ * )
+ *
  */
 abstract class IRouteController extends Controller
 {

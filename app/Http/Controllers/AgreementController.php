@@ -44,7 +44,7 @@ class AgreementController extends IMainRouteController
      *     path="/agreement",
      *     summary="List agreements",
      *     description="Fetch user's agreements on database",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Limit"),
      *
@@ -77,7 +77,7 @@ class AgreementController extends IMainRouteController
      *     path="/agreement",
      *     summary="Store agreement",
      *     description="Store agreement on database",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\RequestBody(ref="#/components/requestBodies/AgreementStore"),
      *
@@ -115,7 +115,7 @@ class AgreementController extends IMainRouteController
      *     path="/agreement/{id}",
      *     summary="Fetch agreement",
      *     description="Fetch an unique agreement on database",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
      *
@@ -142,7 +142,7 @@ class AgreementController extends IMainRouteController
      *     path="/agreement/{id}/update",
      *     summary="[PUT]::/agreement/{id} alias",
      *     description="Redirect request to [PUT]::/agreement/{id} alias",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
      *
@@ -154,7 +154,7 @@ class AgreementController extends IMainRouteController
      *     path="/agreement/{id}",
      *     summary="Update agreement",
      *     description="Update agreement on database",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
      *
@@ -186,7 +186,7 @@ class AgreementController extends IMainRouteController
      *     path="/agreement/{id}/delete",
      *     summary="[DELETE]::/agreement/{id} alias",
      *     description="Redirect request to [DELETE]::/agreement/{id} alias",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
      *
@@ -198,7 +198,7 @@ class AgreementController extends IMainRouteController
      *     path="/agreement/{id}",
      *     summary="Delete agreement",
      *     description="Delete agreement on database",
-     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/Sanctum")},
+     *     security={@OA\SecurityScheme(ref="#/components/securitySchemes/sanctum")},
      *
      *     @OA\Parameter(ref="#/components/parameters/Id"),
      *

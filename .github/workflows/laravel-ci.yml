@@ -3,7 +3,7 @@ on:
   push:
     branches: [ "runtime-laravel" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "runtime-laravel" ]
 jobs:
   phpunit:
     runs-on: ubuntu-latest

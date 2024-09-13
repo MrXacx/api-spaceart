@@ -27,11 +27,11 @@ jobs:
 
       - name: Install composer dependencies
         run: |
-          composer install --no-scripts
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Prepare Laravel Application
         run: |
-          cp .env.example .env.testing
+          cp .env.testing .env
           php artisan key:generate
           chmod -R 777 storage bootstrap/cache
       - name: Run Testsuite

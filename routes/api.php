@@ -21,7 +21,7 @@ use Illuminate\Support\Str;
 function buildAltRoute(string $method, string $name): void
 {
     $method = strtoupper($method); // Transform string to UPPERCASE
-    $action = $method === 'PUT' ? 'update' : ($method === 'DELETE' ? 'delete' : throw new \Exception);
+    $action = $method === 'PUT' ? 'update' : ($method === 'DELETE' ? 'delete' : throw new Exception);
     Route::post(
         "/{id}/$action",
         fn (Request $request) => redirect()->route("$name.$action", $request->all()))

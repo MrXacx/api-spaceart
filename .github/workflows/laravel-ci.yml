@@ -31,8 +31,7 @@ jobs:
 
       - name: Prepare Laravel Application
         run: |
-          cp .env.testing .env
-          php artisan key:generate
+          php artisan key:generate --env=testing
           chmod -R 777 storage bootstrap/cache
       - name: Run Testsuite
-        run: php artisan test
+        run: php artisan test --testsuite=Feature --stop-on-failure

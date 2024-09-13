@@ -1,2 +1,0 @@
-INSERT INTO `enterprise` (`id`, `CNPJ`, `neighborhood`, `address`, `company_name`, `section`) VALUES
-('018bc0df-8852-710a-b2ae-76a57ea07432', '00836410000177', 'Plano Diretor Sul', 'Rua A, s/n', 'DROGARIA D\'AILE LTDA', 'educação');

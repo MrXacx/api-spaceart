@@ -1,0 +1,2166 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "SpaceArt API",
+        "version": "2.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://api-spaceart.dev/api/"
+        }
+    ],
+    "paths": {
+        "/agreement": {
+            "get": {
+                "tags": [
+                    "Agreement"
+                ],
+                "summary": "List agreements",
+                "description": "Fetch user's agreements on database",
+                "operationId": "b0b7da895d6337b674f1bd9aa691dcb3",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Limit"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Agreements found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Agreement"
+                                            }
+                                        },
+                                        "fails": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Agreement"
+                ],
+                "summary": "Store agreement",
+                "description": "Store agreement on database",
+                "operationId": "f10a4ab3169d1c99602c0cbb796fb1bc",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/AgreementStore"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Agreements was created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Agreement"
+                                            },
+                                            "maxItems": 1
+                                        },
+                                        "fails": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            }
+        },
+        "/agreement/{id}": {
+            "get": {
+                "tags": [
+                    "Agreement"
+                ],
+                "summary": "Fetch agreement",
+                "description": "Fetch an unique agreement on database",
+                "operationId": "9fa8fb46551571eb6faa2efa87bc758e",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ReturnAgreement"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Agreement"
+                ],
+                "summary": "Update agreement",
+                "description": "Update agreement on database",
+                "operationId": "02e650c7a48dc10b28c4617ab39b57d1",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Id"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/AgreementUpdate"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ReturnAgreement"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Agreement"
+                ],
+                "summary": "Delete agreement",
+                "description": "Delete agreement on database",
+                "operationId": "6fe0d6aab93ac2f9f1c3cec475827b1d",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "$ref": "#/components/responses/204"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            }
+        },
+        "/agreement/{id}/update": {
+            "post": {
+                "tags": [
+                    "Agreement"
+                ],
+                "summary": "[PUT]::/agreement/{id} alias",
+                "description": "Redirect request to [PUT]::/agreement/{id} alias",
+                "operationId": "917f24a664563a08e429246d8456463d",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Id"
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Redirected to [PUT]::/agreement/{id}"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            }
+        },
+        "/agreement/{id}/delete": {
+            "post": {
+                "tags": [
+                    "Agreement"
+                ],
+                "summary": "[DELETE]::/agreement/{id} alias",
+                "description": "Redirect request to [DELETE]::/agreement/{id} alias",
+                "operationId": "c204776d0d5f93ef877ff6c54a0d2013",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Id"
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Redirected to [DELETE]::/agreement/{id}"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            }
+        },
+        "/auth": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "operationId": "8e2b0b8ec2779a0f85d9e8e68d5f00a3",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/Auth"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Has been authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "token": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Authentication failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "default": "User not authenticated."
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "": {
+                                                        "default": "Email or password is incorrect."
+                                                    }
+                                                },
+                                                "type": "object",
+                                                "minItems": 1
+                                            }
+                                        },
+                                        "fails": {
+                                            "type": "boolean",
+                                            "default": "true"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "operationId": "0d29c740dc06d77602af8095bf4654cc",
+                "responses": {
+                    "200": {
+                        "description": "Logged out",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "default": "User logout."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            }
+        },
+        "/post": {
+            "get": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "List random posts",
+                "description": "Fetch random posts on database",
+                "operationId": "425e95aaa6ab243fc407ffcf09db9de5",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Limit"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Posts were found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Post"
+                                            }
+                                        },
+                                        "fails": {
+                                            "type": "boolean",
+                                            "default": "false"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Publish post",
+                "description": "Store post",
+                "operationId": "35cc3a4123556e20dc17f6f45be00f18",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/PostStore"
+                },
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/ReturnPost"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            }
+        },
+        "/post/{id}": {
+            "get": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Fetch unique post",
+                "description": "Fetch post on database",
+                "operationId": "820a95132e64f02c9c71b2cfc3cadb0b",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ReturnPost"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Delete post",
+                "description": "Delete post on database",
+                "operationId": "cdf3a5c9a54637677e9d19e0bd933ab4",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Post deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "default": "Post was deleted"
+                                        },
+                                        "fails": {
+                                            "type": "boolean",
+                                            "default": "false"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            }
+        },
+        "/post/{id}/delete": {
+            "post": {
+                "tags": [
+                    "Post"
+                ],
+                "summary": "[DELETE]::/post/{id} alias",
+                "description": "Redirect request to [DELETE]::/post/{id}",
+                "operationId": "ba8af6e5884683af54e49eb0f747df1a",
+                "responses": {
+                    "302": {
+                        "description": "Redirected to [DELETE]::/post/{id}"
+                    }
+                }
+            }
+        },
+        "/agreement/{agreement}/rate": {
+            "post": {
+                "tags": [
+                    "Rate"
+                ],
+                "summary": "Store rate",
+                "description": "Relates rate to agreement on database",
+                "operationId": "b31d47e125d7ced6cba151fdeaee3a31",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Agreement"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/RateStore"
+                },
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/ReturnRate"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            }
+        },
+        "/agreement/{agreement}/rate/{author}": {
+            "get": {
+                "tags": [
+                    "Rate"
+                ],
+                "summary": "Fetch rate",
+                "description": "Fetch unique rate of an agreement",
+                "operationId": "f7782f6db85bd524b92a5f6e9165a240",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Agreement"
+                    },
+                    {
+                        "$ref": "#/components/parameters/Author"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ReturnRate"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Rate"
+                ],
+                "summary": "Update rate",
+                "description": "Update rate on database",
+                "operationId": "264c601c7f38b30f4c67b7eb0cad92d8",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Agreement"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/RateUpdate"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ReturnRate"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Rate"
+                ],
+                "summary": "Delete rate",
+                "description": "Delete rate on database",
+                "operationId": "6a7bc5251550e59c502647c1e8e0e4d6",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Agreement"
+                    },
+                    {
+                        "$ref": "#/components/parameters/Author"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "$ref": "#/components/responses/204"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            }
+        },
+        "/agreement/{agreement}/rate/{author}/update": {
+            "post": {
+                "tags": [
+                    "Rate"
+                ],
+                "summary": "[PUT]::/agreement/{agreement}/rate/{author} alias",
+                "description": "Redirect request to [PUT]::/agreement/{agreement}/rate/{author}",
+                "operationId": "11277d33f03ad19571937f528f5ce8b0",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Agreement"
+                    },
+                    {
+                        "$ref": "#/components/parameters/Author"
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Redirected to [PUT]::/agreement/{agreement}/rate/{author}"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            }
+        },
+        "/agreement/{agreement}/rate/{author}/delete": {
+            "post": {
+                "tags": [
+                    "Rate"
+                ],
+                "summary": "[DELETE]::/agreement/{agreement}/rate/{author} alias",
+                "description": "Redirect request to [DELETE]::/agreement/{agreement}/rate/{author}",
+                "operationId": "30aef47e3a00200df4f8abd616c3b96d",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Agreement"
+                    },
+                    {
+                        "$ref": "#/components/parameters/Author"
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Redirected to [DELETE]::/agreement/{agreement}/rate/{author}"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            }
+        },
+        "/selective/{selective}/candidate": {
+            "post": {
+                "tags": [
+                    "Candidate"
+                ],
+                "summary": "Store candidature",
+                "description": "Strore candidature on selective",
+                "operationId": "9c54899a0aaace5941f343c13d631f6c",
+                "parameters": [
+                    {
+                        "name": "selective",
+                        "in": "path",
+                        "description": "Selective id",
+                        "style": "form",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/SelectiveCandidateStore"
+                },
+                "responses": {
+                    "201": {
+                        "description": "Candidature finished successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "default": "Candidature was created"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/SelectiveCandidate"
+                                            }
+                                        },
+                                        "fails": {
+                                            "type": "boolean",
+                                            "default": "false"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            }
+        },
+        "/selective": {
+            "get": {
+                "tags": [
+                    "Selective"
+                ],
+                "summary": "List selectives",
+                "description": "Fetch selectives on database",
+                "operationId": "b842f2148613abfd36ecb03f5aa4e118",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Offset"
+                    },
+                    {
+                        "$ref": "#/components/parameters/Limit"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operation was realized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Selective"
+                                            }
+                                        },
+                                        "fails": {
+                                            "type": "boolean",
+                                            "default": "false"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Selective"
+                ],
+                "summary": "Store selective",
+                "description": "Store selective on database",
+                "operationId": "8df69ff976dccbce85ee35ddf0fbf789",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/SelectiveStore"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ReturnSelective"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            }
+        },
+        "/selective/{id}": {
+            "get": {
+                "tags": [
+                    "Selective"
+                ],
+                "summary": "Fetch unique selective",
+                "description": "Fetch selective on database",
+                "operationId": "f8fc3862f421565dfd8e7dcb28482b2b",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ReturnSelective"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Selective"
+                ],
+                "summary": "Update selective",
+                "description": "Update selective on database",
+                "operationId": "802cf399957a7b0184bbb3de019e0173",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Id"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/SelectiveUpdate"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ReturnSelective"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Selective"
+                ],
+                "summary": "Delete selective",
+                "description": "Delete selective on database",
+                "operationId": "f66a228635f8ce532147a41f96d116f7",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "$ref": "#/components/responses/204"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            }
+        },
+        "/selective/{id}/update": {
+            "post": {
+                "tags": [
+                    "Selective"
+                ],
+                "summary": "[PUT] /selective/{id} alias ",
+                "description": "Redirect to [PUT] /selective/{id}",
+                "operationId": "8cdcac6947cf4f0b5968f15e0c8ced07",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Id"
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Redirected to [PUT] /selective/{id}"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            }
+        },
+        "/selective/{id}/delete": {
+            "post": {
+                "tags": [
+                    "Selective"
+                ],
+                "summary": "[DELETE] /selective/{id} alias ",
+                "description": "Redirect to [DELETE] /selective/{id}",
+                "operationId": "7f8749bacabbcfe0f94d92111dd5d405",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Id"
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Redirected to [DELETE] /selective/{id}"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            }
+        },
+        "/user": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "List active users",
+                "description": "Get users on database and paginate them",
+                "operationId": "23679253d16f34d2972249751e3631dd",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Limit"
+                    },
+                    {
+                        "$ref": "#/components/parameters/Offset"
+                    },
+                    {
+                        "name": "start_with",
+                        "in": "query",
+                        "description": "User's name start with",
+                        "style": "form",
+                        "schema": {
+                            "type": "string",
+                            "nullable": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Users found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "default": "Users found"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/User"
+                                            }
+                                        },
+                                        "fails": {
+                                            "type": "boolean",
+                                            "default": "false"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Store user",
+                "description": "Store user on database",
+                "operationId": "ce3cf31668a69eb39e5e98738715afa1",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/UserStore"
+                },
+                "responses": {
+                    "201": {
+                        "description": "User was created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "default": "User created"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/User"
+                                            }
+                                        },
+                                        "fails": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/{id}": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Show user",
+                "description": "Get an unique user on database",
+                "operationId": "1ec60d4ee968175164a94c21f897f8ea",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ReturnUser"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update user",
+                "description": "Update user, artist or enterprise data on database",
+                "operationId": "786a794071cb7098f55a4a4911e7d3f0",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/UserUpdate"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/ReturnUser"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Disable user account",
+                "description": "Disable access to user account",
+                "operationId": "a56b12a3694a926699892056cdcf8a9e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User id",
+                        "style": "form",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "$ref": "#/components/responses/204"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            }
+        },
+        "/user/{id}/update": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "[PUT]::/user/{id} alias",
+                "description": "Alternative route to [PUT]::/user/{id}",
+                "operationId": "9b143dc285908601878cfa00acfb15f5",
+                "responses": {
+                    "302": {
+                        "description": "Redirected to [PUT]::/user/{id}"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            }
+        },
+        "/user/{id}/delete": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "[DELETE]::/user/{id} alias",
+                "description": "Alternative route to [DELETE]::/user/{id}",
+                "operationId": "3076d808c7bfb8d9643c2f811f46b757",
+                "responses": {
+                    "302": {
+                        "description": "Redirected to [DELETE]::/user/{id}"
+                    }
+                },
+                "security": [
+                    {
+                        "$ref": "#/components/securitySchemes/sanctum"
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ArtistStoreBody": {
+                "required": [
+                    "cpf",
+                    "birthday",
+                    "art",
+                    "wage"
+                ],
+                "properties": {
+                    "cpf": {
+                        "type": "string",
+                        "pattern": "^\\d{11}$",
+                        "example": "01499146000"
+                    },
+                    "birthday": {
+                        "type": "string",
+                        "format": "d/m/Y",
+                        "example": "01/01/1970"
+                    },
+                    "art": {
+                        "type": "enum",
+                        "enum": [
+                            "acting",
+                            "dance",
+                            "music",
+                            "painting",
+                            "sculpture"
+                        ],
+                        "example": "music"
+                    },
+                    "wage": {
+                        "type": "number",
+                        "example": "100"
+                    }
+                },
+                "type": "object"
+            },
+            "ArtistUpdateBody": {
+                "properties": {
+                    "art": {
+                        "type": "enum",
+                        "enum": [
+                            "acting",
+                            "dance",
+                            "music",
+                            "painting",
+                            "sculpture"
+                        ],
+                        "example": "music"
+                    },
+                    "wage": {
+                        "type": "number",
+                        "example": "100"
+                    }
+                },
+                "type": "object"
+            },
+            "EnterpriseStoreBody": {
+                "required": [
+                    "cnpj",
+                    "company_name",
+                    "address_complement"
+                ],
+                "properties": {
+                    "cnpj": {
+                        "type": "string",
+                        "pattern": "^\\d{14}$",
+                        "example": "40033796599"
+                    },
+                    "company_name": {
+                        "type": "string",
+                        "minLength": 3,
+                        "example": "José e Gabriela Esportes ME"
+                    },
+                    "address_complement": {
+                        "type": "string",
+                        "example": "Beside of SESI Saúde"
+                    }
+                },
+                "type": "object"
+            },
+            "EnterpriseUpdateBody": {
+                "properties": {
+                    "company_name": {
+                        "type": "string",
+                        "minLength": 3,
+                        "example": "José e Gabriela Esportes ME"
+                    },
+                    "address_complement": {
+                        "type": "string",
+                        "example": "Beside of SESI Saúde"
+                    }
+                },
+                "type": "object"
+            },
+            "Agreement": {
+                "description": "Schema of Model Agreement",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "enterprise": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "artist": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "art": {
+                        "$ref": "#/components/schemas/Art"
+                    },
+                    "note": {
+                        "description": "Description of service",
+                        "type": "string",
+                        "example": "Rock musical show for 2 hours"
+                    },
+                    "date": {
+                        "description": "Day of service",
+                        "type": "string",
+                        "format": "date",
+                        "example": "01/01/2025"
+                    },
+                    "start_time": {
+                        "description": "Hour of service",
+                        "type": "string",
+                        "format": "date",
+                        "example": "18:30"
+                    },
+                    "end_time": {
+                        "description": "Hour of finish service",
+                        "type": "string",
+                        "format": "date",
+                        "example": "20:30"
+                    },
+                    "status": {
+                        "type": "enum",
+                        "enum": [
+                            "send",
+                            "accepted",
+                            "refused",
+                            "canceled"
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "Art": {
+                "description": "Schema of Model Art",
+                "properties": {
+                    "name": {
+                        "type": "enum",
+                        "enum": [
+                            "acting",
+                            "dance",
+                            "music",
+                            "painting",
+                            "sculpture"
+                        ]
+                    },
+                    "artists_count": {
+                        "description": "number of relationed artists",
+                        "type": "integer"
+                    },
+                    "agreements_count": {
+                        "description": "number of relationed agreements",
+                        "type": "integer"
+                    },
+                    "selectives_count": {
+                        "description": "number of relationed selectives",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "Artist": {
+                "description": "Schema of Model Artist User",
+                "properties": {
+                    "cpf": {
+                        "type": "string",
+                        "example": "40033796599"
+                    },
+                    "bithday": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "01/01/1970"
+                    },
+                    "wage": {
+                        "type": "number",
+                        "example": "100"
+                    },
+                    "art": {
+                        "$ref": "#/components/schemas/Art"
+                    }
+                },
+                "type": "object"
+            },
+            "Enterprise": {
+                "description": "Schema of Model Enterprise User",
+                "properties": {
+                    "cnpj": {
+                        "type": "string",
+                        "example": "01499146000196"
+                    },
+                    "company_name": {
+                        "type": "string",
+                        "example": "José e Gabriela Esportes ME"
+                    },
+                    "agreements": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Agreement"
+                        }
+                    },
+                    "selectives": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Selective"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "Post": {
+                "description": "Schema of Model Post",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "text": {
+                        "description": "Text",
+                        "type": "string",
+                        "example": "Today i show me in Atlantic Resort"
+                    },
+                    "image": {
+                        "description": "Image in base64 or url",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "Rate": {
+                "description": "Schema of Model Rate",
+                "properties": {
+                    "author": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "rated": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "agreement": {
+                        "$ref": "#/components/schemas/Agreement"
+                    },
+                    "score": {
+                        "type": "number",
+                        "format": "float",
+                        "maximum": 5,
+                        "minimum": 0,
+                        "example": "4.5"
+                    },
+                    "note": {
+                        "description": "Short review",
+                        "type": "string",
+                        "example": "The artist is very helpful"
+                    }
+                },
+                "type": "object"
+            },
+            "Selective": {
+                "description": "Schema of Model Selective",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "enterprise": {
+                        "$ref": "#/components/schemas/Enterprise"
+                    },
+                    "art": {
+                        "$ref": "#/components/schemas/Art"
+                    },
+                    "title": {
+                        "description": "Comercial name of selective",
+                        "type": "string",
+                        "example": "Summer 2024's selective"
+                    },
+                    "note": {
+                        "description": "Description of service",
+                        "type": "string",
+                        "example": "Rock musical show for 2 hours"
+                    },
+                    "start_moment": {
+                        "description": "Moment of open selective",
+                        "type": "string",
+                        "format": "date",
+                        "example": "01/01/2025 00:00"
+                    },
+                    "end_moment": {
+                        "description": "Moment of open selective",
+                        "type": "string",
+                        "format": "date",
+                        "example": "31/12/2025 23:59"
+                    },
+                    "price": {
+                        "description": "Value of fee",
+                        "type": "number",
+                        "format": "float",
+                        "example": "1000.00"
+                    },
+                    "candidates": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SelectiveCandidate"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "SelectiveCandidate": {
+                "description": "Schema of Selective Candidate",
+                "properties": {
+                    "artist": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "selective": {
+                        "$ref": "#/components/schemas/Selective"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "description": "Schema of Model User",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "name": {
+                        "description": "Username",
+                        "type": "string",
+                        "example": "José Carlos"
+                    },
+                    "active": {
+                        "description": "Access to account is enabled",
+                        "type": "boolean",
+                        "default": "true"
+                    },
+                    "email": {
+                        "description": "Access email address",
+                        "type": "string",
+                        "example": "example@org.net"
+                    },
+                    "phone": {
+                        "description": "User's mobile number",
+                        "type": "string",
+                        "example": "71988469787"
+                    },
+                    "type": {
+                        "description": "Account type",
+                        "type": "enum",
+                        "enum": [
+                            "artist",
+                            "enterprise"
+                        ]
+                    },
+                    "postal_code": {
+                        "description": "Brazilian zip code",
+                        "type": "string",
+                        "example": "41000000"
+                    },
+                    "state": {
+                        "description": "Brazilian state acronym",
+                        "type": "string",
+                        "example": "BA"
+                    },
+                    "city": {
+                        "type": "string",
+                        "example": "Salvador"
+                    },
+                    "neighborhood": {
+                        "type": "string",
+                        "example": "Piatã"
+                    },
+                    "street": {
+                        "type": "string",
+                        "example": "Av. Orlando Gomes"
+                    },
+                    "address_complement": {
+                        "description": "Additional  information of address",
+                        "type": "string",
+                        "example": "Beside of SESI Saúde"
+                    },
+                    "image": {
+                        "description": "Image in base64 or URL",
+                        "type": "string"
+                    },
+                    "slug": {
+                        "description": "User's website address",
+                        "type": "string",
+                        "example": "https://spaceart-lemon.vercel.app/user/2",
+                        "nullable": true
+                    },
+                    "biography": {
+                        "description": "Short presentation text",
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "received_rates_avg_score": {
+                        "type": "number",
+                        "nullable": true
+                    },
+                    "artist_account_data": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/Artist"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "enterprise_account_data": {
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/Enterprise"
+                            }
+                        ],
+                        "nullable": true
+                    },
+                    "sent_rates": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Rate"
+                        }
+                    },
+                    "received_rates": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Rate"
+                        }
+                    },
+                    "posts": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Post"
+                        }
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "responses": {
+            "ReturnAgreement": {
+                "description": "Response is successful",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Agreement"
+                                    },
+                                    "maxItems": 1
+                                },
+                                "fails": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "204": {
+                "description": "Resource was disabled",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "fails": {
+                                    "type": "boolean",
+                                    "default": "false"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "ReturnPost": {
+                "description": "Operation finished succesfully",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "default": "Post was created"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Post"
+                                    }
+                                },
+                                "fails": {
+                                    "type": "boolean",
+                                    "default": "false"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "ReturnRate": {
+                "description": "Response is successful",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Rate"
+                                    },
+                                    "maxItems": 1
+                                },
+                                "fails": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "ReturnSelective": {
+                "description": "Operation was realized",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Selective"
+                                    },
+                                    "maxItems": 1
+                                },
+                                "fails": {
+                                    "type": "boolean",
+                                    "default": "false"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "ReturnUser": {
+                "description": "Response is successful",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "default": "User was updated"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    },
+                                    "maxItems": 1
+                                },
+                                "fails": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "parameters": {
+            "Limit": {
+                "name": "limit",
+                "in": "query",
+                "description": "Limit per page",
+                "style": "form",
+                "schema": {
+                    "type": "integer",
+                    "nullable": true
+                }
+            },
+            "Offset": {
+                "name": "offset",
+                "in": "query",
+                "description": "Offset for search",
+                "style": "form",
+                "schema": {
+                    "type": "integer",
+                    "nullable": true
+                }
+            },
+            "Id": {
+                "name": "id",
+                "in": "path",
+                "description": "Resource id",
+                "style": "form",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "Author": {
+                "name": "author",
+                "in": "path",
+                "description": "Author id",
+                "style": "form",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "Agreement": {
+                "name": "agreement",
+                "in": "path",
+                "description": "Agreement id",
+                "style": "form",
+                "schema": {
+                    "type": "integer"
+                }
+            }
+        },
+        "requestBodies": {
+            "AgreementStore": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "enterprise_id",
+                                "artist_id",
+                                "price",
+                                "note",
+                                "date",
+                                "start_time",
+                                "end_time"
+                            ],
+                            "properties": {
+                                "enterprise_id": {
+                                    "type": "integer"
+                                },
+                                "artist_id": {
+                                    "type": "integer"
+                                },
+                                "price": {
+                                    "type": "number",
+                                    "format": "^\\d*(\\.\\d*)?$",
+                                    "example": "350.99"
+                                },
+                                "note": {
+                                    "type": "string"
+                                },
+                                "date": {
+                                    "type": "string",
+                                    "format": "d/m/Y",
+                                    "example": "31/12/2005"
+                                },
+                                "start_time": {
+                                    "type": "string",
+                                    "format": "H:i",
+                                    "example": "00:00"
+                                },
+                                "end_time": {
+                                    "type": "string",
+                                    "format": "H:i",
+                                    "example": "22:00"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "AgreementUpdate": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "status"
+                            ],
+                            "properties": {
+                                "note": {
+                                    "type": "string"
+                                },
+                                "date": {
+                                    "type": "string",
+                                    "format": "d/m/Y",
+                                    "example": "31/12/2005"
+                                },
+                                "start_time": {
+                                    "type": "string",
+                                    "format": "H:i",
+                                    "example": "00:00"
+                                },
+                                "end_time": {
+                                    "type": "string",
+                                    "format": "H:i",
+                                    "example": "22:00"
+                                },
+                                "status": {
+                                    "type": "enum",
+                                    "enum": [
+                                        "send",
+                                        "accepted",
+                                        "refused",
+                                        "canceled"
+                                    ]
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "Auth": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "email",
+                                "password",
+                                "device_name"
+                            ],
+                            "properties": {
+                                "email": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "minLength": 8
+                                },
+                                "device_name": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "PostStore": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "user_id": {
+                                    "type": "integer"
+                                },
+                                "text": {
+                                    "type": "string"
+                                },
+                                "image": {
+                                    "description": "Image in base64 ou URL",
+                                    "type": "string",
+                                    "maxLength": 10000000
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "RateStore": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "author_id",
+                                "score",
+                                "note"
+                            ],
+                            "properties": {
+                                "author_id": {
+                                    "type": "integer"
+                                },
+                                "score": {
+                                    "type": "number",
+                                    "maximum": 5,
+                                    "minimum": 0
+                                },
+                                "note": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "RateUpdate": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "score"
+                            ],
+                            "properties": {
+                                "score": {
+                                    "type": "number",
+                                    "maximum": 5,
+                                    "minimum": 0
+                                },
+                                "note": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "SelectiveCandidateStore": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "artist_id"
+                            ],
+                            "properties": {
+                                "artist_id": {
+                                    "type": "integer"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "SelectiveStore": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "enterprise_id",
+                                "title",
+                                "start_moment",
+                                "end_moment",
+                                "art",
+                                "note",
+                                "price"
+                            ],
+                            "properties": {
+                                "enterprise_id": {
+                                    "type": "integer"
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "example": "Summer 2025"
+                                },
+                                "start_moment": {
+                                    "type": "string",
+                                    "format": "d/m/Y H:i",
+                                    "example": ""
+                                },
+                                "end_moment": {
+                                    "type": "string",
+                                    "format": "d/m/Y H:i",
+                                    "example": ""
+                                },
+                                "art": {
+                                    "type": "enum",
+                                    "enum": [
+                                        "acting",
+                                        "dance",
+                                        "music",
+                                        "painting",
+                                        "sculpture"
+                                    ]
+                                },
+                                "note": {
+                                    "type": "string",
+                                    "example": "perfect!!"
+                                },
+                                "price": {
+                                    "type": "number"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "SelectiveUpdate": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "title": {
+                                    "type": "string",
+                                    "example": "Summer 2025"
+                                },
+                                "start_moment": {
+                                    "type": "string",
+                                    "format": "d/m/Y H:i",
+                                    "example": ""
+                                },
+                                "end_moment": {
+                                    "type": "string",
+                                    "format": "d/m/Y H:i",
+                                    "example": ""
+                                },
+                                "note": {
+                                    "type": "string",
+                                    "example": "perfect!!"
+                                },
+                                "price": {
+                                    "type": "number"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "UserStore": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "name",
+                                "email",
+                                "phone",
+                                "password",
+                                "type",
+                                "postal_code",
+                                "image"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "maxLength": 30,
+                                    "minLength": 3,
+                                    "example": "José Carlos"
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "example": "example@org.net"
+                                },
+                                "phone": {
+                                    "type": "string",
+                                    "example": "71988469787"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "minLength": 8,
+                                    "example": "<FO<k2&K83.;<RAeiC?@"
+                                },
+                                "type": {
+                                    "type": "enterprise",
+                                    "enum": [
+                                        "artist",
+                                        "enterprise"
+                                    ]
+                                },
+                                "postal_code": {
+                                    "type": "string",
+                                    "example": "40226000"
+                                },
+                                "image": {
+                                    "type": "string",
+                                    "maxLength": 10000000
+                                }
+                            },
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/components/schemas/ArtistStoreBody"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/EnterpriseStoreBody"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "UserUpdate": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "maxLength": 30,
+                                    "minLength": 3
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "phone": {
+                                    "type": "string",
+                                    "maxLength": 11,
+                                    "minLength": 11
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "minLength": 8
+                                },
+                                "image": {
+                                    "type": "string",
+                                    "maxLength": 10000000
+                                },
+                                "postal_code": {
+                                    "type": "string"
+                                },
+                                "address": {
+                                    "type": "string"
+                                },
+                                "slug": {
+                                    "description": "uri",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/components/schemas/ArtistUpdateBody"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/EnterpriseUpdateBody"
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "sanctum": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Agreement",
+            "description": "Agreement"
+        },
+        {
+            "name": "Auth",
+            "description": "Auth"
+        },
+        {
+            "name": "Post",
+            "description": "Post"
+        },
+        {
+            "name": "Rate",
+            "description": "Rate"
+        },
+        {
+            "name": "Candidate",
+            "description": "Candidate"
+        },
+        {
+            "name": "Selective",
+            "description": "Selective"
+        },
+        {
+            "name": "User",
+            "description": "User"
+        }
+    ]
+}

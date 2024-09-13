@@ -1,3 +1,0 @@
-INSERT INTO `chat` (`id`, `artist`, `enterprise`, `last_message`) VALUES
-('003b58b7-80fb-11ee-bd48-81d6addf550f', '018b9169-1a2e-71de-8a91-1d1c7a94b2e3', '018bc0df-8852-710a-b2ae-76a57ea07432', 'Boa noite! Gostaria de convidá-lo a se apresentar na inauguração da Drogaria D\'Aile. Por favor, retorne esta mensagem caso tenha interesse!'),
-('003b738d-80fb-11ee-bd48-81d6addf550f', '018b918c-0b9a-7014-afa5-5d47d4582fb9', '018bc0df-8852-710a-b2ae-76a57ea07432', '12m²');

@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Monolog\Handler\StreamHandler;
+
 return [
 
     /*
@@ -15,7 +17,7 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'error'),
+    'default' => env('LOG_CHANNEL', 'stderr'),
 
     /*
     |--------------------------------------------------------------------------
@@ -35,34 +37,59 @@ return [
 
     'channels' => [
         'request' => [
+            /*
             'driver' => 'daily',
             'path' => storage_path('logs/request/request.log'),
             'level' => 'info',
             'days' => 2,
+            */
             'replace_placeholders' => true,
+            'driver' => 'stack',
+            'channels' => ['stderr'],
         ],
 
         'db' => [
+            /*
             'driver' => 'daily',
             'path' => storage_path('logs/db/db.log'),
             'level' => 'notice',
             'days' => 2,
+            */
             'replace_placeholders' => true,
+            'driver' => 'stack',
+            'channels' => ['stderr'],
         ],
 
         'error' => [
+            /*
             'driver' => 'single',
             'path' => storage_path('logs/error.log'),
             'level' => 'warning',
+            */
             'replace_placeholders' => true,
+            'driver' => 'stack',
+            'channels' => ['stderr'],
         ],
 
         'auth' => [
+            /*
             'driver' => 'daily',
             'path' => storage_path('logs/auth/auth.log'),
             'level' => 'info',
             'days' => 14,
+            */
             'replace_placeholders' => true,
+            'driver' => 'stack',
+            'channels' => ['stderr'],
+        ],
+
+        'stderr' => [
+            'driver' => 'monolog',
+            'handler' => StreamHandler::class,
+            'formatter' => env('LOG_STDERR_FORMATTER'),
+            'with' => [
+                'stream' => 'php://stderr',
+            ],
         ],
     ],
 

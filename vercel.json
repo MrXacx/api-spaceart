@@ -1,0 +1,37 @@
+{
+  "version": 2,
+  "framework": null,
+  "functions": {
+    "api/index.php": { "runtime": "vercel-php@0.5.5" }
+  },
+  "routes": [
+    {
+      "src": "/api/(css|js)/(.*)",
+      "dest": "public/$1/$2"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/api/index.php"
+    }
+  ],
+  "env": {
+    "APP_URL": "api-spaceart.vercel.app",
+    "APP_NAME":"API Space Art",
+    "API_VERSION":"2",
+
+    "BROADCAST_DRIVER":"log",
+    "FILESYSTEM_DISK":"local",
+    "QUEUE_CONNECTION":"sync",
+    "SESSION_LIFETIME":"120",
+
+    "L5_SWAGGER_GENERATE_ALWAYS":"false",
+
+
+    "APP_CONFIG_CACHE": "/tmp/config.php",
+    "APP_EVENTS_CACHE": "/tmp/events.php",
+    "APP_PACKAGES_CACHE": "/tmp/packages.php",
+    "APP_ROUTES_CACHE": "/tmp/routes.php",
+    "APP_SERVICES_CACHE": "/tmp/services.php",
+    "VIEW_COMPILED_PATH": "/tmp"
+  }
+}
